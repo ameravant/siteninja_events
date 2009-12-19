@@ -1,0 +1,60 @@
+.events {
+  padding: 0;
+  list-style: none;
+}
+
+.events li {
+  line-height: 2em;
+}
+
+.event_date {
+  color: #777;
+}
+
+.event_tag {
+  margin-left: .75em;
+  font-weight: bold;
+  padding: .2em .4em;
+  font-size: .85em;
+}
+
+.event_tag_open,
+.event_tag_full {
+  color: #fff;
+}
+
+.event_tag_open {
+  border: 1px solid #a3e147;
+  background: #83c127;
+}
+
+.event_tag_full {
+  border: 1px solid #bbb;
+  background: #999;
+}
+
+.event_tag_soon {
+  color: #83c127;
+  border: 1px solid #83c127;
+}
+
+.event_tag_this_week {
+  color: #999;
+  border: 1px solid #999;
+}
+
+.recent_events li {
+  margin-bottom: 20px;
+}
+
+#google_map {
+  width: 225px;
+  height: 200px;
+}
+.events { clear: both; }
+.events .event { display: block; clear: both; }
+.event_date { width: 50px; float: left; margin: 0 20px 20px 0; text-align: center; padding: 4px; background: #efefef;}
+.event_date .month, .event_date .day, .event_date .date {display: block;}
+.event_date .date { font-size: 2.2em; }
+.events .event_tag { font-size: .65em; }
+.event_description p { margin: 5px 0; }

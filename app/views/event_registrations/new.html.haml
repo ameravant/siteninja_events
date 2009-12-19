@@ -1,0 +1,68 @@
+- content_for :meta_title do
+  Register for
+  = @event.name
+
+- content_for :side_column do
+  .reginstruct
+    %h2="How to register"
+    Start registration by entering your information in the form to the left.
+    You are able to add guests in the next step.
+    %span.bold.purple
+      Registration takes less than five minutes.
+
+  .eventdetails
+    %h2="Event Details"
+    .big
+      = @event.date_and_time
+      %div
+        = @event.date_and_time.to_s :long_with_zone
+
+%h1
+  = yield :meta_title
+= error_messages_for "registration_contact", "contact", :header_message => "There were some problems starting your registration.", :message => nil
+- form_for :registration, :url => event_event_registrations_path(@event) do |f|
+  %table{ :cellspacing => "0" }
+    - fields_for :event_price do |p|
+      %tr.top
+        %td
+          = p.label :id, "Type"
+        %td
+          - for event_price in @event_prices
+            = p.radio_button :id, event_price.id
+            %label{ :for => "event_price_id_#{event_price.id}" }
+              = h event_price.description
+              \&mdash;
+              = event_price.price
+            %br
+    - fields_for :eventperson do |c|
+      %tr
+        %td
+          = c.label :first_name
+        %td
+          = c.text_field :first_name
+      %tr
+        %td
+          = c.label :last_name
+        %td
+          = c.text_field :last_name
+      %tr
+        %td
+          = c.label :email
+        %td
+          = c.text_field :email
+      %tr
+        %td
+          = c.label :phone, "Phone number"
+        %td
+          = c.text_field :phone, :size => 16, :maxlength => 20
+  %tr.top
+    %td
+      = f.label :comments
+    %td
+      = f.text_area :comments, :size => "50x6"
+  %tr
+    %td{ :colspan => "2" }
+      = submit_tag "Save and Continue &gt;", :class => "big"
+      or
+      = link_to "cancel", event_path(@event.permalink)
+

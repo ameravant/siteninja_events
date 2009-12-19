@@ -1,0 +1,33 @@
+- content_for :meta_title do
+  = "Past" if @past
+  = @cms_config['site_settings']['events_title']
+
+%h1= yield(:meta_title).strip
+
+- @events_grouped.each do |year_and_month, events|
+  %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
+  %ul.events
+    - for event in events
+      %li[event]
+        %div.event_date
+          %span.month== #{event.date_and_time.strftime('%b')}
+          %span.date== #{event.date_and_time.strftime('%d')}
+          %span.day== #{event.date_and_time.strftime('%a')}
+        .event_description
+          %h3
+            = link_to h(event.name), event
+            - if event.today? # before midnight
+              %span.event_tag.event_tag_soon today!
+            - elsif event.tomorrow?
+              %span.event_tag.event_tag_soon tomorrow
+            - elsif event.this_week?
+              %span.event_tag.event_tag_this_week this week
+          - if @cms_config['features']['event_registration']
+            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+              -# if event.registration_spots?
+              -#%span.event_tag.event_tag_open registration open
+              -#- else
+              -#%span.event_tag.event_tag_full registration full
+          .event_blurb= simple_format(h(truncate(event.blurb.strip, 200)))
+  = clear
+

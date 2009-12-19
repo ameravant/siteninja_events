@@ -1,0 +1,7 @@
+%h1
+  = h @event.name
+%h2
+  Edit Price Option
+- form_for :event_price, :url => admin_event_event_price_path(@event, @event_price), :html => { :method => :put } do |f|
+= render :partial => "form", :locals => { :f => f }
+- end # form

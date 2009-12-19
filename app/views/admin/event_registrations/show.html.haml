@@ -1,0 +1,75 @@
+%h1
+  = h @event.name
+- unless @registration.comments.blank?
+%h2
+  Comments
+%p
+  = h @registration.comments
+- end
+%h2
+  Guests
+%ol
+  - for c in @registration.contacts
+  %li
+    = h c.name_reversed
+    \&mdash;
+    = mail_to c.email, nil, :encode => :hex
+  - end
+- if @registration.approved
+- if @registration.paid
+- if @registration.card?
+%h2
+  Credit Card Transactions
+- for t in @registration.transactions
+%table{ :cellspacing => "0" }
+  %tr
+    %td
+      Registration ID:
+    %td
+      = @registration.id.to_s
+  %tr
+    %td
+      Amount:
+    %td
+      = number_to_currency(t.amount)
+  %tr{ :style => "vertical-align: top;" }
+    %td
+      Raw Data:
+    %td
+      #raw_data_link
+        = link_to_function "Show", "$('raw_data').show(); $('raw_data_link').hide();"
+      #raw_data{ :style => "display: none;" }
+        = t.params.gsub("---","").strip.gsub("\n","<br/>")
+- end # transactions
+- elsif @registration.check
+%h2
+  Registration was paid for by check.
+%p
+  = link_to "Mark this registration as unpaid.", unpaid_admin_event_registration_path(@event, @registration)
+- end # registration paid by...
+- else # registration approved but not paid
+- if @registration.cash
+%h2
+  Registration will be paid for in cash at event.
+- elsif @registration.check
+%h2
+  Registration will be paid for by check.
+%p
+  = link_to "Mark this registration as paid.", paid_admin_event_registration_path(@event, @registration)
+- elsif @registration.card?
+%h2
+  Registration is not paid for!
+%p
+  You can direct the customer to complete registration by having them visit:
+  %br
+  = link_to "#{$DOMAIN_PATH}/events/pay/#{@registration.id.to_s}", "#{$DOMAIN_PATH}/events/pay/#{@registration.id.to_s}"
+- end # unpaid reg types
+- end # approved but unpaid
+- elsif @event.registration_spots? # unapproved
+%h2
+  Registration was not completed.
+%p
+  You can direct the customer to complete registration by having them visit:
+  %br
+  = link_to "#{$DOMAIN_PATH}/events/pay/#{@registration.id.to_s}", "#{$DOMAIN_PATH}/events/pay/#{@registration.id.to_s}"
+- end

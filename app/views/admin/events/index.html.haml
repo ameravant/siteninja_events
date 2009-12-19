@@ -1,0 +1,64 @@
+- content_for(:meta_title) { concat "#{ @cms_config['site_settings']['events_title']}" }
+
+%h1= large_icon('Clock') + ' ' + yield(:meta_title).strip
+
+.box
+  .float-right= render :partial => "/shared/search"
+  %span.hmenu
+    = icon "Plus", new_admin_event_path
+    = link_to "Add a new #{@cms_config['site_settings']['event_title']}", new_admin_event_path
+
+%br
+
+- if params[:q].blank?
+  %p== You can find past #{@cms_config['site_settings']['event_title'].pluralize} by searching for them by name.
+- else
+  %h2== Found #{pluralize @all_events.size, "event"}
+
+%table.full_width{ :cellspacing => "0" }
+  %thead
+    %tr
+      %th Title
+      - if @cms_config["features"]["event_registration"]
+        %th Prices
+        %th Registrations
+      - else
+        %th{ :colspan => 2 }
+      %th Images
+      %th Files
+      %th.center Options
+  - if @events.total_pages > 1
+    %tfoot
+      %tr
+        %td{ :colspan => 4 }
+          = will_paginate @events
+  %tbody
+    - for event in @events
+      %tr[event]{ :class => cycle('odd', 'even') }
+        %td.gray
+          == #{link_to h(event.name), edit_admin_event_path(event)}
+          %span.small== on #{event.date_and_time.strftime("%a, %b %d, %Y")}
+        - if event.registration? and @cms_config["features"]["event_registration"]
+          %td= link_to pluralize(event.event_prices.count, "Price"), [:admin, event, :event_prices], :class => (event.event_prices.count == 0 ? "bold red" : nil)
+          %td= link_to pluralize(event.event_registrations.count, "Registration"), [:admin, event, :event_registrations]
+        - else
+          %td{ :colspan => 2 }
+        %td
+          = icon "Picture", [:admin, event]
+          = link_to event.images_count.to_i, [:admin, event, :images]
+        %td
+          = link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
+        %td.center
+          - if event.images_count.to_i > 0
+            - if event.features_count.to_i > 0
+              = defeature_icon(event, "/admin/events/#{event.to_param}/features/1", event.title, "inline")
+              = feature_icon(event, [:admin, event, :features], event.title, "none")
+            -else
+              = feature_icon(event, [:admin, event, :features], event.title, "inline")
+              = defeature_icon(event, "/admin/events/#{event.to_param}/features/1", event.title, "none")
+          -else
+            = disabled_feature_icon(event, [:new, :admin, event, :feature], event.title)
+          = icon "Search", event
+          = icon "Write", edit_admin_event_path(event)
+          = trash_icon(event, admin_event_path(event), "#{event.name}")
+

@@ -1,0 +1,6 @@
+- content_for(:title) { concat "Edit #{@cms_config['site_settings']['event_title']}" }
+%h1
+  = yield :title
+- form_for :event, :url => [:admin, @event], :html => { :onsubmit => "form_submitted();", :method => :put } do |f|
+  = render :partial => "form", :locals => { :f => f }
+

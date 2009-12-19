@@ -1,0 +1,53 @@
+<script type="text/javascript" charset="utf-8">
+  Event.observe(window, "load", function() {
+    <%- if @event.registration? -%>
+    $('payments-allowed').show();
+    $('registration_limit').show();
+    <%- end -%>
+    <%- if @event.allow_check? -%>
+    $('check-payment-options').show();
+    <%- end -%>
+    
+    // If they enter a registration limit, prefill the explanation text box with a generic message
+    Event.observe($('event_registration_limit'), "change", function() {
+      if ($('event_registration_closed_text').value == "")
+        $('event_registration_closed_text').value = "Sorry, this event is closed because registration is full."
+    });
+
+    // Allowed payment fields
+    var event_registration = $('event_registration');
+    Event.observe(event_registration, "change", function() {
+      if (event_registration.checked) {
+        // Show payment option checkboxes
+        $('payments-allowed').appear();
+        $('registration_limit').appear();
+      }
+      else {
+        // Clear any data entered for payments or checks
+        $('event_allow_card').checked = false;
+        $('event_allow_cash').checked = false;
+        $('event_allow_check').checked = false;
+        $('event_check_instructions').value = '';
+        // Hide the check info fields
+        $('registration_limit').fade();
+        $('payments-allowed').fade();
+        $('check-payment-options').fade();
+      }
+    });
+
+    // Check information fields
+    var event_allow_check = $('event_allow_check');
+    Event.observe(event_allow_check, "change", function() {
+      if (event_allow_check.checked) {
+        // Show check info fields
+        $('check-payment-options').appear();
+      }
+      else {
+        // Clear any data entered
+        $('event_check_instructions').value = '';
+        // Hide the check info fields
+        $('check-payment-options').fade();
+      }
+    });
+  });
+</script>

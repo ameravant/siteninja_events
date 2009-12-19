@@ -1,0 +1,56 @@
+- content_for :meta_title do
+  = @event.name
+
+- content_for :side_column do
+  %h2 Date and Time
+  .big
+    =#debug @event.future_date?
+    -if @event.future_date?
+      = soon_indicator(@event.date_and_time, '', true) 
+    %div= @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+
+  / Registration link
+  - if @event.future_date? and @event.registration?
+    %h2 Registration
+    - if @event.registration_spots?
+      - if @event.registration_limit != nil and @event.spots_available <= 10
+        .big.purple== Only #{pluralize @event.spots_available, 'spot'} left!
+      .big= link_to "Register Now &gt;", new_event_event_registration_path(@event)
+      You may pay by:
+      -if @event.allow_cash
+        Cash
+      -if @event.allow_check
+        Check
+      -if @event.allow_card
+        Card
+      -if @event.allow_other
+        Other
+    - else
+      - if @event.registration_closed_text.blank?
+        Sorry, but registration for this event is closed.
+      - else
+        = auto_link(h @event.registration_closed_text)
+
+  / Map and address
+  - unless @event.address.blank?
+    %h2 Location
+    - content_for :head do
+      = render :partial => "/shared/google_maps_includes"
+    %div= h @event.address
+    #google_map
+    %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
+
+  / More events
+  - unless @event.registration? or @latest_events.empty?
+    %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
+    = render :partial => @latest_events
+
+%h1= yield(:meta_title).strip
+= #render :partial => "/shared/image_box", :locals => { :owner => @event } unless @event.images.empty?
+
+= ninja_parse(@event.description)
+
+- if @event.future_date? and @event.registration? and @event.registration_spots?
+  %br
+  .big= link_to "Register Now &gt;", new_event_event_registration_path(@event)
+

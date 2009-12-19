@@ -1,0 +1,92 @@
+- content_for :head do
+  = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.rjs"
+= error_messages_for "event"
+%table{ :cellspacing => "0" }
+  %tr
+    %td.big
+      = f.label :name
+    %td
+      = f.text_field :name, :class => "big", :size => 30
+  %tr
+    %td
+      = f.label :address
+    %td
+      = f.text_field :address
+      %span.small
+        \&mdash; this will be shown on the page and used to display a map (
+        %strong
+          optional
+        )
+  %tr.top
+    %td
+      = f.label :date_and_time, "Event date/time"
+    %td
+      = f.datetime_select :date_and_time
+- if @cms_config['features']['event_registration']
+  %h2
+    Registration Options
+  %div
+    %div
+      = f.check_box :registration
+      %label{ :for => "event_registration" }
+        Registration enabled
+    #registration_limit
+      %br
+      %div
+        Only allow
+        = f.text_field :registration_limit, :size => 4
+        total people to register
+        %span.small.gray
+          \&mdash; optional
+      %br
+      %div
+        Message to display when registration is full and closed:
+      %div
+        = f.text_area :registration_closed_text, :size => "60x4"
+    #payments-allowed
+      %h3
+        Accepted Payments
+      %div
+        = f.check_box :allow_card
+        %label{ :for => "event_allow_card" }
+          Allow credit card payment via PayPal
+        %span.small.gray
+          \&mdash; must have PayPal configured in
+          = link_to "settings", edit_admin_setting_path
+      %div
+        = f.check_box :allow_cash
+        %label{ :for => "event_allow_cash" }
+          Allow cash payment
+        %span.small.gray
+          \&mdash; only if registration is required
+      %div
+        = f.check_box :allow_check
+        %label{ :for => "event_allow_check" }
+          Allow check payment
+        %span.small.gray
+          \&mdash; only if registration is required
+      %div
+        = f.check_box :allow_other
+        %label{ :for => "event_allow_other" }
+          Allow other
+        %span.small.gray
+          \&mdash; Use this option for any other payment types
+      #check-payment-options
+        %h3
+          Payment Instructions
+        %p
+          ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
+        = f.text_area :payment_instructions, :size => "60x8"
+      /check-payment-options
+    /payments-allowed
+%h2
+  Blurb
+= f.text_area :blurb, :size => "80x5"
+%h2
+  Body
+- unless @event.images.empty?
+  = render :partial => "admin/shared/image_options", :locals => {:images => @event.images}
+= f.text_area :description, :size => "80x30", :class => "mceEditor"
+- fancy_submit admin_events_path do
+  = f.submit "Save #{@cms_config['site_settings']['event_title']}"
+

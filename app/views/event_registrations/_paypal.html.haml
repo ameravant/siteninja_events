@@ -1,0 +1,12 @@
+- 
+- payment_service_for total.to_f, @settings.paypal_seller_account, :amount => total, :currency => 'USD', :service => :paypal do |paypal|
+- paypal.item_name event.name
+- paypal.order registration.id.to_s
+- paypal.notify_url "#{$PAYPAL_IPN_DOMAIN}/paypal/ipn/#{registration.id.to_s}"
+- paypal.return_url "#{$PAYPAL_IPN_DOMAIN}/paypal/return/#{registration.id.to_s}"
+- paypal.cancel_return_url "#{$PAYPAL_IPN_DOMAIN}/paypal/cancel/#{registration.id.to_s}"
+= submit_tag "Complete Registration with PayPal &gt;", :class => "big"
+- end
+%br
+%a.icon{ :href => "#", :onclick => "javascript:window.open('https://www.paypal.com/us/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');" }
+  %img.icon{ :src => "https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif", :border => "0", :alt => "Solution Graphics", :style => "border: 1px solid #000;" }

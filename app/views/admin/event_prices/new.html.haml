@@ -1,0 +1,8 @@
+%h1
+  = h @event.name
+%h2
+  New Price Option
+= error_messages_for "event_price", :header_message => "There were problems adding your pricing option.", :message => nil
+- form_for :event_price, :url => admin_event_event_prices_path(@event) do |f|
+= render :partial => "form", :locals => { :f => f }
+- end # form

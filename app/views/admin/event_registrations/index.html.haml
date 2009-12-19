@@ -1,0 +1,47 @@
+%h1
+  = h(@event.name)
+.float-right
+  = icon "Save"
+  = link_to "Export guest list as CSV", :action => "csv", :id => @event.id
+  %span.small.gray
+    (Excel)
+%h2
+  Guest List
+%ol
+  - for c in @registration_people
+    %li
+      = c.contact.name_reversed
+      %span.small.gray
+        (
+        = c.event_price.description
+        )
+      = "<span class=\"red\">Not Paid #{c.payment_type}</span>" unless c.paid?
+%h1
+  Event Registrations
+%table{ :cellspacing => "0", :width => "100%" }
+  %tr{ :class => "row#{cycle('0','1')}" }
+    %th
+      Registered
+    %th.center
+      Approved
+    - unless @free_event
+      %th.center
+        Paid
+      %th
+        Method
+      %th.right
+        Amount
+      %th
+        Options
+  - for r in @registrations
+    %tr
+      %td
+        = r.created_at.to_s :datetime_with_zone
+      %td.center
+        = icon (r.approved ? "Ok" : "Cancel")
+      - unless @free_event
+        %td.center = icon (r.paid ? "Ok" : "Cancel")
+        %td = h r.payment_method
+        %td.right = number_to_currency(r.calculate_total)
+        %td = link_to "View Registration", admin_event_registration_path(@event, r)
+

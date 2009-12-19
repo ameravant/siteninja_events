@@ -1,0 +1,8 @@
+.event-for-box
+  = link_to h(event.name), event
+  %br
+  %span.small
+    = event.date_and_time.strftime('%a, %b %d, %Y')
+    - if event.date_and_time > Date.today.to_time
+      = soon_indicator(event.date_and_time)
+

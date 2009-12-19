@@ -1,0 +1,8 @@
+%h1
+  = h(@event.name)
+%h2
+  Prices
+%p
+  = icon "Plus", new_admin_event_event_price_path(@event)
+  = link_to "Add a new price option", new_admin_event_event_price_path(@event)
+= render :partial => "event_price", :collection => @event_prices
