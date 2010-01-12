@@ -44,7 +44,7 @@
         - else
           %td{ :colspan => 2 }
         %td
-          = icon "Picture", [:admin, event]
+          = icon "Picture", [:admin, event, :images]
           = link_to event.images_count.to_i, [:admin, event, :images]
         %td
           = link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
