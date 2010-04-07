@@ -1,7 +1,7 @@
 resources :events, :as => events_path, :has_many => :images, :collection => { :past => :get } do |event|
-  event.resources :event_registrations,
-    :belongs_to => :people,
-    :has_many => :event_registration_people,
+  event.resources :event_registration_groups,
+    :belongs_to => :event,
+    :has_many => :people,
     :member => { :pay => :get, :complete => :get }
 end
 

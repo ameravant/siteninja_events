@@ -1,0 +1,3 @@
+class EventRegistrationGroup < PersonGroup
+  
+end

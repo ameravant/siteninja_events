@@ -16,6 +16,17 @@
       - if @event.registration_limit != nil and @event.spots_available <= 10
         .big.purple== Only #{pluralize @event.spots_available, 'spot'} left!
       .big= link_to "Register Now &gt;", new_event_event_registration_path(@event)
+      %h3 Pricing Options
+      %table#price_options
+        %th title
+        %th description
+        %th price
+        -for price_option in @price_options
+          %tr
+            %td.title= price_option.title
+            %td.description= price_option.description
+            %td.price= number_to_currency(price_option.price)
+      
       You may pay by:
       -if @event.allow_cash
         Cash
@@ -48,7 +59,7 @@
 %h1= yield(:meta_title).strip
 = #render :partial => "/shared/image_box", :locals => { :owner => @event } unless @event.images.empty?
 
-= ninja_parse(@event.description)
+= ninja_parse(@event.description) if @event.description
 
 - if @event.future_date? and @event.registration? and @event.registration_spots?
   %br

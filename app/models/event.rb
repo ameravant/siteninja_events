@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   has_many :event_prices, :dependent => :destroy
   has_many :event_registrations # registrations.event_id
   has_many :people, :through => :event_registration_people # registrations.contact_id
+  has_many :price_options
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
