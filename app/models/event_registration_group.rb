@@ -1,3 +1,0 @@
-class EventRegistrationGroup < PersonGroup
-  
-end
