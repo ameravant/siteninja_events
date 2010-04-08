@@ -2,8 +2,7 @@ class Event < ActiveRecord::Base
   has_permalink :name
   belongs_to :person
   has_many :event_prices, :dependent => :destroy
-  has_many :event_registrations # registrations.event_id
-  has_many :people, :through => :event_registration_people # registrations.contact_id
+  has_many :event_registration_groups
   has_many :price_options
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy

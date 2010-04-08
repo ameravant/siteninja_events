@@ -2,7 +2,6 @@ class EventRegistration < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
   has_one :event_transaction # transactions.registration_id
-  has_many :people, :through => :event_registration_people
 
   def payment_method
     if self.card?

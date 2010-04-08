@@ -1,0 +1,3 @@
+class EventRegistrationGroupsController < ApplicationController
+  
+end

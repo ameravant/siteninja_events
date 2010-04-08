@@ -31,7 +31,7 @@ Factory.define :random_public_group, :class => PersonGroup do |f|
   f.sequence(:title) { |n| "uniquely titled public group#{n}"}
   f.public false
 end
-Factory.define :random_registration_group, :class => RegistrationGroup do |f|
+Factory.define :random_registration_group, :class => EventRegistrationGroup do |f|
   f.sequence(:title) { |n|"Guest list 1"}
   f.public false
   f.event_id 1

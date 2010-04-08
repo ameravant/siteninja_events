@@ -15,7 +15,7 @@
     - if @event.registration_spots?
       - if @event.registration_limit != nil and @event.spots_available <= 10
         .big.purple== Only #{pluralize @event.spots_available, 'spot'} left!
-      .big= link_to "Register Now &gt;", new_event_event_registration_path(@event)
+      .big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
       %h3 Pricing Options
       %table#price_options
         %th title
@@ -63,5 +63,5 @@
 
 - if @event.future_date? and @event.registration? and @event.registration_spots?
   %br
-  .big= link_to "Register Now &gt;", new_event_event_registration_path(@event)
+  .big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 

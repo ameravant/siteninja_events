@@ -1,3 +1,0 @@
-class RegistrationGroupsController < ApplicationController
-  
-end
