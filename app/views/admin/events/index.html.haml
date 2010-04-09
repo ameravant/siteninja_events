@@ -34,7 +34,7 @@
           = will_paginate @events
   %tbody
     - for event in @events
-      %tr[event]{ :class => cycle('odd', 'even') }
+      %tr[event]{ :class => event.future_date? ? cycle('odd', 'even') : "past_event" }
         %td.gray
           == #{link_to h(event.name), edit_admin_event_path(event)}
           %span.small== on #{event.date_and_time.strftime("%a, %b %d, %Y")}
