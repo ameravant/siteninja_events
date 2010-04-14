@@ -1,0 +1,38 @@
+- content_for :meta_title do
+  Register for
+  = @event.name
+%h1= "Register for '%s'" % @event.name
+- content_for :side_column do
+  .reginstruct
+    %h2="How to register"
+    Start registration by entering your information in the form to the left.
+    You are able to add guests in the next step.
+    %span.bold.purple
+      Registration takes less than five minutes.
+  .eventdetails
+    %h2="Event Details"
+    .big
+      = @event.date_and_time
+= error_messages_for :event_registration_group
+= error_messages_for :person
+
+- form_for [@event, @event_registration_group] do |f|
+  %dl
+    %fieldset
+      - fields_for @person do |p|
+        - form_attributes.each do |att|
+          %dt= p.label att.downcase.gsub(" ","_").to_sym, att
+          %dd= p.text_field att.downcase.gsub(" ","_").to_sym
+        %dd= select :person, :state, $USA_STATES_ARRAY 
+        %dt= p.label :comments, "Comments"
+        %dd= p.text_area :comments
+    -unless @event_price_options
+      %p This is a free event
+    -else
+      %fieldset.price-option
+        - fields_for @event_registration do |er|
+          %dt= er.label :event_price_option_id, "Guest Type"
+          %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)
+    %dt=f.label :is_attending, "I am attending this event"
+    %dd=check_box :event_registration, :is_attending, {:checked => 'checked'}, true, false
+  =f.submit "Save and continue"        

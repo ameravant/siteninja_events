@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Event do
-  describe "associations" do
+  describe "association" do
     it "should have many price options" do
       event = Factory(:random_event)
       price_opt = Factory(:random_price_option, :event_id => event.id)

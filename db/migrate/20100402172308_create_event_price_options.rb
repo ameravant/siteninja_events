@@ -1,6 +1,6 @@
-class CreatePriceOptions < ActiveRecord::Migration
+class CreateEventPriceOptions < ActiveRecord::Migration
   def self.up
-    create_table :price_options do |t|
+    create_table :event_price_options do |t|
       t.string :title, :description
       t.integer :event_id, :price
       t.boolean :public

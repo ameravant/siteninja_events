@@ -15,8 +15,9 @@ module NavigationHelpers
     when /the new registration page for "(.+)"$/
       new_event_event_registration_path(Event.find_by_name($1))
     when /the new registration_group page for "(.+)"$/
-      new_event_registration_group_path(Event.find_by_name($1))
-    
+      new_event_event_registration_group_path(Event.find_by_name($1))
+    when /new event registration group registration page for "(.+)" and "(.+)"$/
+      new_event_event_registration_group_event_registration_path(Event.find_by_name($1), EventRegistrationGroup.find_by_title($2))
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

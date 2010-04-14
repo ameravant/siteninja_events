@@ -18,7 +18,7 @@ class EventsController < ApplicationController
   def show
     begin
       @event = Event.find(params[:id])
-      @price_options = @event.price_options.public
+      @price_options = @event.event_price_options.public
       @latest_events = Event.future.soonest.reject { |event| event == @event }
       add_breadcrumb @cms_config['site_settings']['events_title'], events_path
       add_breadcrumb @event.name

@@ -17,12 +17,11 @@
       %div
         = @event.date_and_time.to_s :long_with_zone
 
-%h1
-  = yield :meta_title
+
 = error_messages_for "registration_contact", "contact", :header_message => "There were some problems starting your registration.", :message => nil
-- form_for :registration, :url => event_event_registrations_path(@event) do |f|
+- form_for :event_registration, :url => event_event_registration_groups_event_registrations_path(@event, @event_group) do |f|
   %table{ :cellspacing => "0" }
-    - fields_for :event_price do |p|
+    - fields_for :event_registration do |p|
       %tr.top
         %td
           = p.label :id, "Type"

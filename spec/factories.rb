@@ -13,14 +13,14 @@ Factory.define :random_public_group, :class => PersonGroup do |f|
   f.public false
 end
 
-Factory.define :random_price_option, :class => PriceOption do |f|
+Factory.define :random_event_price_option, :class => EventPriceOption do |f|
   f.sequence(:title) {|n| "member#{n}"}
   f.sequence(:price) {|n| "1#{n}"}
   f.sequence(:description) {|n| "for member#{n}s only"}
   f.public true
 end
 
-Factory.define :price_option do |f|
+Factory.define :event_price_option do |f|
   f.title "member"
   f.price "5"
   f.description "members only"
@@ -36,12 +36,12 @@ Factory.define :random_registration_group, :class => EventRegistrationGroup do |
   f.public false
   f.event_id 1
   f.owner_id 1
-  f.owner_attending true
+  f.is_attending true
 end
 Factory.define :event_registration do |f|
   f.person_id
-  f.public false
   f.event_id
+  f.event_price_option_id
 end
 Factory.define :random_person, :class => Person do |f|
   f.sequence(:first_name) {|n| "first#{n}"}

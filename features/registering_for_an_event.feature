@@ -7,7 +7,7 @@ Background:
   | name      | date_and_time                  | id  |
   | new event | Fri Aug 14 14:57:19 -0700 2011 | 200 |
   Given there is a public group named "new group"
-  Given the following price_option records
+  Given the following event_price_option records
   | title     | description                     | price | public | event_id |
   | volunteer | for volunteers                  | 5     | true   | 200      |
   | artist    | for artists only                | 10    | true   | 200      |
@@ -41,24 +41,24 @@ Scenario: going to the new registration page
   Given I am on the event page for "new event"
   When I follow "Register Now" 
   Then I should be on the new registration_group page for "new event" 
-  And I should see fields labeled First name, Last name, Email, Phone, Business Phone, Company, Title, Address1, Address2, City, Zip Code, Comments 
-  And I should see "new group" 
+  And I should see "Register for 'new event'"
+  And I should see fields labeled First name, Last name, Email, Phone, Company, Title, Address1, Address2, City, Zip, Comments 
   When I fill in the following:
   | First name     | jason           |
   | Last name      | Gagne           |
   | Email          | test@test.com   |
   | Phone          | 123-234-2344    |
-  | Business Phone | business_name   |
   | Company        | company_name    |
   | Title          | title           |
-  | Address        | 123 test street |
+  | Address1       | 123 test street |
   | Address2       | apt 12          |
   | City           | Santa Barbara   |
-  | Zip Code       | 93150           |
+  | Zip            | 93150           |
+  # passing to here.
   And I select "volunteer" from "Guest Type"
-  And I check "new group"
+  And I check "event_registration_is_attending"
   And I press "Save and continue"
-  Then I should be on the new_event_registration_group_registration page for "new event" and "1-new-event-registration-group"
+  Then I should be on the new event registration group registration page for "new event" and "Jason Gagne's Group For New Event"
   And I should see "Add a guest"
   And I should see "Checkout?"
   And I should see "Pay by check"
