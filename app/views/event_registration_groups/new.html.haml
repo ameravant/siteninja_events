@@ -13,6 +13,7 @@
     %h2="Event Details"
     .big
       = @event.date_and_time
+      = ninja_parse(@event.description) if @event.description
 = error_messages_for :event_registration_group
 = error_messages_for :person
 
