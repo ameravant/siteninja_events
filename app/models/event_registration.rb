@@ -2,6 +2,8 @@ class EventRegistration < ActiveRecord::Base
   belongs_to :event_registration_group
   belongs_to :person
   belongs_to :event_price_option
+  validates_presence_of :person_id
+  validates_presence_of :event_registration_group_id
   # accepts_nested_attributes_for :person
   has_one :event_transaction # transactions.registration_id
 
