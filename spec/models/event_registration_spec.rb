@@ -4,12 +4,12 @@ describe EventRegistration do
   before(:each) do
     @event = Factory(:random_event)
     @event_price_option = Factory(:random_event_price_option)
+    @event_registration_group = Factory(:random_registration_group, :event_id => @event.id)
     @person = Factory(:random_person)
     @valid_attributes = {
-      :event_id => @event.id,
+      :event_registration_group_id => @event_registration_group.id,
       :event_price_option_id => @event_price_option.id,
-      :person_id => @person.id,
-      :is_attending => true
+      :person_id => @person.id
     }
   end
   it "should create a new instance given valid attributes" do

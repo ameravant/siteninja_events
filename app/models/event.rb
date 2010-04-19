@@ -68,6 +68,5 @@ class Event < ActiveRecord::Base
   def this_week?
     self.date_and_time <= Time.now + 7.days
   end
-
 end
 

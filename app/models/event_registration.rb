@@ -2,7 +2,7 @@ class EventRegistration < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
   belongs_to :event_price_option
-  accepts_nested_attributes_for :person
+  # accepts_nested_attributes_for :person
   has_one :event_transaction # transactions.registration_id
 
   def payment_method
@@ -56,7 +56,4 @@ class EventRegistration < ActiveRecord::Base
   end
 end
 
-class Person < ActiveRecord::Base
-has_many :event_registrations
-end
 

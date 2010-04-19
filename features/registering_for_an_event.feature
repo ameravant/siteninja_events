@@ -44,7 +44,7 @@ Scenario: going to the new registration page
   And I should see "Register for 'new event'"
   And I should see fields labeled First name, Last name, Email, Phone, Company, Title, Address1, Address2, City, Zip, Comments 
   When I fill in the following:
-  | First name     | jason           |
+  | First name     | Jason           |
   | Last name      | Gagne           |
   | Email          | test@test.com   |
   | Phone          | 123-234-2344    |
@@ -56,17 +56,54 @@ Scenario: going to the new registration page
   | Zip            | 93150           |
   # passing to here.
   And I select "volunteer" from "Guest Type"
-  And I check "event_registration_is_attending"
+  And I check "event_registration_group_is_attending"
   And I press "Save and continue"
   Then I should be on the new event registration group registration page for "new event" and "Jason Gagne's Group For New Event"
   And I should see "Add a guest"
   And I should see "Checkout?"
   And I should see "Pay by check"
   And I should see "Pay by cash at the event"
-  And I should see "Pay with a credit card"
+  And I should see "Pay by credit card"
   And I should see "Guest List"
   And I should see "Jason Gagne"
-  And I should see "Total: $10"
+  And I should see "Total: $5"
+  
+Scenario: paying for the event
+  Given I am a user in the system named 'Jason Gagne'
+  And I am the owner of 'new event'
+  And I am not attending 'new event'
+  When I go to the new registration page for 'new event'
+  Then I should not see 'Jason Gagne'
+  And I should not see 'total'
+  And I should see 'Add a guest?'
+  When I fill in -----
+  And I press 'submit'
+  Then I should be on the new registration page for 'new event'
+  And I should see 'bill'
+  And I should see 'Total: $5'
+  When I fill in ----
+  And I press 'submit'
+  Then I should be on the new registration page for 'new event'
+  And I should see 'bill'
+  And I should see 'Mary'
+  And I should see 'Total: $15'
+  When I follow 'Pay by cash at the event'
+  Then I should be on the cash instruction page
+  When I follow 'go back'
+  Then I should be on the new registration page for 'new event'
+  And I should see 'Pay by check'
+  When I follow 'Pay by check'
+  Then I should be on the check instruction page
+  When I follow 'go back'
+  Then I should be on the new registration page for 'new event'
+  When I follow 'Pay by credit card'
+  Then I should be on the credit card page
+  And I should see 'Checkout with Google'
+  When I follow 'go back'
+  Then I should be on the new registration page for 'new event'
+  
+
+
   
   
   

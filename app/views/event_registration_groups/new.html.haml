@@ -26,13 +26,10 @@
         %dd= select :person, :state, $USA_STATES_ARRAY 
         %dt= p.label :comments, "Comments"
         %dd= p.text_area :comments
-    -unless @event_price_options
-      %p This is a free event
-    -else
-      %fieldset.price-option
-        - fields_for @event_registration do |er|
-          %dt= er.label :event_price_option_id, "Guest Type"
-          %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)
+    %fieldset.price-option
+      - fields_for @event_registration do |er|
+        %dt= er.label :event_price_option_id, "Guest Type"
+        %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)
     %dt=f.label :is_attending, "I am attending this event"
-    %dd=check_box :event_registration, :is_attending, {:checked => 'checked'}, true, false
+    %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
   =f.submit "Save and continue"        

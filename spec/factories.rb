@@ -1,8 +1,9 @@
 Factory.define :random_event, :class => Event do |f|
   f.name "my new event"
   f.date_and_time 1.day.from_now.to_s
-  f.allow_check false
-  f.allow_cash false
+  f.allow_check true
+  f.allow_cash true
+  f.allow_credit_card true
   f.permalink "my-new-event"
   f.registration true
   f.registration_limit 1000
@@ -27,10 +28,6 @@ Factory.define :event_price_option do |f|
   f.public true
 end
 
-Factory.define :random_public_group, :class => PersonGroup do |f|
-  f.sequence(:title) { |n| "uniquely titled public group#{n}"}
-  f.public false
-end
 Factory.define :random_registration_group, :class => EventRegistrationGroup do |f|
   f.sequence(:title) { |n|"Guest list 1"}
   f.public false
@@ -39,9 +36,9 @@ Factory.define :random_registration_group, :class => EventRegistrationGroup do |
   f.is_attending true
 end
 Factory.define :event_registration do |f|
-  f.person_id
-  f.event_id
-  f.event_price_option_id
+  f.person_id 1 
+  f.event_registration_group_id 1
+  f.event_price_option_id 3
 end
 Factory.define :random_person, :class => Person do |f|
   f.sequence(:first_name) {|n| "first#{n}"}

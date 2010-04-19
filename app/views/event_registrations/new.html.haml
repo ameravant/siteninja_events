@@ -1,8 +1,20 @@
 - content_for :meta_title do
   Register for
   = @event.name
-
+%h2 Add a guest
+%p Checkout?
+%ul
+  %li= link_to "Pay by cash at the event", "#"
+  %li= link_to "Pay by check", "#"
+  %li= link_to "Pay by credit card", "#"
 - content_for :side_column do
+  .guest-list
+    %h2 Your Guest List
+    -for guest in @current_guests
+      %p= "%s %s" % [guest.first_name, guest.last_name]
+    -if @event_group.total.to_i > 0
+      %p="Total: %s" % number_to_currency(@event_group.total)
+
   .reginstruct
     %h2="How to register"
     Start registration by entering your information in the form to the left.
@@ -13,27 +25,18 @@
   .eventdetails
     %h2="Event Details"
     .big
-      = @event.date_and_time
       %div
         = @event.date_and_time.to_s :long_with_zone
 
 
-= error_messages_for "registration_contact", "contact", :header_message => "There were some problems starting your registration.", :message => nil
-- form_for :event_registration, :url => event_event_registration_groups_event_registrations_path(@event, @event_group) do |f|
-  %table{ :cellspacing => "0" }
-    - fields_for :event_registration do |p|
-      %tr.top
-        %td
-          = p.label :id, "Type"
-        %td
-          - for event_price in @event_prices
-            = p.radio_button :id, event_price.id
-            %label{ :for => "event_price_id_#{event_price.id}" }
-              = h event_price.description
-              \&mdash;
-              = event_price.price
-            %br
-    - fields_for :eventperson do |c|
+= error_messages_for "event_registration", "person", :header_message => "There were some problems starting your registration.", :message => nil
+- form_for @event_registration, :url => event_event_registration_group_event_registrations_url(@event, @event_group) do |f|
+  %table{ :cellspacing => "0" }         
+    %tr.top
+      %td
+        = f.label :event_price_option_id, "Type"
+        = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)       
+    - fields_for :person do |c|
       %tr
         %td
           = c.label :first_name
