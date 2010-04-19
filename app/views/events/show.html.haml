@@ -32,6 +32,7 @@
       Card
     -if @event.allow_other
       Other
+    %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
   / Map and address
   - unless @event.address.blank?
@@ -41,7 +42,6 @@
     %div= h @event.address
     #google_map
     %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
-
   / More events
   - unless @event.registration? or @latest_events.empty?
     %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
@@ -51,6 +51,4 @@
 
 = ninja_parse(@event.description) if @event.description
 
-%br
-.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
