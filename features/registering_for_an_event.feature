@@ -54,7 +54,6 @@ Scenario: going to the new registration page
   | Address2       | apt 12          |
   | City           | Santa Barbara   |
   | Zip            | 93150           |
-  # passing to here.
   And I select "volunteer" from "Guest Type"
   And I check "event_registration_group_is_attending"
   And I press "Save and continue"
@@ -67,40 +66,57 @@ Scenario: going to the new registration page
   And I should see "Guest List"
   And I should see "Jason Gagne"
   And I should see "Total: $5"
+  # passing to here.
   
-Scenario: paying for the event
-  Given I am a user in the system named 'Jason Gagne'
-  And I am the owner of 'new event'
-  And I am not attending 'new event'
-  When I go to the new registration page for 'new event'
-  Then I should not see 'Jason Gagne'
-  And I should not see 'total'
-  And I should see 'Add a guest?'
-  When I fill in -----
-  And I press 'submit'
-  Then I should be on the new registration page for 'new event'
-  And I should see 'bill'
-  And I should see 'Total: $5'
-  When I fill in ----
-  And I press 'submit'
-  Then I should be on the new registration page for 'new event'
-  And I should see 'bill'
-  And I should see 'Mary'
-  And I should see 'Total: $15'
-  When I follow 'Pay by cash at the event'
-  Then I should be on the cash instruction page
-  When I follow 'go back'
-  Then I should be on the new registration page for 'new event'
-  And I should see 'Pay by check'
-  When I follow 'Pay by check'
-  Then I should be on the check instruction page
-  When I follow 'go back'
-  Then I should be on the new registration page for 'new event'
-  When I follow 'Pay by credit card'
-  Then I should be on the credit card page
-  And I should see 'Checkout with Google'
-  When I follow 'go back'
-  Then I should be on the new registration page for 'new event'
+@checkout  
+Scenario: adding a guest and paying for the event
+  Given the following person records
+  | email             | first_name | last_name |
+  | sample@sample.com | Jason      | Gagne     |
+  And there is an event registration group for "new event" titled "Jason's group for new event"
+  And I am not attending "new event"
+  When I go to the add a guest page for "Jason's group for new event"
+  Then I should not see "Jason Gagne"
+  And I should not see "total"
+  And I should see "Add a guest?"
+  When I fill in the following:
+   | First Name   | Sample_first      |
+   | Last Name    | Sample_last       |
+   | Email        | Sample@sample.com |
+   | Phone Number | 123-435-0988      |
+  And I select "volunteer" from "Guest Type"
+  And I press "Save and Continue"
+  When I go to the add a guest page for "Jason's group for new event"
+  And I should see "Sample_first"
+  And I should see "Total: $5"
+  When I fill in the following:
+   | First Name   | bill              |
+   | Last Name    | Sample_last       |
+   | Email        | sample1@sample.com |
+   | Phone Number | 123-435-0988      |
+  And I select "artist" from "Guest Type" 
+  And I press "Save and Continue"
+  When I go to the add a guest page for "Jason's group for new event"
+  And I should see "bill"
+  And I should see "Sample_first"
+  And I should see "Total: $15"
+  When I follow "Pay by cash"
+  Then I should be on the event registration group page titled "Jason's group for new event" for the event named "new event"
+  And I should see "pay by cash"
+  And I should not see "pay by check"
+  And I should not see "pay by credit-card"
+  When I follow "Change your payment method?"
+  When I go to the add a guest page for "Jason's group for new event"
+  And I should see "Pay by check"
+  When I follow "Pay by check"
+  Then I should be on the event registration group page titled "Jason's group for new event" for the event named "new event"
+  When I follow "Change your payment method?"
+  When I go to the add a guest page for "Jason's group for new event"
+  When I follow "Pay by credit-card"
+  Then I should be on the event registration group page titled "Jason's group for new event" for the event named "new event"
+  And I should see "Checkout with Google"
+  When I follow "Change your payment method?"
+  When I go to the add a guest page for "Jason's group for new event"
   
 
 

@@ -30,8 +30,12 @@ class EventRegistrationGroupsController < ApplicationController
       flash[:notice] = "Please try again"
     end    
   end
-  private
-  def create_event_registration_group
-   
+  def show
+    @event = Event.find(params[:event_id])
+    @event_registration_group = EventRegistrationGroup.find(params[:id])
+    @current_guests = @event_registration_group.people
+    if params[:pay_method]
+      @event_registration_group.update_attributes(:pay_method => params[:pay_method], :total_price => @event_registration_group.subtotal)
+    end
   end
 end

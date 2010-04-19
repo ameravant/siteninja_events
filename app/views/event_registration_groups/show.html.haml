@@ -1,0 +1,28 @@
+- content_for :meta_title do
+  = "You have chosen to pay by %s for %s" % [params[:pay_method], @event.name]
+.guest-list
+  %h2 Your Guest List
+  %table{ :cellspacing => "0" } 
+    %th{:colspan => "2"} name
+    %th{:colspan => "2"} type
+    %th{:colspan => "2"} price
+    -for guest in @current_guests
+      %tr
+        %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
+        %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.title
+        %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.price
+  -if @event_registration_group.subtotal.to_i > 0
+    %p="Total: %s" % number_to_currency(@event_registration_group.subtotal)
+
+%h1
+  = yield :meta_title
+- if params[:pay_method] == "cash"
+  %p
+    You will pay for your registration in cash at the event. Simply click the button below to complete your registration.
+- elsif params[:pay_method] == "check"
+  = @event.check_instructions || "Please send a check"
+- else # credit card
+  Checkout with Google
+%p=link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
+
+

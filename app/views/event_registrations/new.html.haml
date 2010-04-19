@@ -1,19 +1,21 @@
 - content_for :meta_title do
   Register for
   = @event.name
-%h2 Add a guest
-%p Checkout?
-%ul
-  %li= link_to "Pay by cash at the event", "#"
-  %li= link_to "Pay by check", "#"
-  %li= link_to "Pay by credit card", "#"
+%h2 Add a guest?
 - content_for :side_column do
   .guest-list
     %h2 Your Guest List
-    -for guest in @current_guests
-      %p= "%s %s" % [guest.first_name, guest.last_name]
-    -if @event_group.total.to_i > 0
-      %p="Total: %s" % number_to_currency(@event_group.total)
+    %table{ :cellspacing => "0" } 
+      %th{:colspan => "2"} name
+      %th{:colspan => "2"} type
+      %th{:colspan => "2"} price
+      -for guest in @current_guests
+        %tr
+          %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
+          %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.title
+          %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.price
+    -if @event_group.subtotal.to_i > 0
+      %p="Total: %s" % number_to_currency(@event_group.subtotal)
 
   .reginstruct
     %h2="How to register"
@@ -34,7 +36,7 @@
   %table{ :cellspacing => "0" }         
     %tr.top
       %td
-        = f.label :event_price_option_id, "Type"
+        = f.label :event_price_option_id, "Guest Type"
         = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)       
     - fields_for :person do |c|
       %tr
@@ -64,7 +66,10 @@
       = f.text_area :comments, :size => "50x6"
   %tr
     %td{ :colspan => "2" }
-      = submit_tag "Save and Continue &gt;", :class => "big"
+      = submit_tag "Save and Continue", :class => "big"
       or
       = link_to "cancel", event_path(@event.permalink)
-
+%p#checkout Checkout?
+%ul
+  -for pay_method in %w(check cash credit-card)
+    %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})

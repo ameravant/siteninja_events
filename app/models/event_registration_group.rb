@@ -9,7 +9,7 @@ class EventRegistrationGroup < PersonGroup
   def owner_is_attending?
     self.is_attending
   end
-  def total
+  def subtotal
     prices = 0
     self.event_registrations.reject{|r| r.event_price_option_id.nil?}.each do |e|
       prices += EventPriceOption.find(e.event_price_option_id).price
