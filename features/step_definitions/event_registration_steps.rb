@@ -23,5 +23,11 @@ Then /^I should see fields labeled (.+)$/ do |labels|
     end
   end
 end
+Given /^I am logged in as admin$/ do
+  visit new_session_url
+  fill_in "Login", :with => "admin"
+  fill_in "Password", :with => "admin"
+  click_button "Sign in" 
+end
 
 

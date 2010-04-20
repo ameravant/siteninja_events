@@ -50,3 +50,7 @@ Factory.define :person do |f|
   f.sequence(:last_name) {|n| "last#{n}"}
   f.sequence(:email){|n| "#{n}email@email.com"} 
 end
+Factory.define :random_user, :class => User do |f|
+  f.sequence(:login) {|n| "login#{n}"}
+  f.sequence(:password) {|n| "pass#{n}"}
+end

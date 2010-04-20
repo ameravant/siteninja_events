@@ -54,13 +54,15 @@ Spec::Runner.configure do |config|
   def threeTimes
     [yield, yield, yield]
   end
-  # def login_as_admin
-  #     @user = Factory(:random_admin)
-  #     @user_session = mock 
-  #     @user_session.stubs(:user).returns(@user) 
-  #     @user_session.stubs(:record) 
-  #     UserSession.stubs(:find).returns( @user_session ) 
-  #   end
+  def login_as_admin
+    # @person = Factory(:random_person)
+    @session = mock
+    @user = Factory(:random_user)
+    @session.stubs(:user).returns(@user)
+    @admin = true
+    @session.stubs(:record) 
+    Session.stubs(:find).returns( @session ) 
+  end
   # 
   #   def login_as(ops={})
   #     @user = Factory(:random_admin, ops)

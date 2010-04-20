@@ -22,7 +22,10 @@ module NavigationHelpers
       new_event_event_registration_group_event_registration_path(Event.find(EventRegistrationGroup.find_by_title($1).event_id), EventRegistrationGroup.find_by_title($1))
     when /event registration group page titled "(.+)" for the event named "(.+)"$/
       event_event_registration_group_path(Event.find_by_name($2), EventRegistrationGroup.find_by_title($1))
-      
+    when /the admin event index page$/
+      admin_events_path
+    when /the new event page$/
+      new_admin_event_path  
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
