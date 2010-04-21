@@ -23,7 +23,7 @@ Feature: Managing advanced registration
     #   When I check "Check option"
     #   Then I should see an html field for 'check instructions'
     And I should see "Registration Limit"
-    And I should see fields labeled Title, Address, Message to display when registration is full and closed:, Check Instructions, Date, Price, Description, Registration Limit
+    And I should see fields labeled Name, Address, Message to display when registration is full and closed:, Check Instructions, Event Start date/time, Event End date/time, Price, Description, Registration Limit, Blurb
     When I fill in the following:
      | Title                                                    | brand new event                        |
      | Message to display when registration is full and closed: | Sorry registration closed              |
@@ -40,6 +40,9 @@ Feature: Managing advanced registration
     And I press "Save Event"
     Then I should be on the new event price option page for "brand new event"
     And I should see "Event Created, would you like to add price options"
+    And I should see "Current Price Options"
+    And I should see "Standard"
+    And I should see "$10.00"
 
   Scenario: adding price options to an event
     Given the following event records
@@ -86,7 +89,7 @@ Feature: Managing advanced registration
         | Prices           | admin price options page for "Incredible Event"                  |                                                 |
         | Incredible Event | edit event page for "Incredible Event"                           |                                                 |  
  
-  # And it has one registration
+  #   And it has one registration
   #   Then i should not see "delete"
   #   Given an option titled "second option"
   #   And it has no registrations

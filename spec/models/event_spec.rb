@@ -1,5 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Event do
+  before(:each) do
+    @valid_attributes = {
+      
+    }
+  end
   describe "association" do
     it "should have many price options" do
       event = Factory(:random_event)

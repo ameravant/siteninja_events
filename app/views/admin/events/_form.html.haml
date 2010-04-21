@@ -19,9 +19,14 @@
         )
   %tr.top
     %td
-      = f.label :date_and_time, "Event date/time"
+      = f.label :start_date_and_time, "Event Start date/time"
     %td
-      = f.datetime_select :date_and_time
+      = f.datetime_select :start_date_and_time
+  %tr.top
+    %td
+      = f.label :end_date_and_time, "Event End date/time"
+    %td
+      = f.datetime_select :end_date_and_time
 - if @cms_config['features']['event_registration']
   %h2
     Registration Options
@@ -29,13 +34,13 @@
     %div
       = f.check_box :registration
       %label{ :for => "event_registration" }
-        Registration enabled
+        Registration Required
     #registration_limit
       %br
       %div
         Only allow
         = f.text_field :registration_limit, :size => 4
-        total people to register
+        Registration Limit
         %span.small.gray
           \&mdash; optional
       %br
@@ -73,7 +78,7 @@
           \&mdash; Use this option for any other payment types
       #check-payment-options
         %h3
-          Payment Instructions
+          Check Instructions
         %p
           ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
         = f.text_area :payment_instructions, :size => "60x8"
