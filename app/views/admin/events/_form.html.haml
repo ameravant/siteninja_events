@@ -38,16 +38,22 @@
     #registration_limit
       %br
       %div
-        Only allow
+        = f.label :registration_limit, "Registration Limit"
         = f.text_field :registration_limit, :size => 4
-        Registration Limit
+        %span guests
         %span.small.gray
           \&mdash; optional
       %br
       %div
-        Message to display when registration is full and closed:
+        =f.label :registration_closed_text, "Message to display when registration is full and closed:"
       %div
         = f.text_area :registration_closed_text, :size => "60x4"
+    #price
+      -f.fields_for :event_price_options do |p|
+        =p.label :price, "Price"
+        =p.text_field :price
+        =p.hidden_field :title, :value =>"Standard"
+        %span.note Leave blank if event is free
     #payments-allowed
       %h3
         Accepted Payments
@@ -76,21 +82,20 @@
           Allow other
         %span.small.gray
           \&mdash; Use this option for any other payment types
-      #check-payment-options
-        %h3
-          Check Instructions
+      #check-payment-options          
+        %h3= f.label :payment_instructions, "Check Instructions"
+        = f.text_area :payment_instructions, :size => "60x8"
         %p
           ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
-        = f.text_area :payment_instructions, :size => "60x8"
       /check-payment-options
     /payments-allowed
 %h2
-  Blurb
+= f.label :blurb, "Blurb"
 = f.text_area :blurb, :size => "80x5"
 %h2
-  Body
 - unless @event.images.empty?
   = render :partial => "admin/shared/image_options", :locals => {:images => @event.images}
+= f.label :description, "Description"
 = f.text_area :description, :size => "80x30", :class => "mceEditor"
 - fancy_submit admin_events_path do
   = f.submit "Save #{@cms_config['site_settings']['event_title']}"

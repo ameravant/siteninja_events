@@ -25,7 +25,7 @@ Feature: Managing advanced registration
     And I should see "Registration Limit"
     And I should see fields labeled Name, Address, Message to display when registration is full and closed:, Check Instructions, Event Start date/time, Event End date/time, Price, Description, Registration Limit, Blurb
     When I fill in the following:
-     | Title                                                    | brand new event                        |
+     | Name                                                     | brand new event                        |
      | Message to display when registration is full and closed: | Sorry registration closed              |
      | Check Instructions                                       | mail us a check                        |
      | Price                                                    | 10.00                                  |
@@ -35,8 +35,8 @@ Feature: Managing advanced registration
     And I check "Allow credit card payment"
     And I check "Allow cash payment"
     And I check "Allow check payment"
-    And I select "February 20, 2011" as the start date
-    And I select "February 21, 2011" as the end date
+    And I select "February 20, 2011 08:00" as the "Event Start date/time" date and time
+    And I select "February 21, 2011 09:00" as the "Event End date/time" date and time
     And I press "Save Event"
     Then I should be on the new event price option page for "brand new event"
     And I should see "Event Created, would you like to add price options"
