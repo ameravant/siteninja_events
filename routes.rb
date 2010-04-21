@@ -1,4 +1,4 @@
-resources :events, :as => events_path, :has_many => :images, :collection => { :past => :get } do |event|
+resources :events, :as => events_path, :has_many => :images, :collection => { :past => :get} do |event|
   event.resources :event_registrations,
     :belongs_to => :people,
     :has_many => :event_registration_people,
@@ -15,4 +15,5 @@ namespace :admin do |admin|
 end
 
 addpeople '/addpeople', :controller => "registration_people", :action => "index"
+
 

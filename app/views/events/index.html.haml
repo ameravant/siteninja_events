@@ -3,7 +3,8 @@
   = @cms_config['site_settings']['events_title']
 
 %h1= yield(:meta_title).strip
-
+-if @cms_config['site_settings']['show_past_events']
+  = link_to "Click here to view past events", past_events_path
 - @events_grouped.each do |year_and_month, events|
   %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
   %ul.events
