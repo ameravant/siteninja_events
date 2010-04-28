@@ -23,7 +23,7 @@ class EventRegistrationGroupsController < ApplicationController
         flash[:notice] = "Thanks for registering, would you like to register any other guests?"
       else
         render :action => "new" and return
-        flash[:notice] = "something went wrong"
+        flash[:notice] = "Please Try Again."
       end
     else
       render :action => "new" and return

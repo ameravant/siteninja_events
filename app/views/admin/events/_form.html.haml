@@ -49,7 +49,7 @@
       %div
         = f.text_area :registration_closed_text, :size => "60x4"
     #price
-      -f.fields_for :event_price_options do |p|
+      -fields_for :event_price_options do |p|
         =p.label :price, "Price"
         =p.text_field :price
         =p.hidden_field :title, :value =>"Standard"

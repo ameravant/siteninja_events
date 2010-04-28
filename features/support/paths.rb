@@ -25,7 +25,9 @@ module NavigationHelpers
     when /the admin event index page$/
       admin_events_path
     when /the new event page$/
-      new_admin_event_path  
+      new_admin_event_path 
+    when /the new event price option page for "(.+)"$/
+      new_admin_event_event_price_option_path(Event.find_by_name($1)) 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

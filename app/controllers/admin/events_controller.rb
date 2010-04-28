@@ -28,10 +28,12 @@ class Admin::EventsController < AdminController
   end
 
   def create
-    @event = current_user.events.build(params[:event])
+    @event = Event.new(params[:event])
+    @event.event_price_options.build(params[:event_price_options])
+    @event.person_id = current_user.person.id
     if @event.save
       flash[:notice] = "#{@event.name} created."
-      redirect_to admin_events_path
+      redirect_to new_admin_event_event_price_option_path(@event)
     else
       render :action => "new"
     end

@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
-  validates_presence_of :name, :date_and_time
+  validates_presence_of :name, :start_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
   named_scope :future, :conditions => ["date_and_time >= ?", Time.now]
@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
   named_scope :past, :conditions => ["date_and_time < ?", Time.now]
   named_scope :soonest, :limit => 6
   default_scope :order => "start_date_and_time"
-  accepts_nested_attributes_for :event_price_options
+  # accepts_nested_attributes_for :event_price_options
 
   def to_param
     "#{self.id}-#{self.permalink}"

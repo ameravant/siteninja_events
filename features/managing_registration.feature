@@ -32,6 +32,7 @@ Feature: Managing advanced registration
      | Description                                              | This is gonna be a great event         |
      | Address                                                  | 100 test avenue, testville, test 00000 |
      | Registration Limit                                       | 500                                    |
+    And I check "Registration Required"
     And I check "Allow credit card payment"
     And I check "Allow cash payment"
     And I check "Allow check payment"
