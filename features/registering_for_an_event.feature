@@ -1,10 +1,11 @@
+@public
 Feature: registering for an event
   In order to go to an event
   As an anonymous user
   I want to register
 Background:
   Given the following random_event records
-  | name      | date_and_time                  | id  |
+  | name      | start_date_and_time            | id  |
   | new event | Fri Aug 14 14:57:19 -0700 2011 | 200 |
   Given there is a public group named "new group"
   Given the following event_price_option records

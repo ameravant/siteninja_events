@@ -1,0 +1,12 @@
+-form_for [:admin, @event, @price_option] do |f|
+  %dl
+    %dt=f.label :title
+    %dd=f.text_field :title
+    %dt=f.label :description
+    %dd=f.text_area :description
+    %dt=f.label :price
+    %dd=f.text_area :price, :size => 4
+    %dt=f.label :public, "Show this option to the public"
+    %dd=f.check_box :public
+  =f.submit "Save Price Option"
+    

@@ -40,29 +40,28 @@ Feature: Managing advanced registration
     And I select "February 21, 2011 09:00" as the "Event End date/time" date and time
     And I press "Save Event"
     Then I should be on the new event price option page for "brand new event"
-    And I should see "Event Created, would you like to add price options"
+    And I should see "Event created, would you like to add price options"
     And I should see "Current Price Options"
     And I should see "Standard"
     And I should see "$10.00"
 
   Scenario: adding price options to an event
-    Given the following event records
-    | title       | registration required | registration limit | start date        |
+    Given the following random_event records
+    | name       | registration | registration_limit | start_date_and_time        |
     | Great Event | true                  | 500                | February 20, 2011 |
-    And I am on the new price option page for "Great Event"
-    Then I should see fields labeled Title, Description, Price, Public
+    And I am on the new event price option page for "Great Event"
+    Then I should see fields labeled Title, Description, Price, Show this option to the public
     When I fill in the following:
-     | Title       | member      |
-     | Description | for members |
-     | Price       | 10.00       |
-     | Public      | true        |
-    And I press "Create price option"
-    Then I should be on the new price option page for "Great Event"
-    And I should see "current options:"
+     | Title                          | Member      |
+     | Description                    | for members |
+     | Price                          | 10.00       |
+     | Show this option to the public | true        |
+    And I press "Save Price Option"
+    Then I should be on the new event price option page for "Great Event"
+    And I should see "Current Price Options"
     And I should see "Member"
     And I should see "10.00"
-    And I should see "delete"
-    And I should see fields labeled Title, Description, Price, Public
+    And I should see fields labeled Title, Description, Price, Show this option to the public
     And I should see "Done adding price options"
     When I follow "Done adding price options"
     Then I should be on the admin events index page

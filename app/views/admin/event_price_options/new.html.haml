@@ -1,0 +1,16 @@
+%h1 Add Price Options
+%div.current-options
+  %h2 Current Price Options
+  %table{ :cellspacing => "0" } 
+    %th{:colspan => "2"} Title
+    %th{:colspan => "2"} Description
+    %th{:colspan => "2"} Price
+    -for option in @event.event_price_options
+      %tr
+        %td{:colspan => "2"}= option.title
+        %td{:colspan => "2"}= option.description
+        %td{:colspan => "2"}= number_to_currency(option.price)
+%h2 Add a new price option
+=render :partial => "form"
+
+=link_to "Done adding price options", admin_events_path
