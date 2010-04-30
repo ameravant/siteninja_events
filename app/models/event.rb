@@ -19,11 +19,17 @@ class Event < ActiveRecord::Base
   named_scope :soonest, :limit => 6
   default_scope :order => "start_date_and_time"
   # accepts_nested_attributes_for :event_price_options
-
   def to_param
     "#{self.id}-#{self.permalink}"
   end
-
+  
+  def start_date_and_time
+    self.read_attribute(:start_date_and_time) || self.read_attribute(:date_and_time)
+  end
+  def date_and_time
+    self.read_attribute(:date_and_time) || self.read_attribute(:start_date_and_time)
+  end
+  
   def title
     self.name
   end

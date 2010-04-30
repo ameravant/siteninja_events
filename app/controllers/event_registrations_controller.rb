@@ -11,7 +11,9 @@ class EventRegistrationsController < ApplicationController
   end
   def create
     @event = Event.find(params[:event_id])
+    @event_price_options = @event.event_price_options
     @event_registration_group = EventRegistrationGroup.find(params[:event_registration_group_id])
+    @event_group = @event_registration_group
     @person = Person.find_by_email(params[:person][:email])
     @person ||= Person.new(params[:person])
     @event_registration = EventRegistration.new(params[:event_registration])
@@ -20,6 +22,7 @@ class EventRegistrationsController < ApplicationController
       @event_registration.event_registration_group_id = @event_registration_group.id
       if @event_registration.save
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
+        @event_registration_group.update_attributes(:total_price => @event_registration_group.subtotal)
         "A new guest has been added to your registration"
       else 
         render :action => "new" and return

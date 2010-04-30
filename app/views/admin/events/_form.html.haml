@@ -54,6 +54,9 @@
         =p.text_field :price
         =p.hidden_field :title, :value =>"Standard"
         %span.note Leave blank if event is free
+        %br
+        =p.label :public, "Show this price to the public?"
+        =p.check_box :public, :checked => "checked"
     #payments-allowed
       %h3
         Accepted Payments

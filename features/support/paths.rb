@@ -28,6 +28,12 @@ module NavigationHelpers
       new_admin_event_path 
     when /the new event price option page for "(.+)"$/
       new_admin_event_event_price_option_path(Event.find_by_name($1)) 
+    when /edit event page for "(.+)"$/
+      edit_admin_event_path(Event.find_by_name($1, :order => "id DESC"))
+    when /admin event registration group index page for "(.+)"$/
+      admin_event_event_registration_groups_path(Event.find_by_name($1, :order => "id DESC"))
+    when /admin price options page for "(.+)"$/
+      admin_event_event_price_options_path(Event.find_by_name($1, :order => "id DESC"))
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

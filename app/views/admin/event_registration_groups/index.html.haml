@@ -1,0 +1,8 @@
+%h1= "Registration Groups for %s" % @event.name
+%ul
+  - for group in @groups
+    %li=group.title
+%h1= "Full Roster for %s" % @event.name
+%ul
+  - for reg in @registrations
+    %li=reg.person.first_name

@@ -64,30 +64,34 @@ Feature: Managing advanced registration
     And I should see fields labeled Title, Description, Price, Show this option to the public
     And I should see "Done adding price options"
     When I follow "Done adding price options"
-    Then I should be on the admin events index page
-    
+    Then I should be on the admin event index page
+ @admin_index   
   Scenario: Admin events index
-    Given following event records
-    | title            | address         | description              | start_date      | registration_required | registration_limit |
-    | Incredible Event | 100 test street | this is an awesome event | June 20th, 2020 | true                  | 100                |
-    And I am on the admin events index page
+    Given I am on the admin event index page
+    Given the following random_event records
+    | name             | address         | description              | start_date_and_time | registration | registration_limit |
+    | Incredible Event | 100 test street | this is an awesome event | June 20th, 2020     | true         | 100                |
+    And I am on the admin event index page
     Then I should see "Incredible Event"
-    And I should see "June 20th"
+    And I should see "Jun 20"
     And I should see "Edit"
     And I should see "Prices"
-    And I should see "Delete"
     And I should see "Registrations"
     And I should see "spots are still available"
-    Scenario Outline:
+  Scenario Outline:
+    Given the following random_event records
+    | name             | address         | description              | start_date_and_time | registration | registration_limit |
+    | Incredible Event | 100 test street | this is an awesome event | June 20th, 2020     | true         | 100                |
+    Given I am on the admin event index page
     When I follow <link>
     Then I should be on <page_name>
     And I should see <text>
     Examples:
-        | link             | page_name                                                        | text                                            |
-        | Edit             | edit event page for "Incredible Event"                           | "Title", "Description", "Registration Required" |
-        | Registrations    | admin event registration group index page for "Incredible Event" |                                                 |
-        | Prices           | admin price options page for "Incredible Event"                  |                                                 |
-        | Incredible Event | edit event page for "Incredible Event"                           |                                                 |  
+      | link                    | page_name                                                        | text                                       |
+      | "Edit"                  | edit event page for "Incredible Event"                           | "Edit Event"                               |
+      | "Registrations"         | admin event registration group index page for "Incredible Event" | "Registration Groups for Incredible Event" |
+      | "Prices"                | admin price options page for "Incredible Event"                  | "Price Options for Incredible Event"       |
+      | "Edit Incredible Event" | edit event page for "Incredible Event"                           | "Edit Event"                               |
  
   #   And it has one registration
   #   Then i should not see "delete"

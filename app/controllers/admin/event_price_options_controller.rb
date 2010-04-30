@@ -13,4 +13,8 @@ class Admin::EventPriceOptionsController < AdminController
       render :new and return
     end
   end
+  def index
+    @event = Event.find(params[:event_id], :include => "event_price_options")
+    @prices = @event.event_price_options
+  end
 end

@@ -1,0 +1,19 @@
+%h1= "Price Options for %s" % @event.name
+%div.current-options
+  %h2 Current Price Options
+  %table{ :cellspacing => "0" } 
+    %th{:colspan => "2"} Title
+    %th{:colspan => "2"} Description
+    %th{:colspan => "2"} Price
+    %th Edit
+    %th Delete
+    -for option in @prices
+      %tr
+        %td{:colspan => "2"}= option.title
+        %td{:colspan => "2"}= option.description
+        %td{:colspan => "2"}= number_to_currency(option.price)
+        -unless option.event_registrations.any?
+          %td= icon "Write", edit_admin_event_event_price_option_path(@event, option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
+          -unless option.title == "Standard"
+            %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")
+        

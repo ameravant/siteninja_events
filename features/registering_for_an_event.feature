@@ -62,8 +62,8 @@ Scenario: going to the new registration page
   And I should see "Add a guest"
   And I should see "Checkout?"
   And I should see "Pay by check"
-  And I should see "Pay by cash at the event"
-  And I should see "Pay by credit card"
+  And I should see "Pay by cash"
+  And I should see "Pay by credit-card"
   And I should see "Guest List"
   And I should see "Jason Gagne"
   And I should see "Total: $5"
@@ -81,25 +81,25 @@ Scenario: adding a guest and paying for the event
   And I should not see "total"
   And I should see "Add a guest?"
   When I fill in the following:
-   | First Name   | Sample_first      |
-   | Last Name    | Sample_last       |
+   | First Name   | Samplefirst      |
+   | Last Name    | Samplelast       |
    | Email        | Sample@sample.com |
    | Phone Number | 123-435-0988      |
   And I select "volunteer" from "Guest Type"
   And I press "Save and Continue"
-  When I go to the add a guest page for "Jason's group for new event"
-  And I should see "Sample_first"
+  Then I should be on the add a guest page for "Jason's group for new event"
+  And I should see "Samplefirst"
   And I should see "Total: $5"
   When I fill in the following:
    | First Name   | bill              |
-   | Last Name    | Sample_last       |
+   | Last Name    | Samplelast       |
    | Email        | sample1@sample.com |
    | Phone Number | 123-435-0988      |
   And I select "artist" from "Guest Type" 
   And I press "Save and Continue"
-  When I go to the add a guest page for "Jason's group for new event"
+  Then I should be on the add a guest page for "Jason's group for new event"
   And I should see "bill"
-  And I should see "Sample_first"
+  And I should see "Samplefirst"
   And I should see "Total: $15"
   When I follow "Pay by cash"
   Then I should be on the event registration group page titled "Jason's group for new event" for the event named "new event"

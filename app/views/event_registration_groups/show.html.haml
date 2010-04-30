@@ -11,8 +11,8 @@
         %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
         %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.title
         %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.price
-  -if @event_registration_group.subtotal.to_i > 0
-    %p="Total: %s" % number_to_currency(@event_registration_group.subtotal)
+  -if @event_registration_group.total_price.to_i > 0
+    %p="Total: %s" % number_to_currency(@event_registration_group.total_price)
 
 %h1
   = yield :meta_title
