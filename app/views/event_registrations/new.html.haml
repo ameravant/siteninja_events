@@ -29,7 +29,7 @@
     %h2="Event Details"
     .big
       %h3= @event.name
-      %div= @event.date_and_time.to_s :long_ordinal
+      %p= @event.date_and_time.to_s :long_ordinal
       %div= @event.description
     
 
