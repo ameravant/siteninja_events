@@ -28,8 +28,9 @@
   .eventdetails
     %h2="Event Details"
     .big
+      %h3= @event.name
       %div
-        = @event.date_and_time.to_s :long_with_zone
+        = @event.date_and_time.to_s :long_ordinal
 
 
 = error_messages_for "event_registration", "person", :header_message => "There were some problems starting your registration.", :message => nil
