@@ -20,7 +20,7 @@
   %p
     You will pay for your registration in cash at the event.
 - elsif params[:pay_method] == "check"
-  = @event.check_instructions
+  = @event.check_instructions || @event.payment_instructions
 - else # credit card
   =google_checkout_button(@event_registration_group)
 -unless params[:pay_method] == "credit-card"

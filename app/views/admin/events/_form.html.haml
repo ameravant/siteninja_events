@@ -86,8 +86,8 @@
         %span.small.gray
           \&mdash; Use this option for any other payment types
       #check-payment-options          
-        %h3= f.label :payment_instructions, "Check Instructions"
-        = f.text_area :payment_instructions, :size => "60x8"
+        %h3= f.label :check_instructions, "Check Instructions"
+        = f.text_area :check_instructions, :size => "60x8"
         %p
           ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
       /check-payment-options
