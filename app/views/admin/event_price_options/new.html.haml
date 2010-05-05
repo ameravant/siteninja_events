@@ -5,7 +5,7 @@
     %th{:colspan => "2"} Title
     %th{:colspan => "2"} Description
     %th{:colspan => "2"} Price
-    -for option in @event.event_price_options
+    -for option in @event.event_price_options.public
       %tr
         %td{:colspan => "2"}= option.title
         %td{:colspan => "2"}= option.description

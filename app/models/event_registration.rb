@@ -5,7 +5,7 @@ class EventRegistration < ActiveRecord::Base
   validates_presence_of :person_id
   # accepts_nested_attributes_for :person
   has_one :event_transaction # transactions.registration_id
-
+  after_create :record_transaction
   def payment_method
     if self.card?
       "PayPal"
@@ -16,6 +16,10 @@ class EventRegistration < ActiveRecord::Base
     elsif self.other?
       "Other"
     end
+  end
+  
+  def paid?
+    self.event_registration_group.paid
   end
 
   def is_registered?(email,event_id)
@@ -54,6 +58,10 @@ class EventRegistration < ActiveRecord::Base
         PostOffice.deliver_event_registration_guest(c.name, c.email, event.permalink, event.title, event.date_and_time, registration_owner.person.name)
       end
     end
+  end
+  private
+  def record_transaction
+    EventTransaction.create(:event_registration_id => id, :total => event_price_option.price)
   end
 end
 

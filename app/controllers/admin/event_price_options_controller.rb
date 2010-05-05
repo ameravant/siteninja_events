@@ -1,6 +1,5 @@
 class Admin::EventPriceOptionsController < AdminController
-  before_filter :get_option, :only => [:edit, :update, :delete]
-  before_filter :check_for_registrations, :only => [:edit, :update, :delete]
+  before_filter :get_option, :only => [:edit, :update, :destroy]
   def new
     @price_option = EventPriceOption.new
     @event = Event.find(params[:event_id], :include => "event_price_options")
@@ -17,20 +16,35 @@ class Admin::EventPriceOptionsController < AdminController
   end
   def index
     @event = Event.find(params[:event_id], :include => "event_price_options")
-    @prices = @event.event_price_options
+    @prices = @event.event_price_options.public
   end
   def edit
     
   end
+  def update
+    if @price_option.save
+      redirect_to admin_event_event_price_options_path(@price_option.event)
+      flash[:notice] = "You've added a new price option. Would you like to add another?"
+    else
+      render :edit
+    end
+  end
+  def destroy
+    if @price_option.event_registrations.empty?
+      @price_option.destroy
+      redirect_to admin_event_event_price_options_path(@price_option.event)
+      flash[:notice] = "Price option removed"
+    else
+       @price_option.public = false
+       if @price_option.save
+         redirect_to admin_event_event_price_options_path(@price_option.event)
+         flash[:notice] = "Price Option removed"
+       end
+     end
+   end
   private
   def get_option
     @price_option = EventPriceOption.find(params[:id])
     @event = @price_option.event
-  end
-  def check_for_registrations
-    if @price_option && @price_option.event_registrations.any?
-      redirect_to admin_event_event_price_options_path(@price_option.event)
-      flash[:notice] = "This option has registrations and cannot be edited or deleted"
-    end
   end
 end

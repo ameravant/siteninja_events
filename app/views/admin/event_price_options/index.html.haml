@@ -11,12 +11,10 @@
     %th Edit
     %th Delete
     -for option in @prices
-      %tr
+      %tr[option]
         %td{:colspan => "2"}= option.title
         %td{:colspan => "2"}= option.description
         %td{:colspan => "2"}= number_to_currency(option.price)
-        -unless option.event_registrations.any?
-          %td= icon "Write", edit_admin_event_event_price_option_path(@event, option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
-          -unless option.title == "Standard"
-            %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")
+        %td= icon "Write", edit_admin_event_event_price_option_path(@event, option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
+        %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")
         
