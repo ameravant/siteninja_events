@@ -18,11 +18,14 @@
   = yield :meta_title
 - if params[:pay_method] == "cash"
   %p
-    You will pay for your registration in cash at the event. Simply click the button below to complete your registration.
+    You will pay for your registration in cash at the event.
 - elsif params[:pay_method] == "check"
-  = @event.check_instructions || "Please send a check"
+  = @event.check_instructions
 - else # credit card
-  Checkout with Google
-%p=link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
-
+  =google_checkout_button(@event_registration_group)
+-unless params[:pay_method] == "credit-card"
+  %p= "If you're happy with this payment method, you're all done. See you at the event!"
+  %p 
+    Otherwise  
+    =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
 

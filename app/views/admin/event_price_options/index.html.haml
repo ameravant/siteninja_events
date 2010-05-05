@@ -1,4 +1,7 @@
 %h1= "Price Options for %s" % @event.name
+%p
+  = icon "Plus", new_admin_event_event_price_option_path(@event)
+  = link_to "Add a new price option", new_admin_event_event_price_option_path(@event)
 %div.current-options
   %h2 Current Price Options
   %table{ :cellspacing => "0" } 
