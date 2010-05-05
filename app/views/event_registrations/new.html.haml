@@ -39,7 +39,7 @@
       -if @event_price_options
         %td
           = f.label :event_price_option_id, "Guest Type"
-          = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title)       
+          = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, "#{title} #{price}")       
     - fields_for :person do |c|
       %tr
         %td
