@@ -47,7 +47,7 @@ Feature: Managing advanced registration
 
   Scenario: adding price options to an event
     Given the following random_event records
-    | name       | registration | registration_limit | start_date_and_time        |
+    | name       | registration | registration_limit | date_and_time        |
     | Great Event | true                  | 500                | February 20, 2011 |
     And I am on the new event price option page for "Great Event"
     Then I should see fields labeled Title, Description, Price, Show this option to the public
@@ -69,7 +69,7 @@ Feature: Managing advanced registration
   Scenario: Admin events index
     Given I am on the admin event index page
     Given the following random_event records
-    | name             | address         | description              | start_date_and_time | registration | registration_limit |
+    | name             | address         | description              | date_and_time | registration | registration_limit |
     | Incredible Event | 100 test street | this is an awesome event | June 20th, 2020     | true         | 100                |
     And I am on the admin event index page
     Then I should see "Incredible Event"
@@ -80,7 +80,7 @@ Feature: Managing advanced registration
     And I should see "spots are still available"
   Scenario Outline:
     Given the following random_event records
-    | name             | address         | description              | start_date_and_time | registration | registration_limit |
+    | name             | address         | description              | date_and_time | registration | registration_limit |
     | Incredible Event | 100 test street | this is an awesome event | June 20th, 2020     | true         | 100                |
     Given I am on the admin event index page
     When I follow <link>
@@ -92,19 +92,21 @@ Feature: Managing advanced registration
       | "Registrations"         | admin event registration group index page for "Incredible Event" | "Registration Groups for Incredible Event" |
       | "Prices"                | admin price options page for "Incredible Event"                  | "Price Options for Incredible Event"       |
       | "Edit Incredible Event" | edit event page for "Incredible Event"                           | "Edit Event"                               |
- 
-  #   And it has one registration
-  #   Then i should not see "delete"
-  #   Given an option titled "second option"
-  #   And it has no registrations
-  #   Then I should see "delete"
-  # 
-  #   When I'm on the events index page 
-  #   And I click on number of registrations for "new event"
-  #   Then I should be on the registrations index page for "new event"
-  #   Given there is a registration with the first name of "jason"
-  #   And I should see CSV export
-  #   And I should see a table with headers entitled "name", "email", "payment status", "admin   
+  Scenario: delete button shows for options with no registrations
+    Given the following random_event records
+    Given the following random_registration_group records
+    Given the following random_event_price_option records
+    When I go to the edit event price option page for the option titled "no registrations" and event titled "Great Event"
+    Then I should see "delete"
+    When I go to the edit event price option page for the option titled "1 registration" and event titled "Great Event"
+    Then i should not see "delete"
+  Scenario: csv
+    Given I am on the admin event index page 
+    And I click on number of registrations for "new event"
+    Then I should be on the registrations index page for "new event"
+    Given there is a registration with the first name of "jason"
+    And I should see CSV export
+    And I should see a table with headers entitled "name", "email", "payment status", "admin   
   #                                                    comment", "admin name", "amount", "price option name"
   #   And I should see "jason"
   #   And I should see "unpaid"

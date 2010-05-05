@@ -5,7 +5,7 @@ Feature: registering for an event
   I want to register
 Background:
   Given the following random_event records
-  | name      | start_date_and_time            | id  |
+  | name      | date_and_time            | id  |
   | new event | Fri Aug 14 14:57:19 -0700 2011 | 200 |
   Given there is a public group named "new group"
   Given the following event_price_option records
@@ -83,10 +83,11 @@ Scenario: adding a guest and paying for the event
   When I fill in the following:
    | First Name   | Samplefirst      |
    | Last Name    | Samplelast       |
-   | Email        | Sample@sample.com |
+   | Email        | Sample@sample2.com |
    | Phone Number | 123-435-0988      |
   And I select "volunteer" from "Guest Type"
   And I press "Save and Continue"
+  # Then I should see "jasodfafd"
   Then I should be on the add a guest page for "Jason's group for new event"
   And I should see "Samplefirst"
   And I should see "Total: $5"

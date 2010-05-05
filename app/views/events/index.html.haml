@@ -10,9 +10,9 @@
     - for event in events
       %li[event]
         %div.event_date
-          %span.month== #{event.start_date_and_time.strftime('%b')}
-          %span.date== #{event.start_date_and_time.strftime('%d')}
-          %span.day== #{event.start_date_and_time.strftime('%a')}
+          %span.month== #{event.date_and_time.strftime('%b')}
+          %span.date== #{event.date_and_time.strftime('%d')}
+          %span.day== #{event.date_and_time.strftime('%a')}
         .event_description
           %h3
             = link_to h(event.name), event
@@ -23,7 +23,7 @@
             - elsif event.this_week?
               %span.event_tag.event_tag_this_week this week
           - if @cms_config['features']['event_registration']
-            - if event.registration? and event.start_date_and_time >= Date.tomorrow.to_time
+            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
               -# if event.registration_spots?
               -#%span.event_tag.event_tag_open registration open
               -#- else
