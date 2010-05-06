@@ -15,7 +15,7 @@ class Admin::EventRegistrationGroupsController < AdminController
           @people.each do |person|
             group = person.registration_group_for(@event)
             registration = person.event_registrations.find(:first, :conditions => "event_registration_group_id = #{group.id}")
-            csv << [person.last_name, person.first_name, person.email, "$" + registration.event_transaction.total, group.is_paid? ]
+            csv << [person.last_name, person.first_name, person.email, "$%f" % registration.event_transaction.total, group.is_paid? ]
           end
         end
         send_data csv_data,

@@ -10,7 +10,8 @@ namespace :admin do |admin|
     event.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put }
     event.resources :event_registration_groups,
       :has_many => :contacts,
-      :member => { :csv => :get, :paid => :get, :unpaid => :get }
+      :member => {:paid => :get, :unpaid => :get }, 
+      :collection => {:csv => :get}
   end
 end
 

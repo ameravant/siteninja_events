@@ -1,4 +1,5 @@
 %h1= large_icon('Clock') + ' ' + 'Event Registration Groups'
+%p= link_to "Get a CSV of the event roster", admin_event_event_registration_groups_path(@event, :format => :csv)
 %table.full_width{ :cellspacing => "0" }
   %thead
     %tr
