@@ -55,6 +55,7 @@ class EventsController < ApplicationController
 
     def find_page
       @page = Page.find_by_permalink 'events'
+      @menu = @page.menus.first
       @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
     end
 
