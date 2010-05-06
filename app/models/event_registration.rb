@@ -19,7 +19,7 @@ class EventRegistration < ActiveRecord::Base
   end
   
   def paid?
-    self.event_registration_group.paid
+    self.event_registration_group.paid ? "paid" : "not paid"
   end
 
   def is_registered?(email,event_id)

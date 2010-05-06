@@ -1,8 +1,34 @@
-%h1= "Registration Groups for %s" % @event.name
-%ul
-  - for group in @groups
-    %li=group.title
+%h1= large_icon('Clock') + ' ' + 'Event Registration Groups'
+%table.full_width{ :cellspacing => "0" }
+  %thead
+    %tr
+      %th Title
+      %th Number of Registrations
+      %th Total
+      %th.center Paid
+  %tbody
+    - for group in @groups
+      %tr{ :class => cycle('odd', 'even') }
+        %td.gray= group.title
+        %td= group.event_registrations.count
+        %td= number_to_currency(group.total_price)
+        %td
+          -unless group.paid
+            %span[group]= paid_icon(group, admin_event_event_registration_group_path(@event, group), group.title, "visible")
+          -else
+            %span=image_tag("#{icons_loc}/green/16x16/Currency Dollar.png", :class => "icon", :title => "Event Paid for", :alt => "Paid")
+%br
 %h1= "Full Roster for %s" % @event.name
-%ul
-  - for reg in @registrations
-    %li=reg.person.first_name
+%table.full_width{:cellspacing => "O"}
+  %thead
+    %tr
+      %th Last Name
+      %th First Name
+      %th Paid
+  %tbody
+    - for person in @people
+      %tr
+        %td=person.last_name
+        %td=person.first_name
+        %td=person.registration_group_for(@event).is_paid?
+    

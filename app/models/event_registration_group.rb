@@ -16,4 +16,7 @@ class EventRegistrationGroup < PersonGroup
     end
     prices.to_s
   end
+  def is_paid?
+    self.paid ? "paid" : "not paid"
+  end
 end

@@ -1,6 +1,6 @@
 class AddPaidToPersonGroups < ActiveRecord::Migration
   def self.up
-    add_column :person_groups, :paid, :boolean
+    add_column :person_groups, :paid, :boolean, :default => false
   end
 
   def self.down
