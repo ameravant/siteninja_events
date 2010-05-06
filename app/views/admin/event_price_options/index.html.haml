@@ -17,7 +17,5 @@
         %td{:colspan => "2"}= number_to_currency(option.price)
         %td= icon "Write", edit_admin_event_event_price_option_path(@event, option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
         -if option.event_registrations.empty?
-          %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")
-        -else
-          %td= 
+          %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")      
         
