@@ -10,9 +10,7 @@
 
 %br
 
-- if params[:q].blank?
-  %p== You can find past #{@cms_config['site_settings']['event_title'].pluralize} by searching for them by name.
-- else
+- if !params[:q].blank?
   %h2== Found #{pluralize @all_events.size, "event"}
 
 %table.full_width{ :cellspacing => "0" }

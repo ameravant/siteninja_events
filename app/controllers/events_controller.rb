@@ -8,11 +8,15 @@ class EventsController < ApplicationController
     add_breadcrumb @cms_config['site_settings']['events_title']
   end
 
+  # def past
+  #   @past = true
+  #   @past_events = []
+  #   @events = Event.past
+  #   render :action => "index"
+  # end
+  # 
   def past
-    @past = true
-    @past_events = []
-    @events = Event.past
-    render :action => "index"
+    @events_grouped = Event.past.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
   end
 
   def show
@@ -51,6 +55,7 @@ class EventsController < ApplicationController
 
     def find_page
       @page = Page.find_by_permalink 'events'
+      @menu = @page.menus.first
       @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
     end
 
