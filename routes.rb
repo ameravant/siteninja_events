@@ -17,3 +17,4 @@ end
 
 addpeople '/addpeople', :controller => "registration_people", :action => "index"
 
+

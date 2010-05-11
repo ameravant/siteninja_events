@@ -15,7 +15,7 @@ class Event < ActiveRecord::Base
   named_scope :this_month, :conditions => { :date_and_time => (Time.now..(Time.now + 29.days))  }
   named_scope :three_months,:conditions => { :date_and_time => (Time.now..(Time.now + 3.months))  }
   named_scope :this_year, :conditions => { :date_and_time => (Time.now..Time.now.next_year)  }
-  named_scope :past, :conditions => ["date_and_time < ?", Time.now]
+  named_scope :past, :order => "date_and_time desc", :conditions => ["date_and_time < ?", Time.now]
   named_scope :soonest, :limit => 6
   default_scope :order => "date_and_time"
   # accepts_nested_attributes_for :event_price_options

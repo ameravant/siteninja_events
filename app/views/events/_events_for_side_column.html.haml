@@ -1,0 +1,11 @@
+-unless @events.blank?
+  - content_for :side_column do
+    %h1= @cms_config['site_settings']['events_title']
+    %ul.recent_events.list_of_links
+      - for event in @events[0..count]
+        %li
+          %h2= link_to event.name, event_path(event)
+          %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
+          = event.blurb.blank? ? simple_format(truncate(h(event.description), :length => 100)) : simple_format(h(truncate(event.blurb, :length => 100)))
+          %span.more= link_to "more info", event_path(event)
+

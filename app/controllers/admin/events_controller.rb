@@ -10,7 +10,7 @@ class Admin::EventsController < AdminController
   def index
     if params[:q].blank?
       add_breadcrumb @cms_config['site_settings']['events_title']
-      @all_events = Event.future
+      @all_events = Event.all
     else
       add_breadcrumb @cms_config['site_settings']['events_title'], "admin_events_path"
       add_breadcrumb "Search"
