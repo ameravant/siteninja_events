@@ -1,11 +1,11 @@
 class EventRegistration < ActiveRecord::Base
   belongs_to :event_registration_group
   belongs_to :person
-  belongs_to :event_price_option
   validates_presence_of :person_id
   # accepts_nested_attributes_for :person
   has_one :event_transaction # transactions.registration_id
   after_create :record_transaction
+  attr_accessor :event_price_option_id
   def payment_method
     if self.card?
       "PayPal"
@@ -61,6 +61,7 @@ class EventRegistration < ActiveRecord::Base
   end
   private
   def record_transaction
+    #how do I pass params to model
     EventTransaction.create(:event_registration_id => id, :total => event_price_option.price)
   end
 end

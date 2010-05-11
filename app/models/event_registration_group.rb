@@ -11,8 +11,8 @@ class EventRegistrationGroup < PersonGroup
   end
   def subtotal
     prices = 0
-    self.event_registrations.reject{|r| r.event_price_option_id.nil?}.each do |e|
-      prices += EventPriceOption.find(e.event_price_option_id).price
+    self.event_registrations.each do |e|
+      prices += e.event_transaction.total
     end
     prices.to_s
   end

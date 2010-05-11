@@ -17,7 +17,7 @@ class EventRegistrationGroupsController < ApplicationController
       @event_registration_group.event = @event
       @event_registration_group.title = ("%s %s's group for %s" % [@person.first_name, @person.last_name, @event.name]).titleize
       if @event_registration_group.is_attending == true
-        @event_registration_group.event_registrations.build(:event_price_option_id => params[:event_registration][:event_price_option_id], :person_id => @person.id)
+        @event_registration_group.event_registrations.build(:person_id => @person.id)
       end
       if @event_registration_group.save
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
