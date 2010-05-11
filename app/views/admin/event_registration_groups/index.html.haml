@@ -1,5 +1,6 @@
-%h1= large_icon('Clock') + ' ' + 'Event Registration Groups'
+%h1= large_icon('Clock') + ' ' + 'Registrations for %s' % @event.name
 %p= link_to "Get a CSV of the event roster", admin_event_event_registration_groups_path(@event, :format => :csv)
+%h2 Registration Groups
 %table.full_width{ :cellspacing => "0" }
   %thead
     %tr
@@ -10,14 +11,14 @@
   %tbody
     - for group in @groups
       %tr{ :class => cycle('odd', 'even') }
-        %td.gray= group.title
+        %td.gray= group.title.gsub(/'s Group.*/, "'s Group")
         %td= group.event_registrations.count
         %td= number_to_currency(group.total_price)
         %td
           -unless group.paid
-            %span[group]= paid_icon(group, admin_event_event_registration_group_path(@event, group), group.title, "visible")
+            %span[group]= unpaid_icon(group, admin_event_event_registration_group_path(@event, group), group.title, "visible")
           -else
-            %span=image_tag("#{icons_loc}/green/16x16/Currency Dollar.png", :class => "icon", :title => "Event Paid for", :alt => "Paid")
+            %span[group]= paid_icon(group, admin_event_event_registration_group_path(@event, group), group.title, "visible")
 %br
 %h1= "Full Roster for %s" % @event.name
 %table.full_width{:cellspacing => "O"}

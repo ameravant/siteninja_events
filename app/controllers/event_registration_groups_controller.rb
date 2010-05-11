@@ -17,9 +17,15 @@ class EventRegistrationGroupsController < ApplicationController
       @event_registration_group.event = @event
       @event_registration_group.title = ("%s %s's group for %s" % [@person.first_name, @person.last_name, @event.name]).titleize
       if @event_registration_group.is_attending == true
-        @event_registration_group.event_registrations.build(:person_id => @person.id)
+        @event_registration_group.event_registrations.build(:person_id => @person.id, :event_price_option_id => params[:event_registration][:event_price_option_id])
       end
       if @event_registration_group.save
+        registration = @event_registration_group.event_registrations.last
+        EventTransaction.create(:event_registration_id => registration.id, 
+                                :total => registration.event_price_option.price,
+                                :description => registration.event_price_option.description,
+                                :title => registration.event_price_option.title
+                                )
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
         flash[:notice] = "Thanks for registering, would you like to register any other guests?"
       else

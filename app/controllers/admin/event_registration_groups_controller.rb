@@ -1,4 +1,5 @@
 class Admin::EventRegistrationGroupsController < AdminController
+  add_breadcrumb "Calendar", "admin_events_url"
   def index
     @event = Event.find(params[:event_id], :include => 'event_registration_groups')
     @groups = @event.event_registration_groups
@@ -27,8 +28,8 @@ class Admin::EventRegistrationGroupsController < AdminController
   end
   def update
     @group = EventRegistrationGroup.find(params[:id])
-    if params[:paid] == "true"
-      @group.update_attributes(:paid => true)
+    if params[:paid]
+      @group.update_attributes(:paid => params[:paid])
       # respond_to :js
     end
   end

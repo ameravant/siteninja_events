@@ -21,6 +21,7 @@ class EventRegistrationsController < ApplicationController
       @event_registration.person = @person
       @event_registration.event_registration_group_id = @event_registration_group.id
       if @event_registration.save
+        EventTransaction.create(:event_registration_id => @event_registration.id, :total => @event_registration.event_price_option.price)
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
         @event_registration_group.update_attributes(:total_price => @event_registration_group.subtotal)
         "A new guest has been added to your registration"

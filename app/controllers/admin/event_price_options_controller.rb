@@ -22,25 +22,17 @@ class Admin::EventPriceOptionsController < AdminController
     
   end
   def update
-    if @price_option.save
+    if @price_option.update_attributes(params[:event_price_option])
       redirect_to admin_event_event_price_options_path(@price_option.event)
-      flash[:notice] = "You've added a new price option. Would you like to add another?"
+      flash[:notice] = "You've changed this price option. Would you like to add another?"
     else
       render :edit
     end
   end
   def destroy
-    if @price_option.event_registrations.empty?
-      @price_option.destroy
-      redirect_to admin_event_event_price_options_path(@price_option.event)
-      flash[:notice] = "Price option removed"
-    else
-       @price_option.public = false
-       if @price_option.save
-         redirect_to admin_event_event_price_options_path(@price_option.event)
-         flash[:notice] = "Price Option removed"
-       end
-     end
+    @price_option.destroy
+    redirect_to admin_event_event_price_options_path(@price_option.event)
+    flash[:notice] = "Price option removed"
    end
   private
   def get_option

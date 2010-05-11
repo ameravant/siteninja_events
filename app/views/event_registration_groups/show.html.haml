@@ -23,9 +23,8 @@
   = @event.check_instructions || @event.payment_instructions
 - else # credit card
   =google_checkout_button(@event_registration_group)
--unless params[:pay_method] == "credit-card"
-  %p= "If you're happy with this payment method, you're all done. See you at the event!"
-  %p 
-    Otherwise  
-    =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
+%p= "If you're happy with this payment method, you're all done. See you at the event!"
+%p 
+  Otherwise  
+  =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
 

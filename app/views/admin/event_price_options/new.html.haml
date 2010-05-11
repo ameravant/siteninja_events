@@ -1,4 +1,7 @@
 %h1 Add Price Options
+%p
+  = icon "Write", edit_admin_event_path(@event)
+  = link_to "Edit this Event", edit_admin_event_path(@event)
 %div.current-options
   %h2 Current Price Options
   %table{ :cellspacing => "0" } 
@@ -7,7 +10,9 @@
     %th{:colspan => "2"} Price
     -for option in @event.event_price_options.public
       %tr
-        %td{:colspan => "2"}= option.title
+        %td{:colspan => "2"}
+          = icon "Write", edit_admin_event_event_price_option_path(@event, option)
+          = option.title
         %td{:colspan => "2"}= option.description
         %td{:colspan => "2"}= number_to_currency(option.price)
 %h2 Add a new price option

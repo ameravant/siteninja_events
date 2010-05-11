@@ -12,6 +12,7 @@
   / Registration link
   - if @event.future_date? and @event.registration?
     %h2 Registration
+    %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
     %h3 Pricing Options
     %table#price_options
       %th title
@@ -27,11 +28,11 @@
     -if @event.allow_cash
       Cash
     -if @event.allow_check
-      Check
+      , Check
     -if @event.allow_card
-      Card
+      , Card
     -if @event.allow_other
-      Other
+      , Other
     %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
   / Map and address
@@ -49,6 +50,6 @@
 
 %h1= yield(:meta_title).strip
 
-= ninja_parse(@event.description) if @event.description
+= @event.blurb
 
 

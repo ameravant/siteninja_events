@@ -59,7 +59,6 @@
               = defeature_icon(event, "/admin/events/#{event.to_param}/features/1", event.title, "none")
           -else
             = disabled_feature_icon(event, [:new, :admin, event, :feature], event.title)
-          = icon "Search", event
           = icon "Write", edit_admin_event_path(event), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
           = trash_icon(event, admin_event_path(event), "Delete #{event.name}")
 
