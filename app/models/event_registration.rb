@@ -62,7 +62,7 @@ class EventRegistration < ActiveRecord::Base
   private
   def record_transaction
     #how do I pass params to model
-    EventTransaction.create(:event_registration_id => id, :total => event_price_option.price)
+    EventTransaction.create(:event_registration_id => id, :total => EventPriceOption.find(event_price_option_id).price)
   end
 end
 
