@@ -10,11 +10,11 @@
     %th{:colspan => "2"} Price
     %th Edit
     %th Delete
-    -for option in @prices
-      %tr[option]
-        %td{:colspan => "2"}= option.title
-        %td{:colspan => "2"}= option.description
-        %td{:colspan => "2"}= number_to_currency(option.price)
-        %td= icon "Write", edit_admin_event_event_price_option_path(@event, option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
-        %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")      
+    -for event_price_option in @prices
+      %tr[event_price_option]
+        %td{:colspan => "2"}= event_price_option.title
+        %td{:colspan => "2"}= event_price_option.description
+        %td{:colspan => "2"}= number_to_currency(event_price_option.price)
+        %td= icon "Write", edit_admin_event_event_price_option_path(@event, event_price_option), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
+        %td= trash_icon(event_price_option, admin_event_event_price_option_path(@event, event_price_option), "Delete #{event_price_option.title}")      
         

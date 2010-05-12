@@ -31,8 +31,7 @@ class Admin::EventPriceOptionsController < AdminController
   end
   def destroy
     @price_option.destroy
-    redirect_to admin_event_event_price_options_path(@price_option.event)
-    flash[:notice] = "Price option removed"
+    respond_to :js
    end
   private
   def get_option

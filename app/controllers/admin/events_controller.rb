@@ -32,6 +32,7 @@ class Admin::EventsController < AdminController
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id
     if @event.save
+      PersonGroup.create(:title => "#{@event.name}-#{@event.id}", :public => false, :role => false, :description => "subscription group for #{@event.name}")
       flash[:notice] = "Event created, would you like to add price options"
       redirect_to new_admin_event_event_price_option_path(@event)
     else

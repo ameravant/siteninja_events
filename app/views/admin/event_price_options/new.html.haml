@@ -9,12 +9,13 @@
     %th{:colspan => "2"} Description
     %th{:colspan => "2"} Price
     -for option in @event.event_price_options.public
-      %tr
+      %tr[option]
         %td{:colspan => "2"}
           = icon "Write", edit_admin_event_event_price_option_path(@event, option)
           = option.title
         %td{:colspan => "2"}= option.description
         %td{:colspan => "2"}= number_to_currency(option.price)
+        %td= trash_icon(option, admin_event_event_price_option_path(@event, option), "Delete #{option.title}")      
 %h2 Add a new price option
 =render :partial => "form"
 

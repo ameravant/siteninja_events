@@ -12,7 +12,7 @@ class EventRegistrationGroup < PersonGroup
   def subtotal
     prices = 0
     self.event_registrations.each do |e|
-      prices += e.event_transaction.total
+      prices += (e.event_transaction.total || 0)
     end
     prices.to_s
   end

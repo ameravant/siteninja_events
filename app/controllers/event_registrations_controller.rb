@@ -17,11 +17,12 @@ class EventRegistrationsController < ApplicationController
     @person = Person.find_by_email(params[:person][:email])
     @person ||= Person.new(params[:person])
     @event_registration = EventRegistration.new(params[:event_registration])
+    @person.person_group_ids = @person.person_group_ids << PersonGroup.find_by_title("#{@event.name}-#{@event.id}").id
     if @person.save
       @event_registration.person = @person
       @event_registration.event_registration_group_id = @event_registration_group.id
       if @event_registration.save
-        EventTransaction.create(:event_registration_id => @event_registration.id, :total => @event_registration.event_price_option.price)
+        EventTransaction.create(:event_registration_id => @event_registration.id, :total => @event_registration.event_price_option.price, :title => @event_registration.event_price_option.title )
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
         @event_registration_group.update_attributes(:total_price => @event_registration_group.subtotal)
         "A new guest has been added to your registration"

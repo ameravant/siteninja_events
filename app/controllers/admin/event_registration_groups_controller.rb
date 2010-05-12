@@ -12,11 +12,11 @@ class Admin::EventRegistrationGroupsController < AdminController
       wants.csv do
         @outfile = @event.name + "_registrations_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         csv_data = FasterCSV.generate do |csv|
-          csv << ["Last Name", "First Name", "Email", "Total", "Paid"]
+          csv << ["Last Name", "First Name", "Owner Phone", "Email", "Total", "Paid", "Payment Method"]
           @people.each do |person|
             group = person.registration_group_for(@event)
             registration = person.event_registrations.find(:first, :conditions => "event_registration_group_id = #{group.id}")
-            csv << [person.last_name, person.first_name, person.email, "$%d" % registration.event_transaction.total, group.is_paid? ]
+            csv << [person.last_name, person.first_name, group.owner.phone, person.email, "$%d" % registration.event_transaction.total, group.is_paid?, group.pay_method ]
           end
         end
         send_data csv_data,
@@ -30,7 +30,7 @@ class Admin::EventRegistrationGroupsController < AdminController
     @group = EventRegistrationGroup.find(params[:id])
     if params[:paid]
       @group.update_attributes(:paid => params[:paid])
-      # respond_to :js
+      respond_to :js
     end
   end
   def destroy

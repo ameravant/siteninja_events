@@ -25,12 +25,12 @@
           %td.price= number_to_currency(price_option.price)
       
     You may pay by:
+    -if @event.allow_card
+      Card
     -if @event.allow_cash
-      Cash
+      , Cash
     -if @event.allow_check
       , Check
-    -if @event.allow_card
-      , Card
     -if @event.allow_other
       , Other
     %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
