@@ -1,1 +1,0 @@
-page.visual_effect :fade, dom_id(@registration_contact), :duration => 1

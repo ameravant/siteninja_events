@@ -1,8 +1,0 @@
-%div{ :id => "#{dom_id(event_price)}" }
-  = trash_icon (event_price, admin_event_event_price_path(@event, event_price), "this price")
-  = icon "Write", edit_admin_event_event_price_path(@event, event_price)
-  \&nbsp;
-  = link_to h(event_price.description), edit_admin_event_event_price_path(@event, event_price)
-  \&mdash;
-  = event_price.price
-
