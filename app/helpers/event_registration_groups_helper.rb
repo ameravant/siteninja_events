@@ -10,7 +10,7 @@ module EventRegistrationGroupsHelper
         <input name=\"item_price_1\" type=\"hidden\" value=\"#{group.total_price}\"/>
         <input name=\"item_currency_1\" type=\"hidden\" value=\"USD\"/>
         <input name=\"_charset_\" type=\"hidden\" value=\"utf-8\"/>
-        <input alt=\"\" src=\"https://checkout.google.com/buttons/buy.gif?merchant_id=#{@cms_config['site_settings']['google_merchant_id']}&amp;w=117&amp;h=48&amp;style=white&amp;variant=text&amp;loc=en_US\" type=\"image\"/>
+        <input alt=\"\" src=\"https://checkout.google.com/buttons/buy.gif?merchant_id=#{@cms_config['site_settings']['google_merchant_id']}&amp;w=117&amp;#{[events_url].to_query('continue_url')}&amp;h=48&amp;style=white&amp;variant=text&amp;loc=en_US\" type=\"image\"/>
     </form>"
   end
   
