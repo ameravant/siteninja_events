@@ -16,7 +16,7 @@ class Admin::EventsController < AdminController
       add_breadcrumb "Search"
       @all_events = Event.find :all, :conditions => ["name like ?", "#{params[:q]}%"], :order => "date_and_time desc"
     end
-    @events = @all_events.sort_by(&:date_and_time).reverse.paginate(:page => params[:page], :per_page => 50)
+    @events = @all_events.sort_by(&:date_and_time).paginate(:page => params[:page], :per_page => 50)
   end
 
   def new
