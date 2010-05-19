@@ -33,15 +33,22 @@ class Event < ActiveRecord::Base
   def title
     self.name
   end
+  
+  def is_closed?
+    self.is_full? || self.is_past_deadline?
+  end
+  
+  def is_full?
+    self.registration_count >= self.registration_limit 
+  end
+  
+  def is_past_deadline?
+    deadline = self.registration_deadline ? self.registration_deadline : self.date_and_time
+    Time.now > deadline
+  end
 
   def registration_count
-    # A person is considered registered if:
-    #   (a) the registration record they are associated with is approved; or
-    #   (b) their registration contact record was created in the last 30 minutes
-    EventRegistrationPerson.find(:all, :include => {:event_registration, :person}, :conditions => [
-        "event_id = ? and ((event_registrations.approved = ?) or (event_registrations.approved = ? and people.created_at >= ?))",
-        self.id, true, false, 30.minutes.ago]
-      ).flatten.compact.uniq.size
+    self.event_registration_groups.collect(&:event_registrations).flatten.size
   end
 
   def spots_available

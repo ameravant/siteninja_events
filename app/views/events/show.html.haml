@@ -10,7 +10,7 @@
     %div= @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
 
   / Registration link
-  - if @event.future_date? and @event.registration?
+  - if @event.future_date? and @event.registration? && !@event.is_closed?
     %h2 Registration
     %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
     %h3 Pricing Options

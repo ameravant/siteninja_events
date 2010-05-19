@@ -1,79 +1,82 @@
 - content_for :meta_title do
   Register for
   = @event.name
-%h2 Add a guest?
-- content_for :side_column do
-  .guest-list
-    %h2 Your Guest List
-    %table{ :cellspacing => "0" } 
-      %th{:colspan => "2"} name
-      %th{:colspan => "2"} type
-      %th{:colspan => "2"} price
-      -if @current_guests
-        -for guest in @current_guests
-          %tr
-            %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
-            %td{:colspan => "2"}= guest.event_registrations.last.event_transaction.title
-            %td{:colspan => "2"}= number_to_currency(guest.event_registrations.last.event_transaction.total)
-    -if @event_group && @event_group.subtotal.to_i > 0
-      %p="Total: %s" % number_to_currency(@event_group.subtotal)
-
-  .reginstruct
-    %h2="How to register"
-    Start registration by entering your information in the form to the left.
-    You are able to add guests in the next step.
-    %span.bold.purple
-      Registration takes less than five minutes.
-
-  .eventdetails
-    %h2="Event Details"
-    .big
-      %h3= @event.name
-      %p= @event.date_and_time.to_s :long_ordinal
-      %div= @event.blurb
-    
-
-
-= error_messages_for "event_registration", "person", :header_message => "There were some problems starting your registration.", :message => nil
-- form_for @event_registration, :url => event_event_registration_group_event_registrations_url(@event, @event_group) do |f|
-  %table{ :cellspacing => "0" }         
+-unless @event.is_closed?
+  %h2 Add a guest?
+  - content_for :side_column do
+    .guest-list
+      %h2 Your Guest List
+      %table{ :cellspacing => "0" } 
+        %th{:colspan => "2"} name
+        %th{:colspan => "2"} type
+        %th{:colspan => "2"} price
+        -if @current_guests
+          -for guest in @current_guests
+            %tr
+              %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
+              %td{:colspan => "2"}= guest.event_registrations.last.event_transaction.title
+              %td{:colspan => "2"}= number_to_currency(guest.event_registrations.last.event_transaction.total)
+      -if @event_group && @event_group.subtotal.to_i > 0
+        %p="Total: %s" % number_to_currency(@event_group.subtotal)
+  
+    .reginstruct
+      %h2="How to register"
+      Start registration by entering your information in the form to the left.
+      You are able to add guests in the next step.
+      %span.bold.purple
+        Registration takes less than five minutes.
+  
+    .eventdetails
+      %h2="Event Details"
+      .big
+        %h3= @event.name
+        %p= @event.date_and_time.to_s :long_ordinal
+        %div= @event.blurb
+      
+  
+  
+  = error_messages_for "event_registration", "person", :header_message => "There were some problems starting your registration.", :message => nil
+  - form_for @event_registration, :url => event_event_registration_group_event_registrations_url(@event, @event_group) do |f|
+    %table{ :cellspacing => "0" }         
+      %tr.top
+        -if @event_price_options
+          %td
+            = f.label :event_price_option_id, "Guest Type"
+            = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)       
+      - fields_for :person do |c|
+        %tr
+          %td
+            = c.label :first_name
+          %td
+            = c.text_field :first_name
+        %tr
+          %td
+            = c.label :last_name
+          %td
+            = c.text_field :last_name
+        %tr
+          %td
+            = c.label :email
+          %td
+            = c.text_field :email
+        %tr
+          %td
+            = c.label :phone, "Phone number"
+          %td
+            = c.text_field :phone, :size => 16, :maxlength => 20
     %tr.top
-      -if @event_price_options
-        %td
-          = f.label :event_price_option_id, "Guest Type"
-          = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)       
-    - fields_for :person do |c|
-      %tr
-        %td
-          = c.label :first_name
-        %td
-          = c.text_field :first_name
-      %tr
-        %td
-          = c.label :last_name
-        %td
-          = c.text_field :last_name
-      %tr
-        %td
-          = c.label :email
-        %td
-          = c.text_field :email
-      %tr
-        %td
-          = c.label :phone, "Phone number"
-        %td
-          = c.text_field :phone, :size => 16, :maxlength => 20
-  %tr.top
-    %td
-      = f.label :comments
-    %td
-      = f.text_area :comments, :size => "50x6"
-  %tr
-    %td{ :colspan => "2" }
-      = submit_tag "Save and Continue", :class => "big"
-      or
-      = link_to "cancel", event_path(@event.permalink)
-%p#checkout Checkout?
-%ul
-  -for pay_method in %w(check cash credit-card)
-    %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
+      %td
+        = f.label :comments
+      %td
+        = f.text_area :comments, :size => "50x6"
+    %tr
+      %td{ :colspan => "2" }
+        = submit_tag "Save and Continue", :class => "big"
+        or
+        = link_to "cancel", event_path(@event.permalink)
+  %p#checkout Checkout?
+  %ul
+    -for pay_method in %w(check cash credit-card)
+      %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
+-else
+  =@event.regisration_closed_text

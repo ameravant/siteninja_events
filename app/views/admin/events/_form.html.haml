@@ -48,7 +48,11 @@
           \&mdash; optional
       %br
       %div
-        =f.label :registration_closed_text, "Message to display when registration is full and closed:"
+        = f.label :registration_deadline, "Deadline to register"
+        = f.datetime_select :registration_deadline        
+      %br
+      %div
+        =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
       %div
         = f.text_area :registration_closed_text, :size => "60x4"
     #price
