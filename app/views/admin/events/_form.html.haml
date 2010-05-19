@@ -66,10 +66,11 @@
       %div
         = f.check_box :allow_card
         %label{ :for => "event_allow_card" }
-          Allow credit card payment via PayPal
+          Allow credit card payment via Google Checkout
         %span.small.gray
-          \&mdash; must have PayPal configured in
-          = link_to "settings", edit_admin_setting_path
+          \&mdash; must have Google Checkout configured in
+          = link_to "settings ", edit_admin_setting_path
+          under the 'Advanced' tab
       %div
         = f.check_box :allow_cash
         %label{ :for => "event_allow_cash" }
