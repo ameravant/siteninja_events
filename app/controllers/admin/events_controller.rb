@@ -31,12 +31,12 @@ class Admin::EventsController < AdminController
     @event = Event.new(params[:event])
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id
-    if params[:event][:end_date_and_time] > params[:event][:date_and_time]
-      params[:event][:end_date_and_time] = params[:event][:date_and_time]
-    end
-    if params[:event][:registration_deadline] < 1.hour.from_now
-      params[:event][:registration_deadline] = params[:event][:date_and_time]
-    end
+    # if params[:event][:end_date_and_time] > params[:event][:date_and_time]
+    #       params[:event][:end_date_and_time] = params[:event][:date_and_time]
+    #     end
+    #     if params[:event][:registration_deadline] < 1.hour.from_now
+    #       params[:event][:registration_deadline] = params[:event][:date_and_time]
+    #     end
     if @event.save
       PersonGroup.create(:title => "#{@event.name}-#{@event.id}", :public => false, :role => false, :description => "subscription group for #{@event.name}")
       flash[:notice] = "Event created, would you like to add price options"
