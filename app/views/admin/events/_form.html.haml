@@ -2,12 +2,12 @@
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.rjs"
 = error_messages_for "event"
 %table{ :cellspacing => "0" }
-  %tr
+  %tr{ :class => "form-option #{cycle('even', 'odd')}" }
     %td.big
       = f.label :name
     %td
       = f.text_field :name, :class => "big", :size => 30
-  %tr
+  %tr{:class => "form-option #{cycle('even', 'odd')}"}
     %td
       = f.label :address
     %td
@@ -17,7 +17,17 @@
         %strong
           optional
         )
-  %tr.top
+  -if !@event_categories.blank?
+    %tr{:class => "form-option #{cycle('even', 'odd')}"}
+      %td
+        Category
+      %td
+        - for event_category in @event_categories
+          %span.event_category_checkbox
+            = check_box_tag "event[event_category_ids][]", event_category.id, @event.event_categories.include?(event_category), :id => dom_id(event_category)
+            = label_tag dom_id(event_category), "#{event_category.title}"
+        = clear
+  %tr{:class => "form-option #{cycle('even', 'odd')} top"}
     %td
       = f.label :date_and_time, "Event date/time"
     %td

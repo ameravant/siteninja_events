@@ -1,11 +1,18 @@
 - content_for :meta_title do
-  = "Past" if @past
-  = @cms_config['site_settings']['events_title']
-= render :partial => "/event_categories/event_categories_for_side_column"
+  == #{@cms_config['site_settings']['event_title'].pluralize} by category:
+  = h @event_category.title
+
 %h1= yield(:meta_title).strip
--if @cms_config['site_settings']['show_past_events']
-  = link_to "Click here to view past events", past_events_path
-- @events_grouped.each do |year_and_month, events|
+
+= render :partial => "/event_categories/event_categories_for_side_column"
+/ = render :partial => "/events/sidebar"
+
+/= render :partial => "/events/event_for_list", :collection => @events
+
+- unless @events.total_pages == 1
+  = will_paginate @events
+
+- @events.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }.each do |year_and_month, events|
   %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
   %ul.events
     - for event in events
