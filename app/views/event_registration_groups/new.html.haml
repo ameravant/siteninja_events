@@ -26,8 +26,6 @@
             %dt= p.label att.downcase.gsub(" ","_").to_sym, att
             %dd= p.text_field att.downcase.gsub(" ","_").to_sym
           %dd= select :person, :state, $USA_STATES_ARRAY 
-          %dt= p.label :comments, "Comments"
-          %dd= p.text_area :comments
       %fieldset.price-option
         - fields_for @event_registration do |er|
           %dt= er.label :event_price_option_id, "Guest Type"
