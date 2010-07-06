@@ -1,9 +1,10 @@
 - content_for :head do
-  = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.rjs"
+  = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
 = error_messages_for "event"
-%p
-  = icon "Plus", new_admin_event_event_price_option_path(@event)
-  = link_to "Add a new price option for this event", new_admin_event_event_price_option_path(@event)
+-if @controller.action_name == 'edit'
+  %p
+    = icon "Plus", new_admin_event_event_price_option_path(@event)
+    = link_to "Add a new price option for this event", new_admin_event_event_price_option_path(@event)
 %table{ :cellspacing => "0" }
   %tr{ :class => "form-option #{cycle('even', 'odd')}" }
     %td.big
@@ -44,79 +45,78 @@
   %h2
     Registration Options
   %div
-    %div
+    %div#registration-ops
       = f.check_box :registration
       %label{ :for => "event_registration" }
         Registration Required
-    #registration_limit
-      %br
-      %div
-        = f.label :registration_limit, "Registration Limit"
-        = f.text_field :registration_limit, :size => 4
-        %span guests
-        %span.small.gray
-          \&mdash; optional
-      %br
-      %div
-        = f.label :registration_deadline, "Deadline to register"
-        = f.datetime_select :registration_deadline        
-      %br
-      %div
-        =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
-      %div
-        = f.text_area :registration_closed_text, :size => "60x4"
-    #price
-      -fields_for :event_price_options do |p|
-        =p.label :price, "Price"
-        =p.text_field :price
-        =p.hidden_field :title, :value =>"Standard"
-        %span.note Leave blank if event is free
+    %div.registration-options
+      #registration_limit
         %br
-        =p.label :public, "Show this price to the public?"
-        =p.check_box :public, :checked => "checked"
-    #payments-allowed
-      %h3
-        Accepted Payments
-      %div
-        = f.check_box :allow_card
-        %label{ :for => "event_allow_card" }
-          Allow credit card payment via Google Checkout
-        %span.small.gray
-          \&mdash; must have Google Checkout configured in
-          = link_to "settings ", edit_admin_setting_path
-          under the 'Advanced' tab
-      %div
-        = f.check_box :allow_cash
-        %label{ :for => "event_allow_cash" }
-          Allow cash payment
-        %span.small.gray
-          \&mdash; only if registration is required
-      %div
-        = f.check_box :allow_check
-        %label{ :for => "event_allow_check" }
-          Allow check payment
-        %span.small.gray
-          \&mdash; only if registration is required
-      %div
-        = f.check_box :allow_other
-        %label{ :for => "event_allow_other" }
-          Allow other
-        %span.small.gray
-          \&mdash; Use this option for any other payment types
-      #check-payment-options          
-        %h3= f.label :check_instructions, "Check Instructions"
-        = f.text_area :check_instructions, :size => "60x8"
-        %p
-          ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
-      /check-payment-options
-    /payments-allowed
-%h2
-= f.label :blurb, "Blurb"
+        %div
+          = f.label :registration_limit, "Registration Limit"
+          = f.text_field :registration_limit, :size => 4
+          %span guests
+          %span.small.gray
+            \&mdash; optional
+        %br
+        %div
+          = f.label :registration_deadline, "Deadline to register"
+          = f.datetime_select :registration_deadline        
+        %br
+        %div
+          =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
+        %div
+          = f.text_area :registration_closed_text, :size => "60x4"
+      #price
+        -fields_for :event_price_options do |p|
+          =p.label :price, "Price"
+          =p.text_field :price
+          =p.hidden_field :title, :value =>"Standard"
+          %span.note Leave blank if event is free
+          %br
+          =p.label :public, "Show this price to the public?"
+          =p.check_box :public, :checked => "checked"
+      #payments-allowed
+        %h3
+          Accepted Payments
+        %div
+          = f.check_box :allow_card
+          %label{ :for => "event_allow_card" }
+            Allow credit card payment via Google Checkout
+          %span.small.gray
+            \&mdash; must have Google Checkout configured in
+            = link_to "settings ", edit_admin_setting_path
+            under the 'Advanced' tab
+        %div
+          = f.check_box :allow_cash
+          %label{ :for => "event_allow_cash" }
+            Allow cash payment
+          %span.small.gray
+            \&mdash; only if registration is required
+        %div
+          = f.check_box :allow_check
+          %label{ :for => "event_allow_check" }
+            Allow check payment
+          %span.small.gray
+            \&mdash; only if registration is required
+        %div
+          = f.check_box :allow_other
+          %label{ :for => "event_allow_other" }
+            Allow other
+          %span.small.gray
+            \&mdash; Use this option for any other payment types
+        #check-payment-options          
+          %h3= f.label :check_instructions, "Check Instructions"
+          = f.text_area :check_instructions, :size => "60x8"
+          %p
+            ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
+        /check-payment-options
+      /payments-allowed
+%h2= f.label :blurb, "Blurb"
 = f.text_area :blurb, :size => "80x5"
-%h2
+%h2= f.label :description, "Description"
 - unless @event.images.empty?
   = render :partial => "admin/shared/image_options", :locals => {:images => @event.images}
-= f.label :description, "Description"
 = f.text_area :description, :size => "80x30", :class => "mceEditor"
 - fancy_submit admin_events_path do
   = f.submit "Save #{@cms_config['site_settings']['event_title']}"

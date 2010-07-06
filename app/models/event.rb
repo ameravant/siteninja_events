@@ -24,11 +24,8 @@ class Event < ActiveRecord::Base
     "#{self.id}-#{self.permalink}"
   end
   
-  def date_and_time
-    self.read_attribute(:date_and_time) || self.read_attribute(:date_and_time)
-  end
-  def date_and_time
-    self.read_attribute(:date_and_time) || self.read_attribute(:date_and_time)
+  def end_date_and_time
+    self.read_attribute(:date_and_time)
   end
   
   def title

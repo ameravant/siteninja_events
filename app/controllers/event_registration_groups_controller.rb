@@ -2,7 +2,7 @@ class EventRegistrationGroupsController < ApplicationController
   def new
     @event = Event.find(params[:event_id])
     @event_registration_group = EventRegistrationGroup.new
-    @person = Person.new
+    @person ||= Person.new
     @event_registration = EventRegistration.new
     @event_price_options = @event.event_price_options
   end
