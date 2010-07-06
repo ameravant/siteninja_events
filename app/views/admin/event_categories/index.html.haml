@@ -1,0 +1,42 @@
+- content_for :meta_title do
+  = @cms_config['site_settings']['event_title'] + " Categories"
+
+%h1= large_icon('Folder2') + ' ' + yield(:meta_title).strip
+
+%div.box
+  %span.hmenu
+    = icon "Plus", new_admin_event_category_path
+    = link_to "Make a new category", new_admin_event_category_path
+  = clear
+
+%br
+
+%table{ :cellspacing => "0" }
+  %thead
+    %tr
+      %th Title
+      %th= @cms_config['site_settings']['event_title'].pluralize
+      %th.center Options
+  %tbody
+    - for event_category in @event_categories do
+      %tr[event_category]{ :class => cycle('odd','even') }
+        %td= link_to h(event_category.title), edit_admin_event_category_path(event_category.id)
+        %td= number_with_delimiter(event_category.events.count)
+        %td.center
+          - if event_category.menus_count > 0
+            = navigation_icon(event_category, event_category.title, "inline")
+          - else
+            = activate_navigation_icon(event_category, [:new, :admin, event_category, :menu], event_category.title, "inline")
+          = icon "Write", edit_admin_event_category_path(event_category.id)
+          = trash_icon(event_category, admin_event_category_path(event_category.permalink), "the #{event_category.title} category")
+
+%br
+
+%p
+  %strong Note about deleting categories:
+  If you delete a category, events will no longer be assigned to it. They will
+  still be able to be viewed, but not browsed by category until they are re-assigned to
+  a new category. The
+  = link_to "#{@cms_config['site_settings']['event_title']} list", admin_events_path
+  will notify you of events that do not have a category assignment.
+

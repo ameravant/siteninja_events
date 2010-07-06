@@ -7,6 +7,7 @@ class Event < ActiveRecord::Base
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
+  has_and_belongs_to_many :event_categories
   validates_presence_of :name, :date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"

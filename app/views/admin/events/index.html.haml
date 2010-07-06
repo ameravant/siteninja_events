@@ -8,6 +8,10 @@
     = icon "Plus", new_admin_event_path
     = link_to "Add a new #{@cms_config['site_settings']['event_title']}", new_admin_event_path
 
+  %span.hmenu
+    = icon "Folder", admin_event_categories_path
+    = link_to "Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
+
 %br
 
 - if !params[:q].blank?
@@ -50,15 +54,8 @@
         %td
           = link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
         %td.center
-          - if event.images_count.to_i > 0
-            - if event.features_count.to_i > 0
-              = defeature_icon(event, "/admin/events/#{event.to_param}/features/1", event.title, "inline")
-              = feature_icon(event, [:admin, event, :features], event.title, "none")
-            -else
-              = feature_icon(event, [:admin, event, :features], event.title, "inline")
-              = defeature_icon(event, "/admin/events/#{event.to_param}/features/1", event.title, "none")
-          -else
-            = disabled_feature_icon(event, [:new, :admin, event, :feature], event.title)
-          = icon "Write", edit_admin_event_path(event), '', "#{icons_loc}/", '16x16', 'gray', "Edit"
-          = trash_icon(event, admin_event_path(event), "Delete #{event.name}")
+          = feature_icon_select(event, event.title)
+          = icon "Search", event
+          = icon "Write", edit_admin_event_path(event)
+          = trash_icon(event, admin_event_path(event), "#{event.name}")
 
