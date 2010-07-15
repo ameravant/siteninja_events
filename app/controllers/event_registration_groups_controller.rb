@@ -14,10 +14,10 @@ class EventRegistrationGroupsController < ApplicationController
     if @person.save
       @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
       @event_registration_group.owner = @person
-      @event_registration_group.event = @event
+      @event_registration_group.event_id = @event.id
       @event_registration_group.title = ("%s %s's group for %s" % [@person.first_name, @person.last_name, @event.name]).titleize
       if @event_registration_group.is_attending == true
-        @event_registration_group.event_registrations.build(:person_id => @person.id, :event_price_option_id => params[:event_registration][:event_price_option_id])
+        @event_registration_group.event_registrations.build(:person_id => @person.id, :event_price_option_id => params[:event_registration][:event_price_option_id], :event_id => @event.id )
       end
       if @event_registration_group.save
         registration = @event_registration_group.event_registrations.last
