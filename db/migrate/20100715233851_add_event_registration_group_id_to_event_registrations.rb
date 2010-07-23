@@ -1,10 +1,12 @@
 class AddEventRegistrationGroupIdToEventRegistrations < ActiveRecord::Migration
-  unless EventRegistration.new.respond_to?(:event_registration_group_id)
-    def self.up
+  def self.up
+    unless EventRegistration.new.respond_to?(:event_registration_group_id)
       add_column :event_registrations, :event_registration_group_id, :integer
-    end
+    end 
+  end
     
-    def self.down
+  def self.down
+    if EventRegistration.new.respond_to?(:event_registration_group_id)
       remove_column :event_registrations, :event_registration_group_id
     end
   end
