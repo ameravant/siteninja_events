@@ -5,6 +5,8 @@ class EventRegistration < ActiveRecord::Base
   # accepts_nested_attributes_for :person
   belongs_to :event_price_option
   has_one :event_transaction # transactions.registration_id
+  attr_accessor :event_kind #for spambots
+  
   def payment_method
     if self.card?
       "PayPal"

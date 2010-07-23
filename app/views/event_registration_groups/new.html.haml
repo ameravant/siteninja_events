@@ -32,6 +32,8 @@
           %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
       %dt=f.label :is_attending, "I am attending this event"
       %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
+      = text_field_tag  "event_kind", "", :id => "eventkind"
+      
     =f.submit "Save and continue" 
 -else
   = @event.registration_closed_text       

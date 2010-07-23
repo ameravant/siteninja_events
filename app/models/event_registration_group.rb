@@ -5,6 +5,7 @@ class EventRegistrationGroup < PersonGroup
   belongs_to :event
   accepts_nested_attributes_for :people
   accepts_nested_attributes_for :event_registrations
+  attr_accessor :event_kind #for spambots
   
   def owner_is_attending?
     self.is_attending

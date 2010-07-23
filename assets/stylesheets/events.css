@@ -61,3 +61,6 @@
 .jsenabled .registration-options, .jsenabled #check-payment-options {
 	display:none;
 }
+#eventkind {
+	display:none;
+}
