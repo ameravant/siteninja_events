@@ -15,6 +15,14 @@
       .big
         = @event.date_and_time
         = ninja_parse(@event.blurb) if @event.blurb
+    / Map and address
+    - unless @event.address.blank?
+      %h2 Location
+      - content_for :head do
+        = render :partial => "/shared/google_maps_includes"
+      %div= h @event.address
+      #google_map
+      %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
   = error_messages_for :event_registration_group
   = error_messages_for :person
   
