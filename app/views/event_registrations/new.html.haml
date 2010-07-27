@@ -77,6 +77,7 @@
   %p#checkout Checkout?
   %ul
     -for pay_method in %w(check cash credit-card)
-      %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
+      -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
+        %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
 -else
-  =@event.regisration_closed_text
+  =@event.registration_closed_text
