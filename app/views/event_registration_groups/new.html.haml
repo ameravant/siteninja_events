@@ -33,15 +33,18 @@
           - form_attributes.each do |att|
             %dt= p.label att.downcase.gsub(" ","_").to_sym, att
             %dd= p.text_field att.downcase.gsub(" ","_").to_sym
+          %br.clear
+          %dt= label :state, "State:"
           %dd= select :person, :state, $USA_STATES_ARRAY 
       %fieldset.price-option
         - fields_for @event_registration do |er|
           %dt= er.label :event_price_option_id, "Guest Type"
           %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
-      %dt=f.label :is_attending, "I am attending this event"
+      %br.clear
+      %dt{:style=> "width:13em; margin-right:0;"}=f.label :is_attending, "I am attending this event"
       %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
       = text_field_tag  "event_kind", "", :id => "eventkind"
-      
+    %br.clear
     =f.submit "Save and continue" 
 -else
   = @event.registration_closed_text       

@@ -64,3 +64,6 @@
 #eventkind {
 	display:none;
 }
+#new_event_registration_group dd, #new_event_registration_group dt {float:left;display:inline; margin-bottom:.5em; }
+#new_event_registration_group dt {clear:left; width:5em;}
+#event_registration_group_is_attending {float:left;}

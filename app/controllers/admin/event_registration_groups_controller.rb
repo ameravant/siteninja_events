@@ -10,7 +10,7 @@ class Admin::EventRegistrationGroupsController < AdminController
       require 'fastercsv'
       wants.html
       wants.csv do
-        @outfile = @event.name + "_registrations_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        @outfile = @event.name + "_registrations_" + Time.now.strftime("%m-%d-%Y")
         csv_data = FasterCSV.generate do |csv|
           csv << ["Last Name", "First Name", "Owner Phone", "Email", "Total", "Paid", "Payment Method"]
           @people.each do |person|
@@ -21,7 +21,7 @@ class Admin::EventRegistrationGroupsController < AdminController
         end
         send_data csv_data,
         :type => 'text/csv; charset=iso-8859-1; header=present',
-        :disposition => "attachment; filename=#{@outfile}"
+        :disposition => "attachment; filename=#{@outfile}.csv"
         flash[:notice] = "Export complete!"
       end
     end
