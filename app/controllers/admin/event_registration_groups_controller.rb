@@ -10,13 +10,13 @@ class Admin::EventRegistrationGroupsController < AdminController
       require 'fastercsv'
       wants.html
       wants.csv do
-        @outfile = @event.name + "_registrations_" + Time.now.strftime("%m-%d-%Y")
+        @outfile = @event.name.gsub(" ", "_") + "_registrations_" + Time.now.strftime("%m-%d-%Y")
         csv_data = FasterCSV.generate do |csv|
-          csv << ["Last Name", "First Name", "Owner Phone", "Email", "Total", "Paid", "Payment Method"]
+          csv << ["Last Name", "First Name", "Owner Phone", "Email", "Total", "Paid", "Payment Method", "type"]
           @people.each do |person|
             group = person.registration_group_for(@event)
             registration = person.event_registrations.find(:first, :conditions => "event_registration_group_id = #{group.id}")
-            csv << [person.last_name, person.first_name, group.owner.phone, person.email, "$%d" % registration.event_transaction.total, group.is_paid?, group.pay_method ]
+            csv << [person.last_name, person.first_name, group.owner.phone, person.email, "$%d" % registration.event_transaction.total, group.is_paid?, group.pay_method, registration.event_price_option.title_and_price ]
           end
         end
         send_data csv_data,
