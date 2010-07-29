@@ -64,11 +64,11 @@
             = c.label :phone, "Phone number"
           %td
             = c.text_field :phone, :size => 16, :maxlength => 20
-    %tr.top
-      %td
-        = f.label :comments
-      %td
-        = f.text_area :comments, :size => "50x6"
+        %tr.top
+          %td
+            = c.label :notes
+          %td
+            = c.text_area :notes, :size => "50x6"
     %tr
       %td{ :colspan => "2" }
         = submit_tag "Save and Continue", :class => "big"

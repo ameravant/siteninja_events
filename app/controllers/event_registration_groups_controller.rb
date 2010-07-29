@@ -27,6 +27,10 @@ class EventRegistrationGroupsController < ApplicationController
                                   :description => registration.event_price_option.description,
                                   :title => registration.event_price_option.title
                                   )
+          if @event_registration_group.is_attending
+            @person.event_registration_group_ids = @person.event_registration_group_ids << @event_registration_group.id
+            @person.save
+          end
           redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
           flash[:notice] = "Thanks for registering, would you like to register any other guests?"
         else

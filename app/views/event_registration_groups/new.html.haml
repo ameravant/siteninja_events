@@ -34,6 +34,8 @@
             %dt= p.label att.downcase.gsub(" ","_").to_sym, att
             %dd= p.text_field att.downcase.gsub(" ","_").to_sym
           %br.clear
+          %dt= p.label :notes
+          %dd= p.text_area :notes, :size => "50x6"
           %dt= label :state, "State:"
           %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
       %fieldset.price-option
