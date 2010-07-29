@@ -26,11 +26,13 @@
     %tr
       %th Last Name
       %th First Name
+      %th Email
       %th Paid
   %tbody
     - for person in @people
       %tr
-        %td=person.last_name
-        %td=person.first_name
+        %td=link_to person.last_name, edit_admin_person_url(person)
+        %td=link_to person.first_name, edit_admin_person_url(person)
+        %td=person.email
         %td=person.registration_group_for(@event).is_paid?
     
