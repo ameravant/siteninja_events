@@ -45,27 +45,27 @@
             = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)       
       - fields_for :person do |c|
         %tr
-          %td
+          %td.label
             = c.label :first_name
           %td
             = c.text_field :first_name
         %tr
-          %td
+          %td.label
             = c.label :last_name
           %td
             = c.text_field :last_name
         %tr
-          %td
+          %td.label
             = c.label :email
           %td
             = c.text_field :email
         %tr
-          %td
+          %td.label
             = c.label :phone, "Phone number"
           %td
             = c.text_field :phone, :size => 16, :maxlength => 20
         %tr.top
-          %td
+          %td.label
             = c.label :notes
           %td
             = c.text_area :notes, :size => "50x6"
