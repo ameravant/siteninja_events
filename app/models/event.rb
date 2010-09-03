@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   has_permalink :name
   belongs_to :person
+  belongs_to :master_group, :class_name => "PersonGroup", :foreign_key => "master_group_id"
   has_many :event_prices, :dependent => :destroy
   has_many :event_registration_groups
   has_many :event_price_options
