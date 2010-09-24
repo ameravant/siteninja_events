@@ -7,8 +7,12 @@
     =#debug @event.future_date?
     -if @event.future_date?
       = soon_indicator(@event.date_and_time, '', true) 
-    %div= @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
-
+    %div
+      = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+      -if @event.end_date_and_time
+        to:
+        %br
+        = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
   / Registration link
   - if @event.future_date? and @event.registration? && !@event.is_closed?
     %h2 Registration
