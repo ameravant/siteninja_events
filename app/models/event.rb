@@ -38,7 +38,11 @@ class Event < ActiveRecord::Base
   end
   
   def is_full?
-    self.registration_count >= self.registration_limit 
+    if self.registration_count.blank? || self.registration_limit.blank?
+      false
+    else
+     self.registration_count >= self.registration_limit 
+   end
   end
   
   def is_past_deadline?
