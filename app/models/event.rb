@@ -43,7 +43,11 @@ class Event < ActiveRecord::Base
   
   def is_past_deadline?
     deadline = self.registration_deadline ? self.registration_deadline : self.date_and_time
-    Time.now > deadline
+    if !deadline.blank?
+      Time.now > deadline
+    else
+      false
+    end
   end
 
   def registration_count
