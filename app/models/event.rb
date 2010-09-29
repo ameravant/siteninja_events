@@ -51,7 +51,11 @@ class Event < ActiveRecord::Base
   end
 
   def spots_available
-    self.registration_limit - self.registration_count
+    unless self.registration_limit.blank?
+      self.registration_limit - self.registration_count
+    else
+      0
+    end
   end
 
   def registration_spots?

@@ -16,7 +16,7 @@
 
 - if !params[:q].blank?
   %h2== Found #{pluralize @all_events.size, "event"}
-
+=debug params
 %table.full_width{ :cellspacing => "0" }
   %thead
     %tr
