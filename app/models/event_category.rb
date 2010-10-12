@@ -1,5 +1,6 @@
 class EventCategory < ActiveRecord::Base
   has_permalink :title
+  belongs_to :column
   has_and_belongs_to_many :events
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :images, :as => :viewable, :dependent => :destroy

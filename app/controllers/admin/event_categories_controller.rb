@@ -56,7 +56,7 @@ class Admin::EventCategoriesController < AdminController
   end
 
   def authorization
-    authorize(@permissions['event_categories'], "event Categories")
+    authorize(@permissions['events'], "Event Categories")
   end
 
   def add_crumbs
