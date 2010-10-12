@@ -2,6 +2,7 @@ class EventRegistration < ActiveRecord::Base
   belongs_to :event_registration_group
   belongs_to :person
   validates_presence_of :person_id
+  after_create :add_person_to_master_group
   # accepts_nested_attributes_for :person
   belongs_to :event_price_option
   has_one :event_transaction # transactions.registration_id
@@ -17,6 +18,9 @@ class EventRegistration < ActiveRecord::Base
     elsif self.other?
       "Other"
     end
+  end
+  def event
+    self.event_registration_group.event
   end
   
   def paid?
@@ -61,6 +65,22 @@ class EventRegistration < ActiveRecord::Base
     end
   end
   private
+  def add_person_to_master_group
+    if self.event.master_group_id.nil?
+      group = PersonGroup.find_or_create_by_title("#{self.event.title}-master-#{self.event.date_and_time.strftime('%b-%d-%y')}", :public => false, :role => false)
+      if !group.public
+        group.public = false
+        group.role  = false
+        group.save
+      end
+      self.event.master_group_id = group.id
+      self.event.save
+    else
+      group = self.event.master_group
+    end
+    self.person.person_group_ids = self.person.person_group_ids << group.id unless self.person.person_group_ids.include?(group.id)
+    self.person.save
+  end
 end
 
 

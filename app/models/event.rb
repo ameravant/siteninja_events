@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   has_permalink :name
   belongs_to :person
+  belongs_to :master_group, :class_name => "PersonGroup", :foreign_key => "master_group_id"
   #has_many :event_prices, :dependent => :destroy
   has_many :event_registration_groups
   has_many :event_price_options
@@ -24,9 +25,9 @@ class Event < ActiveRecord::Base
     "#{self.id}-#{self.permalink}"
   end
   
-  def end_date_and_time
-    self.read_attribute(:date_and_time)
-  end
+  # def end_date_and_time
+  #   self.read_attribute(:date_and_time)
+  # end
   
   def title
     self.name
@@ -37,12 +38,20 @@ class Event < ActiveRecord::Base
   end
   
   def is_full?
-    self.registration_count >= self.registration_limit 
+    if self.registration_count.blank? || self.registration_limit.blank?
+      false
+    else
+     self.registration_count >= self.registration_limit 
+   end
   end
   
   def is_past_deadline?
     deadline = self.registration_deadline ? self.registration_deadline : self.date_and_time
-    Time.now > deadline
+    if !deadline.blank?
+      Time.now > deadline
+    else
+      false
+    end
   end
 
   def registration_count

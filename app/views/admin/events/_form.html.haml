@@ -66,7 +66,7 @@
         %div
           =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
         %div
-          = f.text_area :registration_closed_text, :size => "60x4"
+          = f.text_area :registration_closed_text, :size => "60x4", :class => "mceEditor"
       #price
         -fields_for :event_price_options do |p|
           =p.label :price, "Price"
@@ -107,7 +107,7 @@
             \&mdash; Use this option for any other payment types
         #check-payment-options          
           %h3= f.label :check_instructions, "Check Instructions"
-          = f.text_area :check_instructions, :size => "60x8"
+          = f.text_area :check_instructions, :size => "60x8", :class => "mceEditor"
           %p
             ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
         /check-payment-options

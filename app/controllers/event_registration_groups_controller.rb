@@ -12,8 +12,8 @@ class EventRegistrationGroupsController < ApplicationController
       @person = Person.find_by_email(params[:person][:email])
       @event_price_options = @event.event_price_options
       @person ||= Person.new(params[:person])
+      @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
       if @person.save
-        @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
         @event_registration_group.owner = @person
         @event_registration_group.event_id = @event.id
         @event_registration_group.title = ("%s %s's group for %s - %d" % [@person.first_name, @person.last_name, @event.name, Time.now.to_i.to_s[-5...-1]]).titleize
@@ -27,6 +27,10 @@ class EventRegistrationGroupsController < ApplicationController
                                   :description => registration.event_price_option.description,
                                   :title => registration.event_price_option.title
                                   )
+          if @event_registration_group.is_attending
+            @person.event_registration_group_ids = @person.event_registration_group_ids << @event_registration_group.id
+            @person.save
+          end
           redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
           flash[:notice] = "Thanks for registering, would you like to register any other guests?"
         else

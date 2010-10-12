@@ -21,7 +21,7 @@ class EventRegistrationsController < ApplicationController
     if @person.save
       @event_registration.person = @person
       @event_registration.event_registration_group_id = @event_registration_group.id
-      @event_registration.event_id = @event.id
+      # @event_registration.event_id = @event.id
       if @event_registration.save
         EventTransaction.create(:event_registration_id => @event_registration.id, :total => @event_registration.event_price_option.price, :title => @event_registration.event_price_option.title )
         redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
