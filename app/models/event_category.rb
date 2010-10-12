@@ -12,4 +12,8 @@ class EventCategory < ActiveRecord::Base
   def to_param
     "#{self.permalink}"
   end  
+  
+  def name
+    self.title
+  end
 end
