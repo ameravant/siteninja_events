@@ -19,7 +19,6 @@ function initRegistrationOptions() {
   toggleBasedOnChecked('input#event_allow_check', 'div#check-payment-options');
 }
 jQuery(document).ready(function () {
-  jQuery("body").addClass("jsenabled");
   initRegistrationOptions();
 }
 );

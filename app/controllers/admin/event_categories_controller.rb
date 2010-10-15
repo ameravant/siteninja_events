@@ -48,7 +48,7 @@ class Admin::EventCategoriesController < AdminController
 
   def find_event_category
     begin
-      @event_category = EventCategory.find_by_permalink(params[:id])
+      @event_category = EventCategory.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Event category was not found. It may have been deleted."
       redirect_to admin_event_categories_path

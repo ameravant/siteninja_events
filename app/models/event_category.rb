@@ -10,7 +10,7 @@ class EventCategory < ActiveRecord::Base
   default_scope :order => "title"
   
   def to_param
-    "#{self.permalink}"
+    "#{self.id}-#{self.permalink}"
   end  
   
   def name
