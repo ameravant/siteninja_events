@@ -20,15 +20,15 @@
   %tbody
     - for event_category in @event_categories do
       %tr[event_category]{ :class => cycle('odd','even') }
-        %td= link_to h(event_category.title), edit_admin_event_category_path(event_category.id)
+        %td= link_to h(event_category.title), edit_admin_event_category_path(event_category)
         %td= number_with_delimiter(event_category.events.count)
         %td.center
           - if event_category.menus_count > 0
             = navigation_icon(event_category, event_category.title, "inline")
           - else
             = activate_navigation_icon(event_category, [:new, :admin, event_category, :menu], event_category.title, "inline")
-          = icon "Write", edit_admin_event_category_path(event_category.id)
-          = trash_icon(event_category, admin_event_category_path(event_category.permalink), "the #{event_category.title} category")
+          = icon "Write", edit_admin_event_category_path(event_category)
+          = trash_icon(event_category, admin_event_category_path(event_category), "the #{event_category.title} category")
 
 %br
 
