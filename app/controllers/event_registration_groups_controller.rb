@@ -4,13 +4,13 @@ class EventRegistrationGroupsController < ApplicationController
     @event_registration_group = EventRegistrationGroup.new
     @person ||= Person.new
     @event_registration = EventRegistration.new
-    @event_price_options = @event.event_price_options
+    @event_price_options = @event.event_price_options.public
   end
   def create
     if params[:event_kind].blank?
       @event = Event.find(params[:event_id])
       @person = Person.find_by_email(params[:person][:email])
-      @event_price_options = @event.event_price_options
+      @event_price_options = @event.event_price_options.public
       @person ||= Person.new(params[:person])
       @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
       if @person.save

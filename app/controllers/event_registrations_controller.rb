@@ -4,14 +4,14 @@ class EventRegistrationsController < ApplicationController
 
   def new
     @event_group = EventRegistrationGroup.find(params[:event_registration_group_id])
-    @event_price_options = @event.event_price_options
+    @event_price_options = @event.event_price_options.public
     @event_registration = EventRegistration.new
     @current_guests = @event_group.people 
     # @current_guests << @event_group.owner if @event_group.owner_is_attending?
   end
   def create
     @event = Event.find(params[:event_id])
-    @event_price_options = @event.event_price_options
+    @event_price_options = @event.event_price_options.public
     @event_registration_group = EventRegistrationGroup.find(params[:event_registration_group_id])
     @event_group = @event_registration_group
     @person = Person.find_by_email(params[:person][:email])
