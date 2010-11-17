@@ -2,55 +2,59 @@
   = @event.name
 
 - content_for :side_column do
-  %h2 Date and Time
-  .big
-    =#debug @event.future_date?
-    -if @event.future_date?
-      = soon_indicator(@event.date_and_time, '', true) 
-    %div
-      = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
-      -if @event.end_date_and_time
-        to:
-        %br
-        = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
-  / Registration link
+  .side-column-section
+    %h1 Date and Time
+    .big
+      =#debug @event.future_date?
+      -if @event.future_date?
+        = soon_indicator(@event.date_and_time, '', true) 
+      %div
+        = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+        -if @event.end_date_and_time
+          to:
+          %br
+          = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+    / Registration link
   - if @event.future_date? and @event.registration? && !@event.is_closed?
-    %h2 Registration
-    %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
-    %h3 Pricing Options
-    %table#price_options
-      %th title
-      %th description
-      %th price
-      -for price_option in @price_options
-        %tr
-          %td.title= price_option.title
-          %td.description= price_option.description
-          %td.price= number_to_currency(price_option.price)
+    .side-column-section
+      %h1 Registration
+      %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
+      %h3 Pricing Options
+      %table#price_options
+        %th title
+        %th description
+        %th price
+        -for price_option in @price_options
+          %tr
+            %td.title= price_option.title
+            %td.description= price_option.description
+            %td.price= number_to_currency(price_option.price)
       
-    You may pay by:
-    -if @event.allow_card
-      Card
-    -if @event.allow_cash
-      , Cash
-    -if @event.allow_check
-      , Check
-    -if @event.allow_other
-      , Other
-    %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
+      You may pay by:
+      -if @event.allow_card
+        Card
+      -if @event.allow_cash
+        , Cash
+      -if @event.allow_check
+        , Check
+      -if @event.allow_other
+        , Other
+      %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
   / Map and address
   - unless @event.address.blank?
-    %h2 Location
-    - content_for :head do
-      = render :partial => "/shared/google_maps_includes"
-    %div= h @event.address
-    #google_map
-    %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
-  / More events
+    .side-column-section
+      %h1 Location
+      - content_for :head do
+        = render :partial => "/shared/google_maps_includes"
+      %div= h @event.address
+      #google_map
+      %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
+    / More events
   - unless @event.registration? or @latest_events.empty?
-    %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
-    = render :partial => @latest_events
+    .side-column-section
+      %h1== Additional #{@cms_config['site_settings']['event_title'].pluralize}
+      = render :partial => @latest_events
 
 %h1= yield(:meta_title).strip
 

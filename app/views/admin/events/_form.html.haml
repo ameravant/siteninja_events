@@ -1,7 +1,7 @@
 - content_for :head do
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
 = error_messages_for "event"
--if @controller.action_name == 'edit'
+-if @controller.action_name == 'edit' && @cms_config['features']['event_registration']
   %p
     = icon "Plus", new_admin_event_event_price_option_path(@event)
     = link_to "Add a new price option for this event", new_admin_event_event_price_option_path(@event)

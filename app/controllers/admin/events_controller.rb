@@ -34,8 +34,13 @@ class Admin::EventsController < AdminController
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id
     if @event.save
-      flash[:notice] = "Event created, would you like to add price options"
-      redirect_to new_admin_event_event_price_option_path(@event)
+      if @cms_config['features']['event_registration']
+        flash[:notice] = "Event created, would you like to add price options"
+        redirect_to new_admin_event_event_price_option_path(@event)
+      else
+        flash[:notice] = "Event created"
+        redirect_to admin_events_path
+      end
     else
       render :action => "new"
     end
