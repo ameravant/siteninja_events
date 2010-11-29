@@ -5,6 +5,8 @@
 %h1= yield(:meta_title).strip
 -if @cms_config['site_settings']['show_past_events']
   = link_to "Click here to view past events", past_events_path
+=# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
+= @page.body if @page.body.length > 14
 - @events_grouped.each do |year_and_month, events|
   %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
   %ul.events
