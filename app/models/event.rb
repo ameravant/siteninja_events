@@ -9,6 +9,8 @@ class Event < ActiveRecord::Base
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
   has_and_belongs_to_many :event_categories
+
+  before_validation :validates_end_is_after_start
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
@@ -96,6 +98,10 @@ class Event < ActiveRecord::Base
 
   def this_week?
     self.date_and_time <= Time.now + 7.days
+  end
+
+  def validates_end_is_after_start
+    errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time
   end
 end
 
