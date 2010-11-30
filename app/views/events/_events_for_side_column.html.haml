@@ -1,5 +1,5 @@
 - count = ColumnSectionType.find_by_partial_name("events_for_side_column").default_count if count.blank?
-- @events = Event.future[0..(count - 1)]
+- @events = Event.not_yet_complete[0..(count - 1)]
 - unless @events.blank?
   - content_for :side_column do
     .side-column-section

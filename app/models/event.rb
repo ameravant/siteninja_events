@@ -9,7 +9,7 @@ class Event < ActiveRecord::Base
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
   has_and_belongs_to_many :event_categories
-  validates_presence_of :name, :date_and_time
+  validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
   named_scope :future, :conditions => ["date_and_time >= ?", Time.now]
@@ -18,6 +18,8 @@ class Event < ActiveRecord::Base
   named_scope :three_months,:conditions => { :date_and_time => (Time.now..(Time.now + 3.months))  }
   named_scope :this_year, :conditions => { :date_and_time => (Time.now..Time.now.next_year)  }
   named_scope :past, :order => "date_and_time desc", :conditions => ["end_date_and_time < ?", Time.now]
+  named_scope :not_yet_complete, :order => "date_and_time desc", 
+    :conditions => ["end_date_and_time > ? OR end_date_and_time = ?", Time.now, '']
   named_scope :in_progress, :order => "date_and_time desc", 
     :conditions => ["date_and_time < ? AND end_date_and_time > ?", Time.now, Time.now]
   named_scope :soonest, :limit => 6
@@ -25,6 +27,10 @@ class Event < ActiveRecord::Base
   # accepts_nested_attributes_for :event_price_options
   def to_param
     "#{self.id}-#{self.permalink}"
+  end
+  
+  def self.not_yet_complete
+    Event.in_progress.concat(Event.future)
   end
   
   # def end_date_and_time
