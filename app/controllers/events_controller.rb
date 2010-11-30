@@ -62,18 +62,19 @@ class EventsController < ApplicationController
     end
 
     def find_event_range
-    @events_grouped = case @settings.events_range
-      when 1
-        then Event.this_week.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-      when 2
-        then Event.this_month.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-      when 3
-        then Event.three_months.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-      when 4
-        then Event.this_year.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-      when  5
-        then Event.future.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-      end
+      @events_in_progress = Event.in_progress
+      @events_grouped = case @settings.events_range
+        when 1
+          then Event.this_week.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        when 2
+          then Event.this_month.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        when 3
+          then Event.three_months.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        when 4
+          then Event.this_year.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        when  5
+          then Event.future.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        end
     end
 end
 
