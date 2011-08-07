@@ -2,39 +2,37 @@
   Register for
   = @event.name
 -unless @event.is_closed?
-  %h2 Add a guest?
+  %h1 Add a guest?
   - content_for :side_column do
-    .guest-list
-      %h2 Your Guest List
-      %table{ :cellspacing => "0" } 
-        %th{:colspan => "2"} name
-        %th{:colspan => "2"} type
-        %th{:colspan => "2"} price
-        -if @current_guests
-          -for guest in @current_guests
-            %tr
-              %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
-              %td{:colspan => "2"}= guest.event_registrations.last.event_transaction.title
-              %td{:colspan => "2"}= number_to_currency(guest.event_registrations.last.event_transaction.total)
-      -if @event_group && @event_group.subtotal.to_i > 0
-        %p="Total: %s" % number_to_currency(@event_group.subtotal)
-  
-    .reginstruct
-      %h2="How to register"
-      Start registration by entering your information in the form to the left.
-      You are able to add guests in the next step.
-      %span.bold.purple
-        Registration takes less than five minutes.
-  
-    .eventdetails
-      %h2="Event Details"
-      .big
-        %h3= @event.name
+    .side-column-section
+      .guest-list
+        %h1 Your Guest List
+        %table{ :cellspacing => "0" } 
+          %th{:colspan => "2"} name
+          %th{:colspan => "2"} type
+          %th{:colspan => "2"} price
+          -if @current_guests
+            -for guest in @current_guests
+              %tr
+                %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
+                %td{:colspan => "2"}= guest.event_registrations.last.event_transaction.title
+                %td{:colspan => "2"}= number_to_currency(guest.event_registrations.last.event_transaction.total)
+        -if @event_group && @event_group.subtotal.to_i > 0
+          %p="Total: %s" % number_to_currency(@event_group.subtotal)
+    .side-column-section
+      .reginstruct
+        %h1="How to register"
+        Start registration by entering your information in the form to the left.
+        You are able to add guests in the next step.
+        %span.bold.purple
+          Registration takes less than five minutes.
+    .side-column-section
+      .eventdetails
+        %h1="Event Details"
+        %h2.small= @event.name
         %p= @event.date_and_time.to_s :long_ordinal
         %div= @event.blurb
-      
-  
-  
+
   = error_messages_for "event_registration", "person", :header_message => "There were some problems starting your registration.", :message => nil
   - form_for @event_registration, :url => event_event_registration_group_event_registrations_url(@event, @event_group) do |f|
     %table{ :cellspacing => "0" }         

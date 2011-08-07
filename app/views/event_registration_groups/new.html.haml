@@ -4,49 +4,82 @@
 %h1= "Register for '%s'" % @event.name
 -unless @event.is_closed?
   - content_for :side_column do
-    .reginstruct
-      %h2="How to register"
-      Start registration by entering your information in the form to the left.
-      You are able to add guests in the next step.
-      %span.bold.purple
-        Registration takes less than five minutes.
-    .eventdetails
-      %h2="Event Details"
-      .big
-        = @event.date_and_time
-        = ninja_parse(@event.blurb) if @event.blurb
-    / Map and address
+    .side-column-section
+      .reginstruct
+        %h1="How to register"
+        Start registration by entering your information in the form to the left.
+        You are able to add guests in the next step.
+        %span.bold.purple
+          Registration takes less than five minutes.
+    .side-column-section
+      .eventdetails
+        %h1="Event Details"
+        .big
+          = @event.date_and_time
+          = ninja_parse(@event.blurb) if @event.blurb
+      / Map and address
     - unless @event.address.blank?
-      %h2 Location
-      - content_for :head do
-        = render :partial => "/shared/google_maps_includes"
-      %div= h @event.address
-      #google_map
-      %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
+      .side-column-section
+        %h1 Location
+        - content_for :head do
+          = render :partial => "/shared/google_maps_includes"
+        %div= h @event.address
+        #google_map
+        %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
+  
   = error_messages_for :event_registration_group
   = error_messages_for :person
-  
-  - form_for [@event, @event_registration_group] do |f|
-    %dl
-      %fieldset
-        - fields_for @person do |p|
-          - form_attributes.each do |att|
-            %dt= p.label att.downcase.gsub(" ","_").to_sym, att
-            %dd= p.text_field att.downcase.gsub(" ","_").to_sym
-          %br.clear
-          %dt= p.label :notes
-          %dd= p.text_area :notes, :size => "50x6"
-          %dt= label :state, "State:"
-          %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
-      %fieldset.price-option
-        - fields_for @event_registration do |er|
-          %dt= er.label :event_price_option_id, "Guest Type"
-          %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
+  #registration-buttons{:style => "font-size: 1.8em; line-height: 1.5em; "}
+    = link_to("I am only registering myself.", "#", :onclick => "getElementById('self-registration').style.display = 'block'; getElementById('registration-buttons').style.display = 'none'")
+    %br
+    = link_to("I am registering a group or for someone else.", "#", :onclick => "getElementById('group-registration').style.display = 'block'; getElementById('registration-buttons').style.display = 'none'")  
+
+  #self-registration{:style => "display: none"}
+    %h2 Fill out your personal information
+    - form_for [@event, @event_registration_group] do |f|
+      %dl
+        %fieldset
+          - fields_for @person do |p|
+            - form_attributes.each do |att|
+              %dt= p.label att.downcase.gsub(" ","_").to_sym, att
+              %dd= p.text_field att.downcase.gsub(" ","_").to_sym
+            %br.clear
+          
+            %dt= label :state, "State:"
+            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
+        %fieldset.price-option
+          - fields_for @event_registration do |er|
+            %dt= er.label :event_price_option_id, "Guest Type"
+            %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
+        = text_field_tag  "event_kind", "", :id => "eventkind"
       %br.clear
-      %dt{:style=> "width:13em; margin-right:0;"}=f.label :is_attending, "I am attending this event"
-      %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
-      = text_field_tag  "event_kind", "", :id => "eventkind"
-    %br.clear
-    =f.submit "Save and continue" 
+      %p#checkout Checkout?
+      %ul
+        -for pay_method in %w(check cash credit-card)
+          -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
+            %li= link_to "Pay by %s" % pay_method, new_event_event_registration_group_path(@event.id, :params => {:pay_method => pay_method})
+  #group-registration{:style => "display: none"}
+    %h2 Fill out the contact information
+    - form_for [@event, @event_registration_group] do |f|
+      %dl
+        %fieldset
+          - fields_for @person do |p|
+            - form_attributes.each do |att|
+              %dt= p.label att.downcase.gsub(" ","_").to_sym, att
+              %dd= p.text_field att.downcase.gsub(" ","_").to_sym
+            %br.clear
+          
+            %dt= label :state, "State:"
+            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
+        %fieldset.price-option
+          - fields_for @event_registration do |er|
+            %dt= er.label :event_price_option_id, "Guest Type"
+            %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
+        %br.clear
+        %dt{:style=> "width:13em; margin-right:0;"}=f.label :is_attending, "I am attending this event"
+        %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
+        = text_field_tag  "event_kind", "", :id => "eventkind"
+      %br.clear
+      =f.submit "Save and continue" 
 -else
   = @event.registration_closed_text       

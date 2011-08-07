@@ -7,7 +7,7 @@ class EventCategoriesController < ApplicationController
   
   def show
     begin
-      render_404 unless @event_category = EventCategory.active.find(params[:id])
+      render_404 unless @event_category = EventCategory.active.find_by_permalink(params[:id])
       @page = Page.find_by_permalink!('events') if @event_category.menus.empty?
       @event_category.menus.empty? ? @menu = @page.menus.first : @menu = @event_category.menus.first
       @events = @event_category.events.future.paginate(:page => params[:page], :per_page => 10, :include => :event_categories)

@@ -2,44 +2,28 @@
   = @event.name
 
 - content_for :side_column do
-  .side-column-section
-    %h1 Date and Time
-    .big
-      =#debug @event.future_date?
-      -if @event.future_date?
-        = soon_indicator(@event.date_and_time, '', true) 
-      %div
-        = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
-        -if @event.end_date_and_time
-          to:
-          %br
-          = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+  .event-side-column
+
     / Registration link
   - if @event.future_date? and @event.registration? && !@event.is_closed?
     .side-column-section
       %h1 Registration
-      %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
-      %h3 Pricing Options
-      %table#price_options
-        %th title
-        %th description
-        %th price
-        -for price_option in @price_options
-          %tr
-            %td.title= price_option.title
-            %td.description= price_option.description
-            %td.price= number_to_currency(price_option.price)
-      
+      - if !@event.event_price_options.empty?
+        - if @event.event_price_options.size > 1
+          %h3 Pricing Options
+        %table#price_options
+          %th title
+          %th description
+          %th price
+          -for price_option in @price_options
+            %tr
+              %td.title= price_option.title
+              %td.description= price_option.description
+              %td.price= number_to_currency(price_option.price)
+    
       You may pay by:
-      -if @event.allow_card
-        Card
-      -if @event.allow_cash
-        , Cash
-      -if @event.allow_check
-        , Check
-      -if @event.allow_other
-        , Other
-      %h3.big= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
+      = @event.allowed_payment_methods
+      %h3.register= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
   / Map and address
   - unless @event.address.blank?
@@ -57,7 +41,27 @@
       = render :partial => @latest_events
 
 %h1= yield(:meta_title).strip
+-if @event.future_date?
+  = soon_indicator(@event.date_and_time, '', true) 
+.event-date-time
+  = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+  -if @event.end_date_and_time
+    -if @event.end_date_and_time.day == @event.date_and_time.day
+      = @event.end_date_and_time.strftime("&mdash; %I:%M %p")
+    -else
+      &mdash;
+      %br
+      = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+  = @event.date_and_time.strftime("%A")
 
 = ninja_parse(@event.description)
 
-
+- content_for :head do
+  %style{:type => "text/css"}
+    div.event-side-column .side-column-section { margin-bottom: 20px; }
+    div.event-side-column  h3 { font-size: 1.5em; }
+    div.event-side-column .register { margin: 20px 0; font-size: 2em; }
+    table#price_options td, table#price_options th { vertical-align: top; line-height: 1.25em; }
+    div.event-date-time { font-weight: bold; line-height: 1.2em; padding-bottom: 10px; font-size: 1.2em; }
+    table#price_options td.description { font-size: .8em; }
+    div#google_map { width: 300px; }

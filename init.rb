@@ -1,1 +1,1 @@
-require 'person.rb'
+require 'events_person_ext'

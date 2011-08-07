@@ -9,7 +9,8 @@ class Event < ActiveRecord::Base
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
   has_and_belongs_to_many :event_categories
-
+  validates_datetime :registration_deadline, :allow_blank => true
+  validates_datetime :date_and_time, :end_date_and_time
   before_validation :validates_end_is_after_start
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
@@ -102,6 +103,15 @@ class Event < ActiveRecord::Base
 
   def validates_end_is_after_start
     errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time
+  end
+  
+  def allowed_payment_methods
+    payment_methods = []
+    payment_methods << "Cart" if self.allow_card
+    payment_methods << "Cash" if self.allow_cash
+    payment_methods << "Check" if self.allow_check
+    payment_methods << "Other" if self.allow_other
+    payment_methods.join(', ')
   end
 end
 

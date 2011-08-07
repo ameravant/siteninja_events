@@ -1,4 +1,5 @@
 class EventRegistrationGroupsController < ApplicationController
+  unloadable
   def new
     @event = Event.find(params[:event_id])
     @event_registration_group = EventRegistrationGroup.new
@@ -9,9 +10,8 @@ class EventRegistrationGroupsController < ApplicationController
   def create
     if params[:event_kind].blank?
       @event = Event.find(params[:event_id])
-      @person = Person.find_by_email(params[:person][:email])
+      @person = Person.find_or_create_by_email(params[:person])
       @event_price_options = @event.event_price_options.public
-      @person ||= Person.new(params[:person])
       @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
       if @person.save
         @event_registration_group.owner = @person

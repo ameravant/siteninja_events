@@ -1,10 +1,19 @@
 - content_for :head do
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
 = error_messages_for "event"
+- @calendar_select = true
 -if @controller.action_name == 'edit' && @cms_config['features']['event_registration']
   %p
     = icon "Plus", new_admin_event_event_price_option_path(@event)
     = link_to "Add a new price option for this event", new_admin_event_event_price_option_path(@event)
+#main-details.options
+  #options
+    %h3 Event Details
+    = f.label :address
+    %br
+    = f.text_field :address
+    %br
+    
 %table{ :cellspacing => "0" }
   %tr{ :class => "form-option #{cycle('even', 'odd')}" }
     %td.big
@@ -35,12 +44,12 @@
     %td
       = f.label :date_and_time, "Event Start date/time"
     %td
-      = f.datetime_select :date_and_time
+      = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
   %tr.top
     %td
       = f.label :end_date_and_time, "Event End date/time"
     %td
-      = f.datetime_select :end_date_and_time
+      = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
 - if @cms_config['features']['event_registration']
   %h2
     Registration Options
@@ -61,7 +70,7 @@
         %br
         %div
           = f.label :registration_deadline, "Deadline to register"
-          = f.datetime_select :registration_deadline        
+          = f.text_field(:registration_deadline, :value => (@event.registration_deadline.blank? ? "" : @event.registration_deadline.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
         %br
         %div
           =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
