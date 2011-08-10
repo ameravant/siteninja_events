@@ -9,9 +9,9 @@ namespace :admin do |admin|
   admin.resources :events, :has_many => [ :event_price_options, :features, :assets ] do |event|
   admin.resources :event_categories, :has_many => { :features, :menus } do |event_category|
     event_category.resources :menus
-    event_category.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put }
+    event_category.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put, :add_multiple => :get }
   end
-    event.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put }
+    event.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put, :add_multiple => :get }
     event.resources :event_registration_groups,
       :has_many => :contacts,
       :member => {:paid => :get, :unpaid => :get }, 
