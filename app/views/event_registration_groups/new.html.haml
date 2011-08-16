@@ -32,7 +32,7 @@
   #registration-buttons{:style => "font-size: 1.8em; line-height: 1.5em; "}
     = link_to("I am only registering myself.", "#", :onclick => "getElementById('self-registration').style.display = 'block'; getElementById('registration-buttons').style.display = 'none'")
     %br
-    = link_to("I am registering a group or for someone else.", "#", :onclick => "getElementById('group-registration').style.display = 'block'; getElementById('registration-buttons').style.display = 'none'")  
+    = link_to("I am registering a group or for someone else.", "#", :onclick => "getElementById('group-registration').style.display = 'block'; getElementById('registration-buttons').style.display = 'none'")
 
   #self-registration{:style => "display: none"}
     %h2 Fill out your personal information
@@ -53,11 +53,16 @@
             %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
         = text_field_tag  "event_kind", "", :id => "eventkind"
       %br.clear
-      %p#checkout Checkout?
+      %h2 Checkout
       %ul
         -for pay_method in %w(check cash credit-card)
           -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
-            %li= link_to "Pay by %s" % pay_method, new_event_event_registration_group_path(@event.id, :params => {:pay_method => pay_method})
+            %li
+              = radio_button("payment", "method", pay_method)
+              %label{:for => "payment_method_%s" % pay_method.gsub("-", "")}="Pay by %s" % pay_method
+        %input{:type => "hidden", :name => "self_registration", :value => "true"}
+        %input{:type => "hidden", :name => "event_registration_group_is_attending", :value => "true"}
+      = f.submit "Register" 
   #group-registration{:style => "display: none"}
     %h2 Fill out the contact information
     - form_for [@event, @event_registration_group] do |f|
