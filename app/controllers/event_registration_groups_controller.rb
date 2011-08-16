@@ -32,7 +32,11 @@ class EventRegistrationGroupsController < ApplicationController
             @person.save
           end
           if params[:self_registration]
-            redirect_to event_event_registration_group_path(@event, @event_registration_group, :params => {:pay_method => params[:payment][:method]})
+            if params[:payment]
+              redirect_to event_event_registration_group_path(@event, @event_registration_group, :params => {:pay_method => params[:payment][:method]})
+            else
+              redirect_to event_event_registration_group_path(@event, @event_registration_group)              
+            end
             flash[:notice] = "test #{params[:payment_method]}"
           else
             redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)

@@ -1,30 +1,35 @@
-- content_for :meta_title do
-  = "You have chosen to pay by %s for %s" % [params[:pay_method], @event.name]
-.guest-list
-  %h2 Your Guest List
-  %table{ :cellspacing => "0" } 
-    %th{:colspan => "2"} name
-    %th{:colspan => "2"} type
-    %th{:colspan => "2"} price
-    -for guest in @current_guests
-      %tr
-        %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
-        %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.title
-        %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.price
-  -if @event_registration_group.total_price.to_i > 0
-    %p="Total: %s" % number_to_currency(@event_registration_group.total_price)
+- if params[:pay_method]
+  - content_for :meta_title do
+    = "You have chosen to pay by %s for %s" % [params[:pay_method], @event.name]
+  .guest-list
+    %h2 Your Guest List
+    %table{ :cellspacing => "0" } 
+      %th{:colspan => "2"} name
+      %th{:colspan => "2"} type
+      %th{:colspan => "2"} price
+      -for guest in @current_guests
+        %tr
+          %td{:colspan => "2"}= "%s %s" % [guest.first_name, guest.last_name]
+          %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.title
+          %td{:colspan => "2"}= guest.event_registrations.last.event_price_option.price
+    -if @event_registration_group.total_price.to_i > 0
+      %p="Total: %s" % number_to_currency(@event_registration_group.total_price)
 
-%h1
-  = yield :meta_title
-- if params[:pay_method] == "cash"
-  %p
-    You will pay for your registration in cash at the event.
-- elsif params[:pay_method] == "check"
-  = @event.check_instructions || @event.payment_instructions
-- else # credit card
-  =google_checkout_button(@event_registration_group)
-%p= "If you're happy with this payment method, you're all done. See you at the event!"
-%p 
-  Otherwise  
-  =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
-
+  %h1
+    = yield :meta_title
+  - if params[:pay_method] == "cash"
+    %p
+      You will pay for your registration in cash at the event.
+  - elsif params[:pay_method] == "check"
+    = @event.check_instructions || @event.payment_instructions
+  - else # credit card
+    =google_checkout_button(@event_registration_group)
+  %p= "If you're happy with this payment method, you're all done. See you at the event!"
+  %p 
+    Otherwise  
+    =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
+- else
+  - content_for :meta_title do
+    = "You have been registered for %s" % @event.name
+  %h1= yield :meta_title
+  %p= link_to("Return to event.", @event)
