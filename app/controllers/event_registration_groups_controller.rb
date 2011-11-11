@@ -37,7 +37,7 @@ class EventRegistrationGroupsController < ApplicationController
             else
               redirect_to event_event_registration_group_path(@event, @event_registration_group)              
             end
-            flash[:notice] = "test #{params[:payment_method]}"
+            #flash[:notice] = "test #{params[:payment_method]}"
           else
             redirect_to new_event_event_registration_group_event_registration_path(@event, @event_registration_group)
             flash[:notice] = "Thanks for registering, would you like to register any other guests?"

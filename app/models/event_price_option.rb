@@ -3,6 +3,10 @@ class EventPriceOption < ActiveRecord::Base
   named_scope :public, :conditions => ["public = ?", true]
   
   def title_and_price
-    "#{self.title}-$#{self.price}"
+    if self.price.blank?
+      self.title
+    else
+      "#{self.title}-$#{self.price}"
+    end
   end
 end
