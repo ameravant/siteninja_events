@@ -9,8 +9,8 @@ class Event < ActiveRecord::Base
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
   has_and_belongs_to_many :event_categories
-  validates_datetime :registration_deadline, :allow_blank => true
-  validates_datetime :date_and_time, :end_date_and_time
+  #validates_datetime :registration_deadline, :allow_blank => true
+  #validates_datetime :date_and_time, :end_date_and_time
   before_validation :validates_end_is_after_start
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true

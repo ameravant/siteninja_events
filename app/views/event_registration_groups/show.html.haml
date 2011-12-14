@@ -19,15 +19,21 @@
     = yield :meta_title
   - if params[:pay_method] == "cash"
     %p
-      You will pay for your registration in cash at the event.
+      You have completed the registration process and will pay in cash at the event.
   - elsif params[:pay_method] == "check"
+    %p You have completed the registration process and selected to pay by check.
     = @event.check_instructions || @event.payment_instructions
   - else # credit card
-    =google_checkout_button(@event_registration_group)
-  %p= "If you're happy with this payment method, you're all done. See you at the event!"
-  %p 
-    Otherwise  
-    =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
+    %p
+      Complete registration through Google Checkout.
+      =google_checkout_button(@event_registration_group)
+  - if @current_guests.size > 1
+    %p= "If you're happy with this payment method, you're all done. See you at the event!"
+    %p 
+      Otherwise  
+      =link_to "Change your payment method?", new_event_event_registration_group_event_registration_path(@event, @event_registration_group) + "#checkout"
+  - else 
+    %p= link_to("Return to event.", @event)
 - else
   - content_for :meta_title do
     = "You have been registered for %s" % @event.name
