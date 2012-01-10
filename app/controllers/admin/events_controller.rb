@@ -8,6 +8,15 @@ class Admin::EventsController < AdminController
   add_breadcrumb "New", nil, :only => [ :new, :create ]
 
   def index
+    if current_user.has_role("Admin") # Show all articles regardless of author
+      params[:q].blank? ? @all_events = Event.all : @all_events = Event.all(:conditions => ["name like ?", "%#{params[:q]}%"], :order => "date_and_time desc")
+    else
+      params[:q].blank? ? @all_events = Event.all(:conditions => {:person_id => current_user.person.id}) : @all_events = Event.find(:all, :conditions => ["title like ? and person_id = ?", "%#{params[:q]}%", current_user.person.id])
+    end
+    @events = @all_events.sort_by(&:date_and_time).reverse.paginate(:page => params[:page], :per_page => 50)
+    
+    
+    
     if params[:q].blank?
       add_breadcrumb @cms_config['site_settings']['events_title']
       @all_events = Event.all
@@ -16,12 +25,13 @@ class Admin::EventsController < AdminController
       add_breadcrumb "Search"
       @all_events = Event.find :all, :conditions => ["name like ?", "%#{params[:q]}%"], :order => "date_and_time desc"
     end
-    @events = @all_events.sort_by(&:date_and_time).reverse.paginate(:page => params[:page], :per_page => 50)
+    
   end
 
   def new
     @event_categories = EventCategory.active
     @event = Event.new
+    @event.active = false if current_user.has_role("Event Contributor")
   end
 
   def edit
@@ -34,7 +44,7 @@ class Admin::EventsController < AdminController
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id
     if @event.save
-      if @cms_config['features']['event_registration']
+      if @event.registration?
         flash[:notice] = "Event created, would you like to add price options"
         redirect_to new_admin_event_event_price_option_path(@event)
       else
@@ -74,6 +84,7 @@ private
 
   def authorization
     authorize(@permissions['events'], "Events")
+    current_user.has_role(["Admin", "Event Author"]) ? @disabled = false : @disabled = true
   end
   def add_crumbs
     add_breadcrumb @cms_config['site_settings']['events_title'], "admin_events_path"

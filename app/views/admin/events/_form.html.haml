@@ -1,64 +1,61 @@
 - content_for :head do
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
+  %style{:type => "text/css"}
+    ==#categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 150px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); display: none; }
+  :javascript
+    function addtext(text) {
+    tinyMCE.execInstanceCommand("event_description","mceInsertContent",false,text);
+    }
 = error_messages_for "event"
 - @calendar_select = true
--if @controller.action_name == 'edit' && @cms_config['features']['event_registration']
+-if @controller.action_name == 'edit' && @cms_config['features']['event_registration'] && current_user.has_role("Admin")
   %p
     = icon "Plus", new_admin_event_event_price_option_path(@event)
     = link_to "Add a new price option for this event", new_admin_event_event_price_option_path(@event)
 #main-details.options
   #options
     %h3 Event Details
-    = f.label :address
-    %br
-    = f.text_field :address
-    %br
-    
-%table{ :cellspacing => "0" }
-  %tr{ :class => "form-option #{cycle('even', 'odd')}" }
-    %td.big
-      = f.label :name
-    %td
-      = f.text_field :name, :class => "big", :size => 30
-  %tr{:class => "form-option #{cycle('even', 'odd')}"}
-    %td
-      = f.label :address
-    %td
-      = f.text_field :address
-      %span.small
-        \&mdash; this will be shown on the page and used to display a map (
-        %strong
-          optional
-        )
-  -if !@event_categories.blank?
-    %tr{:class => "form-option #{cycle('even', 'odd')}"}
-      %td
-        Category
-      %td
-        - for event_category in @event_categories
-          %span.event_category_checkbox
-            = check_box_tag "event[event_category_ids][]", event_category.id, @event.event_categories.include?(event_category), :id => dom_id(event_category)
-            = label_tag dom_id(event_category), "#{event_category.title}"
-        = clear
-  %tr{:class => "form-option #{cycle('even', 'odd')} top"}
-    %td
-      = f.label :date_and_time, "Event Start date/time"
-    %td
-      = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
-  %tr.top
-    %td
-      = f.label :end_date_and_time, "Event End date/time"
-    %td
-      = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
-- if @cms_config['features']['event_registration']
-  %h2
-    Registration Options
+    %dl
+      %dt.form-label
+        = f.label :address
+        = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "This will be shown on the event page and used to display a map (optional)."}
+      %dd.form-option
+        = f.text_field :address
+      %dt.form-label= f.label :date_and_time, "Start Date/Time"
+      %dd.form-option= f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
+      %dt.form-label= f.label :end_date_and_time, "End Date/Time"
+      %dd.form-option= f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
+      -if !@event_categories.blank?
+        %dt.form-label
+          = f.label :event_category_ids, link_to("Assign Categories", "javascript:void(0)", :id => "display-categories", :onclick => "jQuery('#categories').slideToggle(500);")
+          #categories
+            %img{:src =>"#{css_icon("Cancel","","16x16","red")}", :title =>"close", :alt=> "close box icon", :class => "close-icon", :onclick => "jQuery('#categories').slideUp()"}
+            - for event_category in @event_categories
+              .event_category_checkbox
+                = check_box_tag "event[event_category_ids][]", event_category.id, @event.event_categories.include?(event_category), :id => dom_id(event_category)
+                = label_tag dom_id(event_category), "#{event_category.title}"
+      %dt.form-label
+        = f.check_box :active, :disabled => @disabled
+        = f.label :active, "Publish Event to Public"
+
+%h2.title.form-label= f.label :name, "Event Title"
+= f.text_field :name, :class => "big", :size => 80, :style => "width: 550px;"
+
+
+
+%h2= f.label :blurb, "Blurb"
+= f.text_area :blurb, :size => "77x8"
+
+- if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
+  %br
   %div
     %div#registration-ops
       = f.check_box :registration
       %label{ :for => "event_registration" }
-        Registration Required
+        Enable Registration
     %div.registration-options
+      %h2 Registration Options
+
       #registration_limit
         %br
         %div
@@ -94,7 +91,7 @@
             Allow credit card payment via Google Checkout
           %span.small.gray
             \&mdash; must have Google Checkout configured in
-            = link_to "settings ", edit_admin_setting_path
+            = link_to "settings", edit_admin_setting_path(:anchor => "Advanced")
             under the 'Advanced' tab
         %div
           = f.check_box :allow_cash
@@ -121,12 +118,27 @@
             ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
         /check-payment-options
       /payments-allowed
-%h2= f.label :blurb, "Blurb"
-= f.text_area :blurb, :size => "80x5"
-%h2= f.label :description, "Description"
-- unless @event.images.empty?
-  = render :partial => "admin/shared/image_options", :locals => {:images => @event.images}
-= f.text_area :description, :size => "80x30", :class => "mceEditor"
+
+
+= clear
+#body-wrapper
+  .options#body-details
+    .inserts
+      %strong Insert:
+      %br
+      = render :partial => "admin/shared/parser_help"
+      - unless @event.title.blank?
+        = link_to("#{icon('Picture')} Attached Image", admin_event_images_path(@event, :fancy => "true"), :class => "fancy-iframe")
+      = render :partial => "admin/shared/asset_options"
+      = render :partial => "admin/shared/insert_map"
+
+  %div{:style => "width: 560px;"}
+    %h2.form-label
+      = f.label :description
+
+  = f.text_area :description, :size => "100x40", :class => "mceEditor"
+
+
 - fancy_submit admin_events_path do
   = f.submit "Save #{@cms_config['site_settings']['event_title']}"
 

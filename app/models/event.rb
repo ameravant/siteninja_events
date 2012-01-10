@@ -15,17 +15,17 @@ class Event < ActiveRecord::Base
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
-  named_scope :future, :conditions => ["date_and_time >= ?", Time.now]
-  named_scope :this_week, :conditions => { :date_and_time => (Time.now..(Time.now + 7.days)) }
-  named_scope :this_month, :conditions => { :date_and_time => (Time.now..(Time.now + 29.days))  }
-  named_scope :three_months,:conditions => { :date_and_time => (Time.now..(Time.now + 3.months))  }
-  named_scope :this_year, :conditions => { :date_and_time => (Time.now..Time.now.next_year)  }
-  named_scope :past, :order => "date_and_time desc", :conditions => ["end_date_and_time < ?", Time.now]
+  named_scope :future, :conditions => ["active = ? and date_and_time >= ?", true, Time.now]
+  named_scope :this_week, :conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 7.days)) }
+  named_scope :this_month, :conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 29.days))  }
+  named_scope :three_months,:conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 3.months))  }
+  named_scope :this_year, :conditions => { :active => true, :date_and_time => (Time.now..Time.now.next_year)  }
+  named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and end_date_and_time < ?", true, Time.now]
   named_scope :not_yet_complete, :order => "date_and_time desc", 
-    :conditions => ["end_date_and_time > ? OR end_date_and_time = ?", Time.now, '']
+    :conditions => ["active = ? and end_date_and_time > ? OR end_date_and_time = ?", true, Time.now, '']
   named_scope :in_progress, :order => "date_and_time desc", 
-    :conditions => ["date_and_time < ? AND end_date_and_time > ?", Time.now, Time.now]
-  named_scope :soonest, :limit => 6
+    :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now, Time.now]
+  named_scope :soonest, :limit => 6, :conditions => { :active => true }
   default_scope :order => "date_and_time"
   # accepts_nested_attributes_for :event_price_options
   def to_param

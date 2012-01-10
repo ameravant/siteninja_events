@@ -21,7 +21,7 @@ class EventsController < ApplicationController
 
   def show
     begin
-      @event = Event.find(params[:id])
+      @event = Event.find(params[:id], :conditions => {:active => true})
       @images = @event.images
       @price_options = @event.event_price_options.public
       @latest_events = Event.future.soonest.reject { |event| event == @event }
