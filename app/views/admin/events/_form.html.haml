@@ -44,7 +44,7 @@
 
 
 %h2= f.label :blurb, "Blurb"
-= f.text_area :blurb, :size => "77x8"
+= f.text_area :blurb, :style => "width: 550px; height: 110px;"
 
 - if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
   %br
