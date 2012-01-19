@@ -37,7 +37,7 @@
   %tbody
     - for event in @events
       %tr[event]{ :class => event.future_date? ? cycle('odd', 'even') : "past_event" }
-        %td.note= event.date_and_time.strftime("%a, %b %d, %Y")
+        %td.detail= event.date_and_time.strftime("%a, %b %d, %Y")
         %td= link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
         - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
           %td= link_to pluralize(event.event_price_options.public.count, "Price"), [:admin, event, :event_price_options], :class => (event.event_price_options.public.count == 0 ? "bold red" : nil)
