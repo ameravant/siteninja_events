@@ -19,15 +19,16 @@
 %table.full_width{ :cellspacing => "0" }
   %thead
     %tr
+      %th{:style => "width: 100px;"} Date
       %th Title
       - if @cms_config["features"]["event_registration"]
-        %th Prices
-        %th Registrations
+        %th{:style => "width: 60px;"} Prices
+        %th{:style => "width: 100px;"} Registrations
       - else
         %th{ :colspan => 2 }
-      %th Images
-      %th Files
-      %th.center Options
+      %th{:style => "width: 60px;"} Images
+      %th{:style => "width: 60px;"} Files
+      %th{:style => "width: 80px;"} Options
   - if @events.total_pages > 1
     %tfoot
       %tr
@@ -36,9 +37,8 @@
   %tbody
     - for event in @events
       %tr[event]{ :class => event.future_date? ? cycle('odd', 'even') : "past_event" }
-        %td.gray
-          = link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
-          %span.small== on #{event.date_and_time.strftime("%a, %b %d, %Y")}
+        %td.note= event.date_and_time.strftime("%a, %b %d, %Y")
+        %td= link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
         - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
           %td= link_to pluralize(event.event_price_options.public.count, "Price"), [:admin, event, :event_price_options], :class => (event.event_price_options.public.count == 0 ? "bold red" : nil)
           %td
@@ -51,7 +51,9 @@
           = icon "Picture", [:admin, event, :images]
           = link_to event.images_count.to_i, [:admin, event, :images]
         %td
-          = link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
+          = #link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
+          = icon "Document", [:new, :admin, event, :asset]
+          = link_to event.assets_count, [:new, :admin, event, :asset]
         %td.center
           = feature_icon_select(event, event.title)
           = icon "Search", event
