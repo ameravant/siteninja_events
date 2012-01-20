@@ -36,7 +36,7 @@
           = will_paginate @events
   %tbody
     - for event in @events
-      %tr[event]{ :class => event.future_date? ? cycle('odd', 'even') : "past_event" }
+      %tr[event]{ :class => cycle("odd#{event.future_date? ? "" : " past_event"}", "even#{event.future_date? ? "" : " past_event"}") }
         %td.detail= event.date_and_time.strftime("%a, %b %d, %Y")
         %td= link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
         - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
