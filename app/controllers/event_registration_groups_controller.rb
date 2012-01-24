@@ -4,7 +4,6 @@ class EventRegistrationGroupsController < ApplicationController
     @event = Event.find(params[:event_id])
     @event_registration_group = EventRegistrationGroup.new
     @person ||= Person.new
-    @event_registration = EventRegistration.new
     @event_price_options = @event.event_price_options.public
   end
   def create
@@ -12,25 +11,27 @@ class EventRegistrationGroupsController < ApplicationController
       @event = Event.find(params[:event_id])
       @person = Person.find_or_create_by_email(params[:person])
       @event_price_options = @event.event_price_options.public
-      @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
+      
       if @person.save
+        if @event_price_options.size > 1
+          @event_registration_group = EventRegistrationGroup.new(params[:event_registration_group])
+        else
+          @event_registration_group = EventRegistrationGroup.new
+        end
         @event_registration_group.owner = @person
         @event_registration_group.event_id = @event.id
         @event_registration_group.title = ("%s %s's group for %s - %d" % [@person.first_name, @person.last_name, @event.name, Time.now.to_i.to_s[-5...-1]]).titleize
-        if @event_registration_group.is_attending == true
-          @event_registration_group.event_registrations.build(:person_id => @person.id, :event_price_option_id => params[:event_registration][:event_price_option_id] )
-        end
+        @event_price_options.size == 1 ? epo_id = @event_price_options.first.id : params[:event_registration][:event_price_option_id]
         if @event_registration_group.save
-          registration = @event_registration_group.event_registrations.last
+          #if @event_registration_group.is_attending == true
+            @event_registration = EventRegistration.create(:person_id => @person.id, :event_price_option_id => epo_id, :event_registration_group_id => @event_registration_group.id )
+          #end
+          registration = @event_registration
           EventTransaction.create(:event_registration_id => registration.id, 
                                   :total => registration.event_price_option.price,
                                   :description => registration.event_price_option.description,
                                   :title => registration.event_price_option.title
                                   )
-          if @event_registration_group.is_attending
-            @person.event_registration_group_ids = @person.event_registration_group_ids << @event_registration_group.id
-            @person.save
-          end
           if params[:self_registration]
             if params[:payment]
               redirect_to event_event_registration_group_path(@event, @event_registration_group, :params => {:pay_method => params[:payment][:method]})

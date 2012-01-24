@@ -2,7 +2,7 @@ class EventRegistration < ActiveRecord::Base
   belongs_to :event_registration_group
   belongs_to :person
   validates_presence_of :person_id
-  after_create :add_person_to_master_group
+  #after_create :add_person_to_master_group
   # accepts_nested_attributes_for :person
   belongs_to :event_price_option
   has_one :event_transaction # transactions.registration_id

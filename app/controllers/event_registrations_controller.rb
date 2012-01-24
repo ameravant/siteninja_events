@@ -16,7 +16,6 @@ class EventRegistrationsController < ApplicationController
     @event_group = @event_registration_group
     @person = Person.find_or_create_by_email(params[:person])
     @event_registration = EventRegistration.new(params[:event_registration])
-    @person.person_group_ids = @person.person_group_ids << PersonGroup.find_by_title("#{@event.name}-#{@event.id}").id
     if @person.save
       @event_registration.person = @person
       @event_registration.event_registration_group_id = @event_registration_group.id

@@ -38,8 +38,9 @@
     %table{ :cellspacing => "0" }         
       %tr.top
         -if @event_price_options
-          %td
-            = f.label :event_price_option_id, "Guest Type"
+          %td{:colspan => 2}
+            - unless @event_price_options.reject{|p| p.price.blank?}.empty?
+              = f.label :event_price_option_id, "Guest Type"
             = collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)       
       - fields_for :person do |c|
         %tr
@@ -73,9 +74,12 @@
         or
         = link_to "cancel", event_path(@event.permalink)
   %p#checkout Checkout?
-  %ul
-    -for pay_method in %w(check cash credit-card)
-      -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
-        %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
+  - if @event_price_options.reject{|p| p.price.blank?}.empty?
+    %li= link_to "Complete Registration", event_event_registration_group_path(@event, @event_group)
+  -else
+    %ul
+      -for pay_method in %w(check cash credit-card)
+        -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
+          %li= link_to "Pay by %s" % pay_method, event_event_registration_group_path(@event, @event_group, :params => {:pay_method => pay_method})
 -else
   =@event.registration_closed_text

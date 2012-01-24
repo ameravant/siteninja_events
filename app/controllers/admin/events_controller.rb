@@ -59,6 +59,11 @@ class Admin::EventsController < AdminController
   def update
     add_breadcrumb @event.name
     if @event.update_attributes(params[:event])
+      if @event.registration and @event.event_price_options.reject{|o| !o.public}.empty?
+        epo = @event.event_price_options.build(params[:event_price_options])
+        epo.public = true
+        epo.save
+      end
       flash[:notice] = "#{@event.name} updated."
       redirect_to admin_events_path
     else

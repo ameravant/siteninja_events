@@ -46,23 +46,25 @@
             %br.clear
           
             %dt= label :state, "State:"
-            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
-        %fieldset.price-option
-          - fields_for @event_registration do |er|
-            %dt= er.label :event_price_option_id, "Guest Type"
-            %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
+            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"
+        - unless @event_price_options.reject{|p| p.price.blank? and p.title.blank?}.empty?
+          %fieldset.price-option
+            - fields_for @event_registration do |er|
+              %dt= er.label :event_price_option_id, "Guest Type"
+              %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
         = text_field_tag  "event_kind", "", :id => "eventkind"
       %br.clear
-      %ul
-        - radio_button_number = 0
-        -for pay_method in %w(check cash credit-card)
-          -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
-            - radio_button_number += 1
-            %li
-              = radio_button("payment", "method", pay_method, :checked => (radio_button_number == 1 ? true : false))
-              %label{:for => "payment_method_%s" % pay_method.gsub("-", "")}="Pay by %s" % pay_method
-        %input{:type => "hidden", :name => "self_registration", :value => "true"}
-        %input{:type => "hidden", :name => "event_registration_group_is_attending", :value => "true"}
+      - unless @event_price_options.reject{|p| p.price.blank?}.empty?
+        %ul
+          - radio_button_number = 0
+          -for pay_method in %w(check cash credit-card)
+            -if @event.send(("allow_" + pay_method.gsub('credit-', '')).to_sym)
+              - radio_button_number += 1
+              %li
+                = radio_button("payment", "method", pay_method, :checked => (radio_button_number == 1 ? true : false))
+                %label{:for => "payment_method_%s" % pay_method.gsub("-", "")}="Pay by %s" % pay_method
+      %input{:type => "hidden", :name => "self_registration", :value => "true"}
+      %input{:type => "hidden", :name => "event_registration_group_is_attending", :value => "true"}
       = f.submit "Register" 
   #group-registration{:style => "display: none"}
     %h2 Fill out the contact information
@@ -76,11 +78,12 @@
             %br.clear
           
             %dt= label :state, "State:"
-            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"  
-        %fieldset.price-option
-          - fields_for @event_registration do |er|
-            %dt= er.label :event_price_option_id, "Guest Type"
-            %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options, :id, :title_and_price)
+            %dd= select :person, :state, $USA_STATES_ARRAY, :selected => "CA"
+        - unless @event_price_options.reject{|p| p.price.blank? and p.title.blank?}.empty?
+          %fieldset.price-option
+            - fields_for @event_registration do |er|
+              %dt= er.label :event_price_option_id, "Guest Type"
+              %dd= collection_select(:event_registration, :event_price_option_id, @event_price_options.reject{|p| p.price.blank? and p.title.blank? }, :id, :title_and_price)
         %br.clear
         %dt{:style=> "width:13em; margin-right:0;"}=f.label :is_attending, "I am attending this event"
         %dd=check_box :event_registration_group, :is_attending, {:checked => 'checked'}, true, false
