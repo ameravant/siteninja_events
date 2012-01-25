@@ -21,7 +21,7 @@ class EventRegistrationGroupsController < ApplicationController
         @event_registration_group.owner = @person
         @event_registration_group.event_id = @event.id
         @event_registration_group.title = ("%s %s's group for %s - %d" % [@person.first_name, @person.last_name, @event.name, Time.now.to_i.to_s[-5...-1]]).titleize
-        @event_price_options.size == 1 ? epo_id = @event_price_options.first.id : params[:event_registration][:event_price_option_id]
+        @event_price_options.size == 1 ? epo_id = @event_price_options.first.id : epo_id = params[:event_registration][:event_price_option_id]
         if @event_registration_group.save
           #if @event_registration_group.is_attending == true
             @event_registration = EventRegistration.create(:person_id => @person.id, :event_price_option_id => epo_id, :event_registration_group_id => @event_registration_group.id )
