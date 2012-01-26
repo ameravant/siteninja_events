@@ -57,10 +57,12 @@
 .event_date .month, .event_date .day, .event_date .date {display: block;}
 .event_date .date { font-size: 2.2em; }
 .events .event_tag { font-size: .65em; }
-.event_description p { margin: 5px 0; }
+.events .event_description h3 { margin-bottom: 0; padding: 0 0 5px 0; }
+.event_description p { margin: 0; padding: 5px 0; }
 .jsenabled .registration-options, .jsenabled #check-payment-options {
 	display:none;
 }
+
 #eventkind {
 	display:none;
 }

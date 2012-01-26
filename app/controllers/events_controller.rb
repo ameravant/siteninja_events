@@ -6,6 +6,11 @@ class EventsController < ApplicationController
 
   def index
     add_breadcrumb @cms_config['site_settings']['events_title']
+    respond_to do |wants|
+      wants.html # index.html.erb
+      wants.xml { render :xml => Event.future.to_xml }
+      wants.rss { render :layout => false } # uses index.rss.builder
+    end
   end
 
   # def past
