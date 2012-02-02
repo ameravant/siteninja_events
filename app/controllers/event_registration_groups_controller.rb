@@ -20,7 +20,7 @@ class EventRegistrationGroupsController < ApplicationController
         end
         @event_registration_group.owner = @person
         @event_registration_group.event_id = @event.id
-        @event_registration_group.title = ("%s %s's group for %s - %d" % [@person.first_name, @person.last_name, @event.name, Time.now.strftime("%b %d, %Y at %I:%M %p"]).titleize
+        @event_registration_group.title = ("%s %s's group for %s - %d" % [@person.first_name, @person.last_name, @event.name, Time.now.strftime("%b %d, %Y at %I:%M %p")]).titleize
         @event_price_options.size == 1 ? epo_id = @event_price_options.first.id : epo_id = params[:event_registration][:event_price_option_id]
         if @event_registration_group.save
           #if @event_registration_group.is_attending == true
