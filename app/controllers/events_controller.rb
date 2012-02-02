@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  unloadable # http://dev.rubyonrails.org/ticket/6001
+  unloadable # http://dev.rubyonrails.org/ticket/60018
   before_filter :find_page
   before_filter :find_event_range, :only => [:index]
   add_breadcrumb "Home", "root_path"
@@ -61,10 +61,16 @@ class EventsController < ApplicationController
   private
 
     def find_page
-      @page = Page.find_by_permalink 'events'
-      @menu = @page.menus.first
-      @event_categories = EventCategory.active
-      @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
+      if @cms_config['modules']['events']
+        render_404 unless @page = Page.find_by_permalink('events')
+        @menu = @page.menus.first
+        @event_categories = EventCategory.active
+        @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
+      else
+        render_404 unless @page = Page.find_by_permalink('events')
+        get_page_defaults(@page)
+        render 'pages/show'
+      end
     end
 
     def find_event_range

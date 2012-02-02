@@ -7,8 +7,6 @@ class EventCategoriesController < ApplicationController
   
   def show
     begin
-      render_404 unless @event_category = EventCategory.active.find(params[:id])
-      @page = Page.find_by_permalink!('events') if @event_category.menus.empty?
       @event_category.menus.empty? ? @menu = @page.menus.first : @menu = @event_category.menus.first
       @events = @event_category.events.future.paginate(:page => params[:page], :per_page => 10, :include => :event_categories)
       add_breadcrumb @event_category.title
@@ -27,8 +25,21 @@ class EventCategoriesController < ApplicationController
   end
 
   def find_page
-    @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
-    #@page = Page.find_by_permalink!('blog')
+    if @cms_config['modules']['events']
+      @event_category = EventCategory.active.find(params[:id])
+      if @event_category.blank?
+        render_404
+      else
+        @page = Page.find_by_permalink('events') if @event_category.menus.empty?
+      end
+    else
+      unless @page = Page.find_by_permalink('events')
+        render_404
+      else
+        get_page_defaults(@page)
+        render 'pages/show'
+      end
+    end
   end
 
   def find_events_for_sidebar
