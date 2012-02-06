@@ -1,5 +1,6 @@
 class EventRegistrationGroupsController < ApplicationController
   unloadable
+  before_filter :get_page
   def new
     @event = Event.find(params[:event_id])
     @event_registration_group = EventRegistrationGroup.new
@@ -62,5 +63,11 @@ class EventRegistrationGroupsController < ApplicationController
     if params[:pay_method]
       @event_registration_group.update_attributes(:pay_method => params[:pay_method], :total_price => @event_registration_group.subtotal)
     end
+  end
+  
+  private
+  
+  def get_page
+    @page = Page.find_by_permalink('events')
   end
 end
