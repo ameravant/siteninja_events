@@ -20,11 +20,11 @@
         = f.label :address
         = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "This will be shown on the event page and used to display a map (optional)."}
       %dd.form-option
-        = f.text_field :address
+        = f.text_field :address, :class => "small-input"
       %dt.form-label= f.label :date_and_time, "Start Date/Time"
-      %dd.form-option= f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
+      %dd.form-option= f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input")
       %dt.form-label= f.label :end_date_and_time, "End Date/Time"
-      %dd.form-option= f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
+      %dd.form-option= f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input")
       -if !@event_categories.blank?
         %dt.form-label
           = f.label :event_category_ids, link_to("Assign Categories", "javascript:void(0)", :id => "display-categories", :onclick => "jQuery('#categories').slideToggle(500);")
@@ -39,12 +39,12 @@
         = f.label :active, "Publish Event to Public"
 
 %h2.title.form-label= f.label :name, "Event Title"
-= f.text_field :name, :class => "big", :size => 80, :style => "width: 550px;"
+= f.text_field :name, :class => "big-input"
 
 
 
 %h2= f.label :blurb, "Blurb"
-= f.text_area :blurb, :style => "width: 550px; height: 110px;"
+= f.text_area :blurb, :class => "big-area blurb"
 
 - if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
   %br
