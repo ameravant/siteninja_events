@@ -31,7 +31,7 @@ class EventsController < ApplicationController
       @price_options = @event.event_price_options.public
       @latest_events = Event.future.soonest.reject { |event| event == @event }
       add_breadcrumb @cms_config['site_settings']['events_title'], events_path
-      add_breadcrumb @event.name
+      add_breadcrumb '@event.name'
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "That event could not be found. It may have already happened or been deleted."
       redirect_to events_path
