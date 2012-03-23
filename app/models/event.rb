@@ -66,7 +66,8 @@ class Event < ActiveRecord::Base
   end
 
   def registration_count
-    self.event_registration_groups.collect(&:event_registrations).flatten.size
+    PersonGroup.all(:conditions => {:event_id => self.id}).each{ |x| x.event_registrations }.size
+    #self.event_registration_groups.collect(&:event_registrations).flatten.size
   end
 
   def spots_available

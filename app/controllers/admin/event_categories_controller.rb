@@ -56,7 +56,16 @@ class Admin::EventCategoriesController < AdminController
   end
 
   def authorization
-    authorize(@permissions['events'], "Event Categories")
+    if @cms_config['modules']['events']
+      authorize(@permissions['events'], "Events")
+      if !current_user.has_role(["Admin"])
+        flash[:error] = "You do not have permission to access Event Categories."
+        redirect_to admin_events_path 
+      end
+    else
+      flash[:error] = "You do not have permission to access Events."
+      redirect_to "/"
+    end
   end
 
   def add_crumbs

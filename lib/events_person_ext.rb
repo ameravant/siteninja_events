@@ -17,7 +17,9 @@ module EventsPersonExt
 
   module InstanceMethods
     def registration_group_for(event)
+      #PersonGroup.all(:conditions => {:event_id => event.id})
       self.event_registration_groups.find(:first, :conditions => "person_groups.event_id = #{event.id}")
+      # self.event_registration_groups.find(:first, :conditions => "person_groups.event_id = #{event.id}")
     end
     def admin?
       respond_to?(:user) && user.is_admin

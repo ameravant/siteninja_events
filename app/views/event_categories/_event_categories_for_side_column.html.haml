@@ -8,7 +8,7 @@
       - for category in @event_categories
         - if @event_category and @event_category == category
           %li.sidebar_link_active
-            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon-selected", :title => "Subscribe to RSS Feed")
+            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
             = h(category.title)
         - else
           %li

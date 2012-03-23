@@ -7,10 +7,10 @@
   %span.hmenu
     = icon "Plus", new_admin_event_path
     = link_to "Add a new #{@cms_config['site_settings']['event_title']}", new_admin_event_path
-
-  %span.hmenu
-    = icon "Folder", admin_event_categories_path
-    = link_to "Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
+  - if @full_access == true
+    %span.hmenu
+      = icon "Folder", admin_event_categories_path
+      = link_to "Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
 
 %br
 
@@ -21,14 +21,13 @@
     %tr
       %th{:style => "width: 100px;"} Date
       %th Title
-      - if @cms_config["features"]["event_registration"]
-        %th{:style => "width: 60px;"} Prices
-        %th{:style => "width: 100px;"} Registrations
-      - else
-        %th{ :colspan => 2 }
-      %th{:style => "width: 60px;"} Images
-      %th{:style => "width: 60px;"} Files
-      %th{:style => "width: 80px;"} Options
+      - if @full_access == true
+        - if @cms_config["features"]["event_registration"]
+          %th{:style => "width: 60px;"} Prices
+          %th{:style => "width: 100px;"} Registrations
+        %th{:style => "width: 60px;"} Images
+        %th{:style => "width: 60px;"} Files
+      %th.event-options.align-right{:style => "width: 80px;"} Options
   - if @events.total_pages > 1
     %tfoot
       %tr
@@ -39,24 +38,31 @@
       %tr[event]{ :class => cycle("odd#{event.future_date? ? "" : " past_event"}", "even#{event.future_date? ? "" : " past_event"}") }
         %td.detail= event.date_and_time.strftime("%a, %b %d, %Y")
         %td= link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
-        - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
-          %td= link_to pluralize(event.event_price_options.public.count, "Price"), [:admin, event, :event_price_options], :class => (event.event_price_options.public.count == 0 ? "bold red" : nil)
+        - if @full_access == true
+          - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
+            %td= link_to pluralize(event.event_price_options.public.count, "Price"), [:admin, event, :event_price_options], :class => (event.event_price_options.public.count == 0 ? "bold red" : nil)
+            %td
+              = link_to pluralize(event.registration_count, "Registration"), [:admin, event, :event_registration_groups]
+              %br
+              ="%s are still available" % pluralize(event.spots_available, "spot") if event.registration_limit
+          - else
+            %td{ :colspan => 2 }
           %td
-            = link_to pluralize(event.registration_count, "Registration"), [:admin, event, :event_registration_groups]
-            %br
-            ="%s are still available" % pluralize(event.spots_available, "spot") if event.registration_limit
-        - else
-          %td{ :colspan => 2 }
-        %td
-          = icon "Picture", [:admin, event, :images]
-          = link_to event.images_count.to_i, [:admin, event, :images]
-        %td
-          = #link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
-          = icon "Document", [:new, :admin, event, :asset]
-          = link_to event.assets_count, [:new, :admin, event, :asset]
-        %td.center
-          = feature_icon_select(event, event.title)
+            = icon "Picture", [:admin, event, :images]
+            = link_to event.images_count.to_i, [:admin, event, :images]
+          %td
+            = #link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
+            = icon "Document", [:new, :admin, event, :asset]
+            = link_to event.assets_count, [:new, :admin, event, :asset]
+        %td.event-options.align-right
+          - if @full_access == true
+            = feature_icon_select(event, event.title)
           = icon "Search", event
-          = icon "Write", edit_admin_event_path(event)
-          = trash_icon(event, admin_event_path(event), "#{event.name}")
-
+          - if @full_access == true
+            = icon "Write", edit_admin_event_path(event)
+            = trash_icon(event, admin_event_path(event), "#{event.name}")
+          - else
+            - if event.active == false
+              = icon "Write", edit_admin_event_path(event)
+              = trash_icon(event, admin_event_path(event), "#{event.name}")
+              

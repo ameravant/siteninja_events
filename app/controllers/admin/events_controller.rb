@@ -15,8 +15,6 @@ class Admin::EventsController < AdminController
     end
     @events = @all_events.sort_by(&:date_and_time).reverse.paginate(:page => params[:page], :per_page => 50)
     
-    
-    
     if params[:q].blank?
       add_breadcrumb @cms_config['site_settings']['events_title']
       @all_events = Event.all
@@ -31,7 +29,9 @@ class Admin::EventsController < AdminController
   def new
     @event_categories = EventCategory.active
     @event = Event.new
-    @event.active = false if current_user.has_role("Event Contributor")
+    if @full_access == false
+      @event.active = false if current_user.has_role("Event Contributor")
+    end
   end
 
   def edit
@@ -88,8 +88,14 @@ private
   end
 
   def authorization
-    authorize(@permissions['events'], "Events")
-    current_user.has_role(["Admin", "Event Author"]) ? @disabled = false : @disabled = true
+    if @cms_config['modules']['events']
+      authorize(@permissions['events'], "Events")
+      current_user.has_role(["Admin", "Event Author"]) ? @full_access = true : @full_access = false
+      @disabled = true if !@full_access
+    else
+      flash[:error] = "You do not have permission to access Events."
+      redirect_to "/"
+    end
   end
   def add_crumbs
     add_breadcrumb @cms_config['site_settings']['events_title'], "admin_events_path"

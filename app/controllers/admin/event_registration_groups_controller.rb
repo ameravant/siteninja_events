@@ -2,8 +2,8 @@ class Admin::EventRegistrationGroupsController < AdminController
   unloadable
   add_breadcrumb "Calendar", "admin_events_url"
   def index
-    @event = Event.find(params[:event_id], :include => 'event_registration_groups')
-    @groups = @event.event_registration_groups
+    @event = Event.find(params[:event_id])
+    @groups = PersonGroup.all(:conditions => {:event_id => @event.id})
     @registrations = @groups.collect(&:event_registrations).flatten
     @people = @registrations.collect(&:person).flatten.sort_by(&:last_name)
     
