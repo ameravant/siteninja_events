@@ -56,8 +56,34 @@ class EventsController < ApplicationController
       redirect_to event_registration_registration_contacts_path(registration.event, registration)
     end
   end
-
-
+  
+  def new
+    @event_categories = EventCategory.active
+    @event = Event.new
+    @event.active = false
+  end
+  
+  def create
+    @person = Person.find_or_create_by_email(params[:person])
+    @event = Event.new(params[:event])
+    if !@person.valid?
+      flash[:error] = "Please enter your first and last name"
+      @event = Event.new(params[:event])
+      render :action => 'new'
+      @event.active = false
+    else
+      @person.save
+      @event.person_id = @person.id
+      if @event.save
+        flash[:notice] = "Your event has been submitted for approval"
+        EventMailer.deliver_event_notification_to_admin(@event)
+        redirect_to events_path
+      else
+        render :action => "new"
+      end
+    end
+  end
+  
   private
 
     def find_page

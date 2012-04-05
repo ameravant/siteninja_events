@@ -15,16 +15,15 @@
     -if @event_registration_group.total_price.to_i > 0
       %p="Total: %s" % number_to_currency(@event_registration_group.total_price)
 
-  %h1
-    = yield :meta_title
+  = yield :meta_title
   - if params[:pay_method] == "cash"
-    %p
+    %h1
       You have completed the registration process and will pay in cash at the event.
   - elsif params[:pay_method] == "check"
-    %p You have completed the registration process and selected to pay by check.
+    %h1 You have completed the registration process and selected to pay by check.
     = @event.check_instructions || @event.payment_instructions
   - else # credit card
-    %p
+    %h1
       Complete registration through Google Checkout.
       =google_checkout_button(@event_registration_group)
   - if @current_guests.size > 1
