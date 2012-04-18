@@ -1,4 +1,4 @@
-- if !@event.description.include?('<p>') || !@event.description.include?('<div>') 
+- if !@event.description.blank? && (!@event.description.include?('<p>') || !@event.description.include?('<div>')) 
   - @event.description = simple_format(@event.description)
 - content_for :head do
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
