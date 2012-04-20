@@ -1,0 +1,59 @@
+- @event_categories = EventCategory.active
+- @event = Event.new
+- @event.active = false
+= error_messages_for "event"
+- @calendar_select = true
+
+= javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
+%style{:type => "text/css"}
+  ==.submission-form dl { margin: 0; padding: 0 0 20px; }
+  ==.submission-form input { padding: 4px; font-size: 1.1em; width: 45%;}
+  ==.submission-form .short-field { width: 20%; }
+  ==.submission-form .medium-field { width: 35%; }
+  ==.submission-form dt { margin: 0; padding: 10px 0 0; }
+  ==.submission-form dd { margin: 0; padding: 0 0 10px; display: block; }
+  ==.submission-form .long-field { width: 90%; }
+  ==.submission-form .large-textarea { width: 90%; height: 100px; padding: 4px; }
+  ==.submission-form h2 { margin: 0; padding: 10px 0 0; }
+  ==.submission-form .submit-button { width: inherit; padding: 8px; font-size: 1.1em; border-radius: 8px; border: 2px solid #3f7f00; background: #bbea8c; }
+  ==.submission-form { margin: 0 0 20px; }
+
+%h1
+  = yield :title
+
+- form_for :event, :url => events_path, :html => { :onsubmit => "form_submitted();", :class => "submission-form" } do |f|
+  %fieldset
+    - fields_for :person do |p|
+      %h2 Contact Info
+      .note For our records, not visible to the public.
+      = f.hidden_field :active, :value => "false"
+      %dl
+        %dt.title.form-label= p.label :first_name, "Name"
+        %dd
+          = p.text_field :first_name, :placeholder => "First", :class => "short-field"
+          %span{:class => "required"}*
+          &nbsp;
+          = p.text_field :last_name, :placeholder => "Last", :class => "short-field"
+          %span{:class => "required"}*
+        %dt.title.form-label= f.label :email
+        %dd
+          = p.text_field :email
+          %span{:class => "required"} *
+        %dt.title.form-label= p.label :company, "Organization"
+        %dd= p.text_field :company
+        %dt.title.form-label= p.label :phone
+        %dd= p.text_field :phone, :class => "short-field"
+      %h2 Event Info
+      %dl
+        %dt.title.form-label= f.label :name, "Event Title"
+        %dd= f.text_field :name, :class => "long-field"
+        %dt.form-label= f.label :date_and_time, "Date/Time"
+        %dd.date-options
+          = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker medium-field", :placeholder => "Start")
+          to
+          = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker medium-field", :placeholder => "End")
+        %dt.form-label= f.label :address
+        %dd= f.text_field :address, :class => "long-field", :placeholder => "Format: \"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\""
+        %dt.form-label= f.label :description, "Description"
+        %dd= f.text_area :description, :class => "large-textarea"
+      = f.submit "Submit event", :class => "submit-button"
