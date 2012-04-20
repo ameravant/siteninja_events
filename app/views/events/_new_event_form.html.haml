@@ -47,13 +47,13 @@
       %dl
         %dt.title.form-label= f.label :name, "Event Title"
         %dd= f.text_field :name, :class => "long-field"
-        %dt.form-label= f.label :date_and_time, "Date/Time"
+        %dt.form-label= f.label :date_and_time, "Event Date/Time"
         %dd.date-options
           = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker medium-field", :placeholder => "Start")
           to
           = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker medium-field", :placeholder => "End")
         %dt.form-label= f.label :address
         %dd= f.text_field :address, :class => "long-field", :placeholder => "Format: \"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\""
-        %dt.form-label= f.label :description, "Description"
+        %dt.form-label= f.label :description, "Event Description"
         %dd= f.text_area :description, :class => "large-textarea"
       = f.submit "Submit event", :class => "submit-button"
