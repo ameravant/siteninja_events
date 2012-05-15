@@ -1,8 +1,17 @@
 = f.error_messages
-
-%table{:cellspacing => "0"}
-  %tr
-    %td= f.label :title
-    %td= f.text_field :title
+.responsive-form
+  .main-fields
+    %h2.title.form-label= f.label :title, "Title"
+    = f.text_field :title, :class => "big-input"
+  #main-details.details.options
+    #options
+      %dl
+        %dt.form-label
+          = f.label :column_id, "Side Column"
+        %dd.form-option
+          = f.select :column_id, Column.all(:conditions => {:column_location => "side_column"}).collect {|ac| [ac.title, ac.id]}, {:include_blank => "Select Side Column"}
+%br
+%br
+&nbsp;
 - fancy_submit admin_event_categories_path do
   = f.submit "Save category"

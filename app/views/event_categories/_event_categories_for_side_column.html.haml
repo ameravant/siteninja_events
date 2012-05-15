@@ -1,3 +1,4 @@
+- @event_categories = EventCategory.active
 - unless @event_categories.empty?
   - content_for :side_column do
     %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories

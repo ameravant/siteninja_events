@@ -1,10 +1,18 @@
+- accs = section.event_categories
+- categories = []
+- for category in accs
+  - categories << category.id
 - count = ColumnSectionType.find_by_partial_name("events_for_side_column").default_count if count.blank?
-- @events = Event.not_yet_complete[0..(count - 1)]
-- unless @events.blank?
+- ops = "person_id = #{@page.author_id}" if @page.author_id
+- if section.show_all_categories == true
+  - events = Event.not_yet_complete[0..(count - 1)]
+- else
+  - events = Event.not_yet_complete.reject{|a| !(a.event_category_ids.any? {|ac| categories.include?(ac)})}[0..count-1]
+- unless events.blank?
   .side-column-section
-    %h2= @cms_config['site_settings']['events_title']
+    %h2= title
     %ul.recent_events.list_of_links
-      - for event in @events[0..count]
+      - for event in events[0..count]
         %li
           %h3= link_to event.name, event_path(event)
           %span.date= event.date_and_time.strftime("%a, %B %d, %Y")

@@ -35,16 +35,20 @@
           = f.label :blurb, "Short Description"
         %dd.form-option
           = f.text_area :blurb, :class => "small-area blurb", :placeholder => "A brief overview of the event."
-      
         -if !@event_categories.blank?
           %dt.form-label
-            = f.label :event_category_ids, link_to("Assign Categories", "javascript:void(0)", :id => "display-categories", :onclick => "jQuery('#categories').slideToggle(500);")
+            = f.label :event_category_id, "Primary Category"
+          %dd.form-option
+            = f.select :event_category_id, EventCategory.all.sort_by(&:title).collect {|ac| [ac.title, ac.id]}, {:include_blank => "Select a main category"}
+            %br
+            = f.label :event_category_ids, link_to("Secondary Categories", "javascript:void(0)", :id => "display-categories", :onclick => "jQuery('#categories').slideToggle(500);")
             #categories
               %img{:src =>"#{css_icon("Cancel","","16x16","red")}", :title =>"close", :alt=> "close box icon", :class => "close-icon", :onclick => "jQuery('#categories').slideUp()"}
               - for event_category in @event_categories
                 .event_category_checkbox
                   = check_box_tag "event[event_category_ids][]", event_category.id, @event.event_categories.include?(event_category), :id => dom_id(event_category)
                   = label_tag dom_id(event_category), "#{event_category.title}"
+
         %dt.form-label
           = f.check_box :active, :disabled => @disabled
           = f.label :active, "Publish Event to Public"

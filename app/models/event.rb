@@ -8,6 +8,7 @@ class Event < ActiveRecord::Base
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :assets, :as => :attachable, :dependent => :destroy
+  belongs_to :event_category
   has_and_belongs_to_many :event_categories
   #validates_datetime :registration_deadline, :allow_blank => true
   #validates_datetime :date_and_time, :end_date_and_time

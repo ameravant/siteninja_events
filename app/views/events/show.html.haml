@@ -3,13 +3,14 @@
 - content_for :meta_title do
   = @event.name
 
+
 - content_for :side_column do
   .event-side-column
 
     / Registration link
   - if @event.future_date? and @event.registration? && !@event.is_closed?
     .side-column-section
-      %h1 Registration
+      %h2 Registration
       - if !@event.event_price_options.empty?
         - if @event.event_price_options.size > 1
           %h3 Pricing Options
@@ -30,18 +31,24 @@
   / Map and address
   - unless @event.address.blank?
     .side-column-section
-      %h1 Location
+      %h2 Location
       - content_for :head do
         = render :partial => "/shared/google_maps_includes"
       %div= h @event.address
       #google_map
       %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
-    / More events
-  - unless @event.registration? or @latest_events.empty?
-    .side-column-section
-      %h1== Additional #{@cms_config['site_settings']['event_title'].pluralize}
-      = render :partial => @latest_events
 
+
+- if !@event.event_category.blank? and !@event.event_category.column.blank?
+  - @side_column_sections = @event.event_category.column.column_sections
+  = render :partial => "shared/side_column"
+- else
+  - content_for :side_column do
+    - unless @event.registration? or @latest_events.empty?
+      .side-column-section
+        %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
+        = render :partial => @latest_events
+    
 %h1= yield(:meta_title).strip
 -if @event.future_date?
   = soon_indicator(@event.date_and_time, '', true) 
