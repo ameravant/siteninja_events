@@ -1,2 +1,2 @@
 %h1 A new event was submitted.
-%h2=link_to("Confirm the event.", edit_admin_event_url(@event))
+%h2=link_to("Confirm the event.", "#{$DOMAIN_PATH}#{edit_admin_event_path(@event)}")
