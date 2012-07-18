@@ -11,7 +11,7 @@ class EventMailer < ActionMailer::Base
   
   def event_notification_to_admin(event)   
     person = event.person 
-    setup_email(Setting.first.inquiry_notification_email, $CMS_CONFIG['website']['name'], "#{person} has submitted a new event to #{$CMS_CONFIG['website']['name']}.")
+    setup_email(Setting.first.inquiry_notification_email, $CMS_CONFIG['website']['name'], "#{person} has submitted a new event to #{$CMS_CONFIG['website']['name']} - Event ##{event.id}.")
     body :person => person, :event => event
   end
   
