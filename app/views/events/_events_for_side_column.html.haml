@@ -9,7 +9,7 @@
 - else
   - events = Event.not_yet_complete.reject{|a| !(a.event_category_ids.any? {|ac| categories.include?(ac)})}[0..count-1]
 - unless events.blank?
-  .side-column-section{:id => "section-#{section.id}"}
+  .slice.side-column-section{:id => "section-#{section.id}"}
     %h2= title
     %ul.recent_events.list_of_links
       - for event in events[0..count]
