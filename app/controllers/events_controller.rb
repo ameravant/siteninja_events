@@ -36,6 +36,12 @@ class EventsController < ApplicationController
       flash[:error] = "That event could not be found. It may have already happened or been deleted."
       redirect_to events_path
     end
+    if @cms_config['site_settings']['enable_responsive_layouts']
+      unless @event.event_category and !@event.event_category.column.blank?
+        @main_column = Column.first(:conditions => {:column_location => "event"})
+        @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
+      end
+    end
   end
 
   def pay
@@ -89,6 +95,9 @@ class EventsController < ApplicationController
     def find_page
       if @cms_config['modules']['events']
         render_404 unless @page = Page.find_by_permalink('events')
+        
+        @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
+        @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
         @menu = @page.menus.first
         @event_categories = EventCategory.active
         @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )

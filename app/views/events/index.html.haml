@@ -1,61 +1,8 @@
 - content_for :meta_title do
   = "Past" if @past
   = @cms_config['site_settings']['events_title']
-= render :partial => "/event_categories/event_categories_for_side_column"
-%h1= yield(:meta_title).strip
--if @cms_config['site_settings']['show_past_events']
-  = link_to "Click here to view past events", past_events_path
-=# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
-= @page.body if @page.body.length > 14
-- if !@events_in_progress.blank?
-  %h2.event_month In Progress
-  %ul.events
-    - for event in @events_in_progress
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-            - if event.today? # before midnight
-              %span.event_tag.event_tag_soon today!
-            - elsif event.tomorrow?
-              %span.event_tag.event_tag_soon tomorrow
-            - elsif event.this_week?
-              %span.event_tag.event_tag_this_week this week
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(truncate(event.blurb.strip, 200))
-  .clear
-- @events_grouped.each do |year_and_month, events|
-  %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
-  %ul.events
-    - for event in events.sort_by(&:date_and_time)
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-            - if event.today? # before midnight
-              %span.event_tag.event_tag_soon today!
-            - elsif event.tomorrow?
-              %span.event_tag.event_tag_soon tomorrow
-            - elsif event.this_week?
-              %span.event_tag.event_tag_this_week this week
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(truncate(event.blurb.strip, 200))
-  = clear
+- if @cms_config['site_settings']['enable_responsive_layouts']
+  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "index"}, :collection => @main_column_sections
+- else
+  = render :partial => "/event_categories/event_categories_for_side_column"
+  = render :partial => "/events/index"

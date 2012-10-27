@@ -1,0 +1,9 @@
+.event-date-time
+  = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+  -if @event.end_date_and_time
+    -if @event.end_date_and_time.day == @event.date_and_time.day
+      = @event.end_date_and_time.strftime("&mdash; %I:%M %p")
+    -else
+      &mdash;
+      %br
+      = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")

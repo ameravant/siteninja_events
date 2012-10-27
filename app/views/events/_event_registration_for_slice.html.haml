@@ -1,0 +1,18 @@
+- if @event.future_date? and @event.registration? && !@event.is_closed?
+  %h2 Registration
+  - if !@event.event_price_options.empty?
+    - if @event.event_price_options.size > 1
+      %h3 Pricing Options
+    %table#price_options
+      %th title
+      %th description
+      %th price
+      -for price_option in @price_options
+        %tr
+          %td.title= price_option.title
+          %td.description= price_option.description
+          %td.price= number_to_currency(price_option.price)
+
+  You may pay by:
+  = @event.allowed_payment_methods
+  %h3.register= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)

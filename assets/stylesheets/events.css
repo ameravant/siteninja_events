@@ -71,3 +71,11 @@
 #event_registration_group_is_attending {float:left;}
 #new_event_registration td.label {padding-bottom:12px;width:100px;clear:left;}
 #new_event_registration td {float:left;}
+
+div.event-side-column .side-column-section { margin-bottom: 20px; }
+    div.event-side-column  h3 { font-size: 1.5em; }
+    div.event-side-column .register { margin: 20px 0; font-size: 2em; }
+    table#price_options td, table#price_options th { vertical-align: top; line-height: 1.25em; }
+    div.event-date-time { font-weight: bold; line-height: 1.2em; padding-bottom: 10px; font-size: 1.2em; }
+    table#price_options td.description { font-size: .8em; }
+    div#google_map { width: 300px; }

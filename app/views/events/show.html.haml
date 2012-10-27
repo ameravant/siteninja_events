@@ -4,72 +4,65 @@
   = @event.name
 
 
-- content_for :side_column do
-  .event-side-column
-
-    / Registration link
-  - if @event.future_date? and @event.registration? && !@event.is_closed?
-    .side-column-section
-      %h2 Registration
-      - if !@event.event_price_options.empty?
-        - if @event.event_price_options.size > 1
-          %h3 Pricing Options
-        %table#price_options
-          %th title
-          %th description
-          %th price
-          -for price_option in @price_options
-            %tr
-              %td.title= price_option.title
-              %td.description= price_option.description
-              %td.price= number_to_currency(price_option.price)
-    
-      You may pay by:
-      = @event.allowed_payment_methods
-      %h3.register= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
-
-  / Map and address
-  - unless @event.address.blank?
-    .side-column-section
-      %h2 Location
-      - content_for :head do
-        = render :partial => "/shared/google_maps_includes"
-      %div= h @event.address
-      #google_map
-      %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
-
-
-- if !@event.event_category.blank? and !@event.event_category.column.blank?
-  - @side_column_sections = @event.event_category.column.column_sections
-  = render :partial => "shared/side_column"
-- else
+- if !@cms_config['site_settings']['enable_responsive_layouts']
   - content_for :side_column do
-    - unless @event.registration? or @latest_events.empty?
+    .event-side-column
+
+      / Registration link
+    - if @event.future_date? and @event.registration? && !@event.is_closed?
       .side-column-section
-        %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
-        = render :partial => @latest_events
+        %h2 Registration
+        - if !@event.event_price_options.empty?
+          - if @event.event_price_options.size > 1
+            %h3 Pricing Options
+          %table#price_options
+            %th title
+            %th description
+            %th price
+            -for price_option in @price_options
+              %tr
+                %td.title= price_option.title
+                %td.description= price_option.description
+                %td.price= number_to_currency(price_option.price)
     
-%h1= yield(:meta_title).strip
--if @event.future_date?
-  = soon_indicator(@event.date_and_time, '', true) 
-.event-date-time
-  = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
-  -if @event.end_date_and_time
-    -if @event.end_date_and_time.day == @event.date_and_time.day
-      = @event.end_date_and_time.strftime("&mdash; %I:%M %p")
-    -else
-      &mdash;
-      %br
-      = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+        You may pay by:
+        = @event.allowed_payment_methods
+        %h3.register= link_to "Register Now &gt;", new_event_event_registration_group_path(@event)
 
-= ninja_parse(@event.description)
+    / Map and address
+    - unless @event.address.blank?
+      .side-column-section
+        %h2 Location
+        - content_for :head do
+          = render :partial => "/shared/google_maps_includes"
+        %div= h @event.address
+        #google_map
+        %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
 
-- content_for :head do
-  %style{:type => "text/css"}
-    div.event-side-column .side-column-section { margin-bottom: 20px; }
-    div.event-side-column  h3 { font-size: 1.5em; }
-    div.event-side-column .register { margin: 20px 0; font-size: 2em; }
-    table#price_options td, table#price_options th { vertical-align: top; line-height: 1.25em; }
-    div.event-date-time { font-weight: bold; line-height: 1.2em; padding-bottom: 10px; font-size: 1.2em; }
-    table#price_options td.description { font-size: .8em; }
-    div#google_map { width: 300px; }
+
+  - if !@event.event_category.blank? and !@event.event_category.column.blank?
+    - @side_column_sections = @event.event_category.column.column_sections
+    = render :partial => "shared/side_column"
+  - else
+    - content_for :side_column do
+      - unless @event.registration? or @latest_events.empty?
+        .side-column-section
+          %h2== Additional #{@cms_config['site_settings']['event_title'].pluralize}
+          = render :partial => @latest_events
+    
+  %h1= yield(:meta_title).strip
+  -if @event.future_date?
+    = soon_indicator(@event.date_and_time, '', true) 
+  .event-date-time
+    = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+    -if @event.end_date_and_time
+      -if @event.end_date_and_time.day == @event.date_and_time.day
+        = @event.end_date_and_time.strftime("&mdash; %I:%M %p")
+      -else
+        &mdash;
+        %br
+        = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+
+  = ninja_parse(@event.description)
+- else
+  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "show"}, :collection => @main_column_sections

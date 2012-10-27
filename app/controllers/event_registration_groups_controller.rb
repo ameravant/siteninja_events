@@ -69,5 +69,7 @@ class EventRegistrationGroupsController < ApplicationController
   
   def get_page
     @page = Page.find_by_permalink('events')
+    @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
+    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
   end
 end

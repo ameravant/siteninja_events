@@ -1,0 +1,7 @@
+.side-column-section
+  %h2 Location
+  - content_for :head do
+    = render :partial => "/shared/google_maps_includes"
+  %div= h @event.address
+  #google_map
+  %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"

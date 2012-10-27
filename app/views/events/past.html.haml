@@ -1,26 +1,3 @@
 - content_for :meta_title do
   = "Past #{@cms_config['site_settings']['events_title']}"
-
-%h1= yield(:meta_title).strip
-= link_to "Click here to view current #{@cms_config['site_settings']['events_title']}", events_path
-- @events_grouped.each do |year_and_month, events|
-  %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
-  %ul.events
-    - for event in events
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(h(truncate(event.blurb.strip, 200)))
-  = clear
-
+= render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "past"}, :collection => @main_column_sections
