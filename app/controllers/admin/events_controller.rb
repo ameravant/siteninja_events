@@ -59,7 +59,7 @@ class Admin::EventsController < AdminController
   end
 
   def update
-    add_breadcrumb @event.name          
+    add_breadcrumb '@event.name'          
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
     if @event.update_attributes(params[:event])
