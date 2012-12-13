@@ -2,6 +2,7 @@
 - categories = []
 - for category in accs
   - categories << category.id
+- count = section.count
 - count = ColumnSectionType.find_by_partial_name("events_for_side_column").default_count if count.blank?
 - ops = "person_id = #{@page.author_id}" if @page.author_id
 - if section.show_all_categories == true
