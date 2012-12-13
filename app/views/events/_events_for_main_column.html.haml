@@ -38,7 +38,7 @@
     - else
       %h2= section.title
       %ul.recent_events.list_of_links
-        - for event in events[0..count]
+        - for event in events
           %li
             %h3= link_to event.name, event_path(event)
             %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
