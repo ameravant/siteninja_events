@@ -1,6 +1,9 @@
 - if params[:pay_method]
   - content_for :meta_title do
-    = "You have chosen to pay by %s for %s" % [params[:pay_method], @event.name]
+    - if @event_registration_group.total_price.to_i == 0
+      = "You have completed the registration for #{@event.name}"
+    - else
+      = "You have chosen to pay by %s for %s" % [params[:pay_method], @event.name]
   .guest-list
     %h2 Your Guest List
     %table{ :cellspacing => "0" } 
