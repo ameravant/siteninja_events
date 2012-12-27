@@ -20,11 +20,11 @@
 
   = #yield :meta_title
   - if @event_registration_group.total_price.to_i == 0
-    %h1= yield
+    %h1= yield :meta_title
   - elsif params[:pay_method] == "cash"
-    %h1= yield
+    %h1= yield :meta_title
   - elsif params[:pay_method] == "check"
-    %h1= yield
+    %h1= yield :meta_title
     = @event.check_instructions || @event.payment_instructions
   - else # credit card
     %h1
