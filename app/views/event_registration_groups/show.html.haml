@@ -16,7 +16,9 @@
       %p="Total: %s" % number_to_currency(@event_registration_group.total_price)
 
   = yield :meta_title
-  - if params[:pay_method] == "cash"
+  - if @event_registration_group.total_price.to_i == 0
+    %h1 You have completed the registration process.
+  - elsif params[:pay_method] == "cash"
     %h1
       You have completed the registration process and will pay in cash at the event.
   - elsif params[:pay_method] == "check"
