@@ -10,9 +10,9 @@
 - else
   - events = Event.not_yet_complete.reject{|a| !(a.event_category_ids.any? {|ac| categories.include?(ac)})}[0..count-1]
 - unless events.blank?
-  .slice.main-column-section{:id => "section-#{section.id}"}
+  %div
     - if section.section_format == "full"
-      %ul.events{:id => "section-#{section.id}"}
+      %ul.events
         - for event in events.sort_by(&:date_and_time)
           %li[event]
             %div.event_date
