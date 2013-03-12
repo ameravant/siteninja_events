@@ -17,7 +17,7 @@
         %li
           %h3= link_to event.name, event_path(event)
           - if @cms_config['site_settings']['show_event_location']
-            = event.location
+            = event.address
           %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
           - if show_blurb
             = simple_format(truncate(event.blurb, :length => 100))
