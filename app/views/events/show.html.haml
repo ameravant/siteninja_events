@@ -1,4 +1,4 @@
-- if !@event.description.include?('<p>') || !@event.description.include?('<div>') 
+- if !@event.description.include?('<p>') and !@event.description.include?('<div>') 
   - @event.description = simple_format(@event.description)
 - content_for :meta_title do
   = @event.name
