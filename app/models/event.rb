@@ -27,6 +27,10 @@ class Event < ActiveRecord::Base
   named_scope :in_progress, :order => "date_and_time desc", 
     :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now, Time.now]
   named_scope :soonest, :limit => 6, :conditions => { :active => true }
+  include Rakismet::Model
+  rakismet_attrs   :author => :person_name,
+                   :author_email => :person_email,
+                   :content => :description
   default_scope :order => "date_and_time"
   # accepts_nested_attributes_for :event_price_options
   def to_param

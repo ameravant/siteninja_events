@@ -2,7 +2,8 @@ class EventsController < ApplicationController
   unloadable # http://dev.rubyonrails.org/ticket/60018
   before_filter :find_page
   before_filter :find_event_range, :only => [:index]
-  #rakismet_filter :only => :create
+  include Rakismet::Controller
+  rakismet_filter :only => :create
   add_breadcrumb "Home", "root_path"
 
   def index
@@ -71,8 +72,8 @@ class EventsController < ApplicationController
   end
   
   def create
-    @person = Person.find_or_create_by_email(params[:person])
     @event = Event.new(params[:event])
+    @person = Person.find_or_create_by_email(params[:person])
     if !@person.valid?
       flash[:error] = "Please enter your first and last name"
       @event = Event.new(params[:event])
@@ -81,6 +82,8 @@ class EventsController < ApplicationController
     else
       @person.save
       @event.person_id = @person.id
+      @event.person_name = "#{@person.first_name} #{@person.last_name}"
+      @event.person_email = @person.email
       if @event.save
         flash[:notice] = "Your event has been submitted for approval"
         EventMailer.deliver_event_notification_to_admin(@event)
