@@ -2,6 +2,7 @@ class EventsController < ApplicationController
   unloadable # http://dev.rubyonrails.org/ticket/60018
   before_filter :find_page
   before_filter :find_event_range, :only => [:index]
+  rakismet_filter :only => :create
   add_breadcrumb "Home", "root_path"
 
   def index
