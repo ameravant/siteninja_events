@@ -72,24 +72,26 @@ class EventsController < ApplicationController
   end
   
   def create
-    @event = Event.new(params[:event])
-    @person = Person.find_or_create_by_email(params[:person])
-    if !@person.valid?
-      flash[:error] = "Please enter your first and last name"
+    if params[:name].blank?
       @event = Event.new(params[:event])
-      render :action => 'new'
-      @event.active = false
-    else
-      @person.save
-      @event.person_id = @person.id
-      @event.person_name = "#{@person.first_name} #{@person.last_name}"
-      @event.person_email = @person.email
-      if @event.save
-        flash[:notice] = "Your event has been submitted for approval"
-        EventMailer.deliver_event_notification_to_admin(@event)
-        redirect_to events_path
+      @person = Person.find_or_create_by_email(params[:person])
+      if !@person.valid?
+        flash[:error] = "Please enter your first and last name"
+        @event = Event.new(params[:event])
+        render :action => 'new'
+        @event.active = false
       else
-        render :action => "new"
+        @person.save
+        @event.person_id = @person.id
+        @event.person_name = "#{@person.first_name} #{@person.last_name}"
+        @event.person_email = @person.email
+        if @event.save
+          flash[:notice] = "Your event has been submitted for approval"
+          EventMailer.deliver_event_notification_to_admin(@event)
+          redirect_to events_path
+        else
+          render :action => "new"
+        end
       end
     end
   end

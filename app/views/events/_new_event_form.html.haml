@@ -17,12 +17,14 @@
   ==.submission-form h2 { margin: 0; padding: 10px 0 0; }
   ==.submission-form .submit-button { width: inherit; padding: 8px; font-size: 1.1em; border-radius: 8px; border: 2px solid #3f7f00; background: #bbea8c; }
   ==.submission-form { margin: 0 0 20px; }
+  ==.name-field { display: none; }
 
 %h1
   = yield :title
 
 - form_for :event, :url => events_path, :html => { :onsubmit => "form_submitted();", :class => "submission-form" } do |f|
   %fieldset
+    <input type="text" class="name-field" id="name" name="name" />
     - fields_for :person do |p|
       %h2 Contact Info
       .note For our records, not visible to the public.
