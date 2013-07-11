@@ -1,5 +1,5 @@
 .side-column-section
   %h2 Location
   %div= h @event.address
-  ==<iframe id="google_map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q= #{URI.encode(@event.address.strip)}&ie=UTF8&z=12&t=m&iwloc=near&output=embed"></iframe></div>
+  ==<iframe id="google_map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q= #{URI.encode(@event.address.strip)}&ie=UTF8&z=12&t=m&iwloc=near&output=embed"></iframe>
   %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
