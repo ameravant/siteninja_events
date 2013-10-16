@@ -35,7 +35,7 @@ class Admin::EventsController < AdminController
         @outfile = "events_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         csv_data = FasterCSV.generate do |csv|
           csv << ["Name", "Address", "Description", "Long Description", "Start Date and Time", "End Date and Time", "Repeat", "Repeat Start Date", "Repeat Start Time", "Repeat End Date", "Repeat End Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "First Weekday", "Second Weekday", "Third Weekday", "Fourth Weekday", "Last Weekday", "Repeat Frequency"]
-          @event_count.each do |event|
+          @all_events.each do |event|
             csv << [event.name, event.address, event.description, event.blurb, event.date_and_time, event.end_date_and_time, event.repeat, event.repeat_start_date, event.repeat_start_time, event.repeat_end_date, event.repeat_end_time, event.monday, event.tuesday, event.wednesday, event.thursday, event.friday, event.saturday, event.sunday, event.repeat_frequency]
           end
         end

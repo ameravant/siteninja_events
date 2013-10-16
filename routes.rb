@@ -6,7 +6,7 @@ resources :events, :as => events_path, :has_many => :images, :collection => { :p
 end
 
 namespace :admin do |admin|
-  admin.resources :events, :has_many => [ :event_price_options, :features, :assets ] do |event|
+  admin.resources :events, :has_many => [ :event_price_options, :features, :assets ], :collection => { :csv => :get } do |event|
   admin.resources :event_categories, :has_many => { :features, :menus } do |event_category|
     event_category.resources :menus
     event_category.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put, :add_multiple => :get }

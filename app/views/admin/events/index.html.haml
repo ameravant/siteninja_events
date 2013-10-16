@@ -11,6 +11,8 @@
     %span.hmenu
       = icon "Folder", admin_event_categories_path
       = link_to "Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
+    %span.hmenu
+      = link_to "Export Events", "/admin/events.csv"
 
 %br
 
