@@ -1,3 +1,55 @@
+/ - if params[:calendar]
+/   - year = params[:year] ? params[:year].to_i : Time.now.year
+/   - month = params[:month] ? params[:month].to_i : Time.now.month
+/   - date = Date.new(year.to_i, month.to_i, 1)
+/   = link_to("Next Month", "?calendar=true&month=#{month.to_i == 12 ? 1 : month.to_i + 1}&year=#{month.to_i == 12 ? year.to_i + 1 : year.to_i}", :class => "next-month float-right")
+/   = link_to("Last Month", "?calendar=true&month=#{month.to_i == 1 ? 12 : month.to_i - 1}&year=#{month.to_i == 1 ? year.to_i - 1 : year.to_i}", :class => "last-month float-left")
+/   = clear
+/   %style{:type => 'text/css'}
+/     ==.calendar { border: 1px solid #ccc; }
+/     ==table.calendar tr td, table.calendar tr th { border: 1px solid #ccc; vertical-align: top; }
+/     ==table.calendar th { width: 14%; }
+/     ==.calendar-day { font-weight: bold; }
+/     ==.calendar td { height: 100px; }
+/     ==.calendar ul { list-style: none; margin: 0; padding: 0; }
+/     ==.calendar li { margin: 0 0 10px 0; font-size: .8em; line-height: 1.2em; }
+/   - #first_wday = date.beginning_of_month.wday
+/   - #first_monday = (date.beginning_of_month.monday.month == date.month ? date.beginning_of_month.monday : (date.beginning_of_month.monday + 1.week))
+/   - #first_tuesday = (date.beginning_of_month.monday + 1.day == date.month ? date.beginning_of_month.monday + 1 : (date.beginning_of_month.monday + 1.week))
+/   - #first_sunday = first_monday >= first_wday ? first_monday - 1.day : first_monday + 6.days
+/   - #first_tuesday = first_monday <= first_wday ? first_monday + 1.day : first_monday - 6.days
+/   - #first_wednesday = first_monday <= first_wday ? first_monday + 2.days : first_monday - 5.days
+/   - #first_thursday = first_monday <= first_wday ? first_monday + 3.days : first_monday - 4.days
+/   - #first_friday = first_monday <= first_wday ? first_monday + 4.days : first_monday - 3.days
+/   - #first_saturday = first_monday <= first_wday ? first_monday + 5.days : first_monday - 2.days
+/   -# %div== first monday: #{first_monday}
+/   -# %div== first tuesday: #{first_tuesday}  
+/   -# %div== first wednesday: #{first_wednesday}
+/   -# %div== first thursday: #{first_thursday}
+/   -# %div== first friday: #{first_friday}
+/   -# %div== first saturday: #{first_saturday}
+/   -# %div== first sunday: #{first_sunday}
+/   %table.calendar
+/     <tr><th>Sunday</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr>
+/     <tr>
+/     - (date.wday).times do
+/       <td></td>
+/     - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
+/       - if date.wday == 0 and date.beginning_of_month.day != date.day
+/         <tr>
+/       <td>
+/       .calendar-day= date.day
+/       - wday_count = ((date.day - 1) / 7).round + 1
+/       - @events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ?)", date.beginning_of_day, date.end_of_day, false,     date, date, true, true, "Weekly",     date, date, true, true, "Select Weeks", true])
+/       - #@events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ?) or (repeat_start_date <= ? and repeat_end_date >= ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ?) or (repeat_start_date <= ? and repeat_end_date >= ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and repeat_every = ?)", date.beginning_of_day, date.end_of_day, date, date, true, "weekly", "monthly"])
+/       %ul
+/         - for event in @events
+/           %li
+/             = link_to(event.title, event_path(event))
+/       </td>
+/       - if date.wday == 6 or date.end_of_month.day == date.day
+/         </tr>
+
 - content_for :meta_title do
   = "Past" if @past
   = @cms_config['site_settings']['events_title']

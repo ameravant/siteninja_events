@@ -33,4 +33,6 @@ module EventsHelper
     [0,nil].include?(p) ? "Free" : number_to_currency(p)
   end
 
+
+
 end

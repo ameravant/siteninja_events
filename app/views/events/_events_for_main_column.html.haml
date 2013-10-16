@@ -5,45 +5,102 @@
 - count = section.count
 - count = ColumnSectionType.find_by_partial_name("events_for_side_column").default_count if count.blank?
 - ops = "person_id = #{@page.author_id}" if @page.author_id
-- if section.show_all_categories == true
-  - events = Event.not_yet_complete[0..(count - 1)]
-- else
-  - events = Event.not_yet_complete.reject{|a| !(a.event_category_ids.any? {|ac| categories.include?(ac)})}[0..count-1]
-- unless events.blank?
+
+- if @cms_config['features']['recurring_events']
+  - #unless events.blank?
   %div
     - if section.section_format == "full"
+      %h2= section.title
       %ul.events
-        - for event in events.sort_by(&:date_and_time)
-          %li[event]
-            %div.event_date
-              %span.month== #{event.date_and_time.strftime('%b')}
-              %span.date== #{event.date_and_time.strftime('%d')}
-              %span.day== #{event.date_and_time.strftime('%a')}
-            .event_description
-              %h3
-                = link_to h(event.name), event
-                - if event.today? # before midnight
-                  %span.event_tag.event_tag_soon today!
-                - elsif event.tomorrow?
-                  %span.event_tag.event_tag_soon tomorrow
-                - elsif event.this_week?
-                  %span.event_tag.event_tag_this_week this week
-              - if @cms_config['features']['event_registration']
-                - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-                  -# if event.registration_spots?
-                  -#%span.event_tag.event_tag_open registration open
-                  -#- else
-                  -#%span.event_tag.event_tag_full registration full
-              .event_blurb= simple_format(truncate(event.blurb.strip, 200))
-
+        - i = 0
+        - date = Date.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day)
+        - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
+          - wday_count = ((date.day - 1) / 7).round + 1
+          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+          - for event in events
+            %li[event]
+              %div.event_date
+                - if event.repeat
+                  %span.month== #{date.strftime('%b')}
+                  %span.date== #{date.strftime('%d')}
+                  %span.day== #{date.strftime('%a')}
+                - else
+                  %span.month== #{event.date_and_time.strftime('%b')}
+                  %span.date== #{event.date_and_time.strftime('%d')}
+                  %span.day== #{event.date_and_time.strftime('%a')}
+              .event_description
+                %h3
+                  = link_to h(event.name), event
+                - if @cms_config['features']['event_registration']
+                  - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+                    -# if event.registration_spots?
+                    -#%span.event_tag.event_tag_open registration open
+                    -#- else
+                    -#%span.event_tag.event_tag_full registration full
+                .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+                - i += 1
+            - break if i >= count
+          - break if i >= count
     - else
       %h2= section.title
       %ul.recent_events.list_of_links
-        - for event in events
-          %li
-            %h3= link_to event.name, event_path(event)
-            - if @cms_config['site_settings']['show_event_location']
-              %address= event.address
-            %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
-            - if section.show_blurb
-              = simple_format(truncate(event.blurb, :length => 100))
+        - i = 0
+        - date = Date.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day)
+        - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
+          - wday_count = ((date.day - 1) / 7).round + 1
+          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+          - for event in events
+            %li
+              %h3= link_to event.name, event_path(event)
+              - if @cms_config['site_settings']['show_event_location']
+                %address= event.address
+              %span.date= date.strftime("%a, %B %d, %Y")
+              - if section.show_blurb
+                = simple_format(truncate(event.blurb, :length => 100))
+            - i += 1
+            - break if i == count
+          - break if i == count
+- else
+  - if section.show_all_categories == true
+    - events = Event.not_yet_complete[0..(count - 1)]
+  - else
+    - events = Event.not_yet_complete.reject{|a| !(a.event_category_ids.any? {|ac| categories.include?(ac)})}[0..count-1]
+  - unless events.blank?
+    %div
+      - if section.section_format == "full"
+        %h2= section.title
+        %ul.events
+          - for event in events.sort_by(&:date_and_time)
+            %li[event]
+              %div.event_date
+                %span.month== #{event.date_and_time.strftime('%b')}
+                %span.date== #{event.date_and_time.strftime('%d')}
+                %span.day== #{event.date_and_time.strftime('%a')}
+              .event_description
+                %h3
+                  = link_to h(event.name), event
+                  - if event.today? # before midnight
+                    %span.event_tag.event_tag_soon today!
+                  - elsif event.tomorrow?
+                    %span.event_tag.event_tag_soon tomorrow
+                  - elsif event.this_week?
+                    %span.event_tag.event_tag_this_week this week
+                - if @cms_config['features']['event_registration']
+                  - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+                    -# if event.registration_spots?
+                    -#%span.event_tag.event_tag_open registration open
+                    -#- else
+                    -#%span.event_tag.event_tag_full registration full
+                .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+
+      - else
+        %h2= section.title
+        %ul.recent_events.list_of_links
+          - for event in events
+            %li
+              %h3= link_to event.name, event_path(event)
+              - if @cms_config['site_settings']['show_event_location']
+                %address= event.address
+              %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
+              - if section.show_blurb
+                = simple_format(truncate(event.blurb, :length => 100))

@@ -13,6 +13,8 @@ class Event < ActiveRecord::Base
   #validates_datetime :registration_deadline, :allow_blank => true
   #validates_datetime :date_and_time, :end_date_and_time
   before_validation :validates_end_is_after_start
+  before_create :set_repeat_start_date_and_time
+  before_update :set_repeat_start_date_and_time
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
@@ -21,9 +23,9 @@ class Event < ActiveRecord::Base
   named_scope :this_month, :conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 29.days))  }
   named_scope :three_months,:conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 3.months))  }
   named_scope :this_year, :conditions => { :active => true, :date_and_time => (Time.now..Time.now.next_year)  }
-  named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and end_date_and_time < ?", true, Time.now]
+  named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and (end_date_and_time < ? or repeat_end_date < ?)", true, Time.now, Time.now]
   named_scope :not_yet_complete, :order => "date_and_time desc", 
-    :conditions => ["active = ? and end_date_and_time > ? OR end_date_and_time = ?", true, Time.now, '']
+    :conditions => ["active = ? and ((end_date_and_time > ? OR end_date_and_time = ?) or (repeat_start_time < ? and repeat_end_time > ?))", true, Time.now, '', Time.now, Time.now]
   named_scope :in_progress, :order => "date_and_time desc", 
     :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now, Time.now]
   named_scope :soonest, :limit => 6, :conditions => { :active => true }
@@ -31,7 +33,7 @@ class Event < ActiveRecord::Base
   rakismet_attrs   :author => :person_name,
                    :author_email => :person_email,
                    :content => :description
-  default_scope :order => "date_and_time"
+  default_scope :order => "date_and_time, repeat_start_time"
   # accepts_nested_attributes_for :event_price_options
   def to_param
     "#{self.id}-#{self.permalink}"
@@ -108,7 +110,14 @@ class Event < ActiveRecord::Base
   end
 
   def validates_end_is_after_start
-    errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time
+    errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time or repeat_end_date < repeat_start_date
+  end
+  
+  def set_repeat_start_date_and_time
+    if self.repeat
+      self.date_and_time = "#{self.repeat_start_date.strftime('%m/%d/%Y')} #{self.repeat_start_time.strftime('%I:%M %p')}"
+      self.end_date_and_time = "#{self.repeat_end_date.strftime('%m/%d/%Y')} #{self.repeat_end_time.strftime('%I:%M %p')}"
+    end
   end
   
   def allowed_payment_methods

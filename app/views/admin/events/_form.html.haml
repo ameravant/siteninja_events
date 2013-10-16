@@ -4,8 +4,17 @@
   = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
   %style{:type => "text/css"}
     ==#categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 150px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); display: none; }
-    ==.date-options input { padding: 8px 14px; }
+    ==.date-options input, .repeat-date-options input { padding: 8px 14px; }
     ==.registration-wrapper { margin: 20px 0; }
+    ==.repeat-checkbox { margin: 10px 0; }
+    ==div#content-inner .repeat-options-title { margin: 0 0 10px; }
+    ==.repeat-date-options { margin-bottom: 5px; }
+    ==.repeat-date-options .small-input { width: 100px; }
+    ==.repeat, .registration-options { padding: 0 10px 10px; margin: 10px; border: 1px solid #ccc; background: #eee; border-radius: 5px; }
+    == .weekdays ul, .week-number ul { list-style: none; padding: 5px 0; margin: 0; }
+    == .weekdays, .week-number { width: 50%; float: left; }
+    == .week-number { display: #{@event.repeat_frequency == "Select Weeks" ? "block" : "none"}}
+    == .radio-option { margin-left: 20px; }
   :javascript
     function addtext(text) {
     tinyMCE.execInstanceCommand("event_description","mceInsertContent",false,text);
@@ -20,12 +29,77 @@
   .main-fields
     %h2.title.form-label= f.label :name, "Title"
     = f.text_field :name, :class => "big-input"
-    %h2.form-label= f.label :date_and_time, "Date/Time"
-    .date-options
-      = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "Start")
-      to
-      = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "End")
-
+    .date-wrapper{:style => "display: #{@event.repeat ? "none" : "block"}"}
+      %h2.form-label= f.label :date_and_time, "Date/Time"
+      .date-options
+        = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "Start")
+        to
+        = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "End")
+    - if @cms_config['features']['recurring_events']
+      .repeat-checkbox
+        = f.check_box :repeat, :onclick => 'jQuery(".repeat").slideToggle(); jQuery(".date-wrapper").slideToggle(); jQuery(".registration-wrapper").slideToggle()'
+        = f.label :repeat
+      .repeat{:style => "display: #{@event.repeat ? "block" : "none"}"}
+        %h2.title.repeat-options-title Repeat Options
+        .repeat-date-options
+          Dates:
+          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
+          to
+          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
+        .repeat-date-options
+          Time: &nbsp;
+          = f.text_field(:repeat_start_time, :value => (@event.repeat_start_time.blank? ? Time.now.strftime("%I:%M %p") : @event.repeat_start_time.strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "Start Time")
+          to
+          = f.text_field(:repeat_end_time, :value => (@event.repeat_end_time.blank? ? (Time.now + 2.hours).strftime("%I:%M %p") : @event.repeat_end_time.strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "End Time")
+        .frequency
+          Frequency: 
+          = f.radio_button(:repeat_frequency, "Weekly", :onclick => 'jQuery(".week-number").slideUp()')
+          = f.label(:repeat_frequency_weekly, "Weekly")
+          = f.radio_button(:repeat_frequency, "Select Weeks", :onclick => 'jQuery(".week-number").slideDown()', :class => "radio-option")
+          = f.label(:repeat_frequency_select_weeks, "Select Weeks")
+        .weekdays
+          %h3.title Weekdays
+          %ul
+            %li
+              = f.check_box :sunday
+              = f.label :sunday
+            %li
+              = f.check_box :monday
+              = f.label :monday
+            %li
+              = f.check_box :tuesday
+              = f.label :tuesday
+            %li
+              = f.check_box :wednesday
+              = f.label :wednesday
+            %li
+              = f.check_box :thursday
+              = f.label :thursday
+            %li
+              = f.check_box :friday
+              = f.label :friday
+            %li
+              = f.check_box :saturday
+              = f.label :saturday
+        .week-number
+          %h3.title Weekday Number
+          %ul
+            %li
+              = f.check_box :week_1
+              = f.label :week_1, "First"
+            %li
+              = f.check_box :week_2
+              = f.label :week_2, "Second"
+            %li
+              = f.check_box :week_3
+              = f.label :week_3, "Third"
+            %li
+              = f.check_box :week_4
+              = f.label :week_4, "Fourth"
+            %li
+              = f.check_box :week_5
+              = f.label :week_5, "Last"
+        = clear
     %h2.form-label= f.label :address
     = f.text_field :address, :class => "big-input", :placeholder => "\"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\""
   #main-details.details.options
@@ -53,76 +127,76 @@
           = f.check_box :active, :disabled => @disabled
           = f.label :active, "Publish Event to Public"
   
-- if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
-  = clear
-  .registration-wrapper
-    %div#registration-ops
-      = f.check_box :registration
-      %label{ :for => "event_registration" }
-        Enable Registration
-    %div.registration-options
-      %h2 Registration Options
+  - if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
+    = clear
+    .registration-wrapper{:style => "display: #{@event.repeat ? "none" : "block"}"}
+      %div#registration-ops
+        = f.check_box :registration
+        %label{ :for => "event_registration" }
+          Enable Registration
+      %div.registration-options
+        %h2 Registration Options
 
-      #registration_limit
-        %br
-        %div
-          = f.label :registration_limit, "Registration Limit"
-          = f.text_field :registration_limit, :size => 4
-          %span guests
-          %span.small.gray
-            \&mdash; optional
-        %br
-        %div
-          = f.label :registration_deadline, "Deadline to register"
-          = f.text_field(:registration_deadline, :value => (@event.registration_deadline.blank? ? "" : @event.registration_deadline.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
-        %br
-        %div
-          =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
-        %div
-          = f.text_area :registration_closed_text, :size => "60x4", :class => "mceEditor"
-      #price
-        -fields_for :event_price_options do |p|
-          =p.label :price, "Price"
-          =p.text_field :price
-          =p.hidden_field :title, :value =>"Standard"
-          %span.note Leave blank if event is free
+        #registration_limit
           %br
-          =p.label :public, "Show this price to the public?"
-          =p.check_box :public, :checked => "checked"
-      #payments-allowed
-        %h3
-          Accepted Payments
-        %div
-          = f.check_box :allow_card
-          %label{ :for => "event_allow_card" }
-            Allow credit card payment via Google Checkout
-          %span.small.gray
-            \&mdash; must have Google Checkout configured in
-            = link_to "settings", edit_admin_setting_path(:anchor => "Advanced")
-            under the 'Advanced' tab
-        %div
-          = f.check_box :allow_cash
-          %label{ :for => "event_allow_cash" }
-            Allow cash payment
-          %span.small.gray
-            \&mdash; only if registration is required
-        %div.checks
-          = f.check_box :allow_check
-          %label{ :for => "event_allow_check" }
-            Allow check payment
-          %span.small.gray
-            \&mdash; only if registration is required
-        %div
-          = f.check_box :allow_other
-          %label{ :for => "event_allow_other" }
-            Allow other
-          %span.small.gray
-            \&mdash; Use this option for any other payment types
-        #check-payment-options          
-          %h3= f.label :check_instructions, "Check Instructions"
-          = f.text_area :check_instructions, :size => "60x8", :class => "mceEditor"
-          %p
-            ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
+          %div
+            = f.label :registration_limit, "Registration Limit"
+            = f.text_field :registration_limit, :size => 4
+            %span guests
+            %span.small.gray
+              \&mdash; optional
+          %br
+          %div
+            = f.label :registration_deadline, "Deadline to register"
+            = f.text_field(:registration_deadline, :value => (@event.registration_deadline.blank? ? "" : @event.registration_deadline.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker")
+          %br
+          %div
+            =f.label :registration_closed_text, "Message to display when registration is full or past the deadline and now closed:"
+          %div
+            = f.text_area :registration_closed_text, :size => "60x4", :class => "mceEditor"
+        #price
+          -fields_for :event_price_options do |p|
+            =p.label :price, "Price"
+            =p.text_field :price
+            =p.hidden_field :title, :value =>"Standard"
+            %span.note Leave blank if event is free
+            %br
+            =p.label :public, "Show this price to the public?"
+            =p.check_box :public, :checked => "checked"
+        #payments-allowed
+          %h3
+            Accepted Payments
+          %div
+            = f.check_box :allow_card
+            %label{ :for => "event_allow_card" }
+              Allow credit card payment via Google Checkout
+            %span.small.gray
+              \&mdash; must have Google Checkout configured in
+              = link_to "settings", edit_admin_setting_path(:anchor => "Advanced")
+              under the 'Advanced' tab
+          %div
+            = f.check_box :allow_cash
+            %label{ :for => "event_allow_cash" }
+              Allow cash payment
+            %span.small.gray
+              \&mdash; only if registration is required
+          %div.checks
+            = f.check_box :allow_check
+            %label{ :for => "event_allow_check" }
+              Allow check payment
+            %span.small.gray
+              \&mdash; only if registration is required
+          %div
+            = f.check_box :allow_other
+            %label{ :for => "event_allow_other" }
+              Allow other
+            %span.small.gray
+              \&mdash; Use this option for any other payment types
+          #check-payment-options          
+            %h3= f.label :check_instructions, "Check Instructions"
+            = f.text_area :check_instructions, :size => "60x8", :class => "mceEditor"
+            %p
+              ==Let registrants know any pertinent information relating to payment for the #{@cms_config['site_settings']['event_title']}.
 
 
 = clear

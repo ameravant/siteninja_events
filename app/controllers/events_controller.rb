@@ -39,10 +39,10 @@ class EventsController < ApplicationController
       redirect_to events_path
     end
     if @cms_config['site_settings']['enable_responsive_layouts']
-      unless @event.event_category and !@event.event_category.column.blank?
-        @main_column = Column.first(:conditions => {:column_location => "event"})
+      #unless @event.event_category and !@event.event_category.column.blank?
+        @tmplate.event_layout_id ? @main_column = Column.find(@tmplate.event_layout_id) : @main_column = Column.first(:conditions => {:column_location => "event"})
         @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
-      end
+      #end
     end
   end
 
@@ -99,7 +99,7 @@ class EventsController < ApplicationController
   private
 
     def find_page
-      if @cms_config['modules']['events']
+      # if @cms_config['modules']['events']
         render_404 unless @page = Page.find_by_permalink('events')
         
         @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
@@ -107,11 +107,11 @@ class EventsController < ApplicationController
         @menu = @page.menus.first
         @event_categories = EventCategory.active
         @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
-      else
-        render_404 unless @page = Page.find_by_permalink('events')
-        get_page_defaults(@page)
-        render 'pages/show'
-      end
+      # else
+      #   render_404 unless @page = Page.find_by_permalink('events')
+      #   get_page_defaults(@page)
+      #   render 'pages/show'
+      # end
     end
 
     def find_event_range
@@ -125,8 +125,20 @@ class EventsController < ApplicationController
           then Event.three_months.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
         when 4
           then Event.this_year.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
-        when  5
+        when 5
           then Event.future.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }
+        end
+      @end_date = case @settings.events_range
+        when 1
+          then Date.new((Time.now + 7.days).year, (Time.now + 7.days).month, (Time.now + 7.days).day)
+        when 2
+          then Date.new((Time.now + 30.days).year, (Time.now + 30.days).month, (Time.now + 30.days).day)
+        when 3
+          then Date.new((Time.now + 3.months).year, (Time.now + 3.months).month, (Time.now + 3.months).day)
+        when 4
+          then Date.new((Time.now + 1.year).year,(Time.now + 1.year).month, (Time.now + 1.year).day)
+        when 5
+          then Date.new((Time.now + 1.year).year,(Time.now + 1.year).month, (Time.now + 2.years).day)
         end
     end
 end

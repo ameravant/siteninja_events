@@ -6,6 +6,9 @@ class Admin::EventsController < AdminController
   # Configure breadcrumb
   before_filter :add_crumbs, :except => :index
   add_breadcrumb "New", nil, :only => [ :new, :create ]
+  
+  require 'fastercsv'
+  require 'csv'
 
   def index
     if current_user.has_role("Admin") # Show all articles regardless of author
@@ -23,6 +26,26 @@ class Admin::EventsController < AdminController
       add_breadcrumb "Search"
       @all_events = Event.find :all, :conditions => ["name like ?", "%#{params[:q]}%"], :order => "date_and_time desc"
     end
+
+    # Export CSV
+    respond_to do |wants|
+      require 'fastercsv'
+      wants.html
+      wants.csv do
+        @outfile = "events_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        csv_data = FasterCSV.generate do |csv|
+          csv << ["Name", "Address", "Description", "Long Description", "Start Date and Time", "End Date and Time", "Repeat", "Repeat Start Date", "Repeat Start Time", "Repeat End Date", "Repeat End Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "First Weekday", "Second Weekday", "Third Weekday", "Fourth Weekday", "Last Weekday", "Repeat Frequency"]
+          @event_count.each do |event|
+            csv << [event.name, event.address, event.description, event.blurb, event.date_and_time, event.end_date_and_time, event.repeat, event.repeat_start_date, event.repeat_start_time, event.repeat_end_date, event.repeat_end_time, event.monday, event.tuesday, event.wednesday, event.thursday, event.friday, event.saturday, event.sunday, event.repeat_frequency]
+          end
+        end
+        send_data csv_data,
+        :type => 'text/csv; charset=iso-8859-1; header=present',
+        :disposition => "attachment; filename=#{@outfile}"
+        flash[:notice] = "Export complete!"
+      end
+    end
+
     
   end
 

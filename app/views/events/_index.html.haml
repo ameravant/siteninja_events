@@ -1,57 +1,126 @@
 %h1= @page.title.strip
--if @cms_config['site_settings']['show_past_events']
-  = link_to "Click here to view past events", past_events_path
-=# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
-= @page.body if @page.body.length > 14
-- if !@events_in_progress.blank?
-  %h2.event_month In Progress
-  %ul.events
-    - for event in @events_in_progress
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-            - if event.today? # before midnight
-              %span.event_tag.event_tag_soon today!
-            - elsif event.tomorrow?
-              %span.event_tag.event_tag_soon tomorrow
-            - elsif event.this_week?
-              %span.event_tag.event_tag_this_week this week
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(truncate(event.blurb.strip, 200))
-  .clear
-- @events_grouped.each do |year_and_month, events|
-  %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
-  %ul.events
-    - for event in events.sort_by(&:date_and_time)
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-            - if event.today? # before midnight
-              %span.event_tag.event_tag_soon today!
-            - elsif event.tomorrow?
-              %span.event_tag.event_tag_soon tomorrow
-            - elsif event.this_week?
-              %span.event_tag.event_tag_this_week this week
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+- if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar']
+  - year = params[:year] ? params[:year].to_i : Time.now.year
+  - month = params[:month] ? params[:month].to_i : Time.now.month
+  - date = Date.new(year.to_i, month.to_i, 1)
+  .calendar-title
+    - if date.beginning_of_day <= Time.now.beginning_of_month + 1.year
+      = link_to("Next Month", "?calendar=true&month=#{month.to_i == 12 ? 1 : month.to_i + 1}&year=#{month.to_i == 12 ? year.to_i + 1 : year.to_i}", :class => "next-month float-right")    
+    - if date.beginning_of_day >= Time.now.beginning_of_month - 6.months
+      = link_to("Last Month", "?calendar=true&month=#{month.to_i == 1 ? 12 : month.to_i - 1}&year=#{month.to_i == 1 ? year.to_i - 1 : year.to_i}", :class => "last-month float-left")
+    %h2.month-name= "#{month_of_the_year(date.month)} #{date.year}"
   = clear
+  %style{:type => 'text/css'}
+    ==.calendar { border: 1px solid #ccc; }
+    ==table.calendar tr td, table.calendar tr th { border: 1px solid #ccc; vertical-align: top; }
+    ==table.calendar th { width: 14%; }
+    ==.calendar-day { font-weight: bold; }
+    ==.calendar td { height: 100px; }
+    ==.calendar ul { list-style: none; margin: 0; padding: 0; }
+    ==.calendar li { margin: 0 0 10px 0; font-size: .8em; line-height: 1.2em; }
+    ==.month-name { display: inline; }
+    ==.calendar-title { text-align: center; }
+    ==.next-month { text-align: right; display: block; }
+    ==.last-month { text-align: left; display: block; }
+    ==.weekday { max-width: 100%; white-space: none; overflow: hidden; width: 100%; }
+  %table.calendar
+    <tr><th><div class="weekday">Sun</div></th><th><div class="weekday">Mon</div></th><th><div class="weekday">Tue</div></th><th><div class="weekday">Wed</div></th><th><div class="weekday">Thu</div></th><th><div class="weekday">Fri</div></th><th><div class="weekday">Sat</div></th></tr>
+    <tr>
+    - (date.wday).times do
+      <td></td>
+    - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
+      - if date.wday == 0 and date.beginning_of_month.day != date.day
+        <tr>
+      <td>
+      .calendar-day= date.day
+      - wday_count = ((date.day - 1) / 7).round + 1
+      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+
+      %ul
+        - for event in events
+          %li
+            = link_to(event.title, event_path(event))
+      </td>
+      - if date.wday == 6 or date.end_of_month.day == date.day
+        </tr>
+- elsif @cms_config['features']['recurring_events']
+  - year = Time.now.year
+  - month = Time.now.month
+  - date = Date.new(year.to_i, month.to_i, Time.now.day)
+  %ul.events
+    - (date..@end_date).each do |date|
+      - wday_count = ((date.day - 1) / 7).round + 1
+      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+      - for event in events
+        %li[event]
+          %div.event_date
+            - if event.repeat
+              %span.month== #{date.strftime('%b')}
+              %span.date== #{date.strftime('%d')}
+              %span.day== #{date.strftime('%a')}
+            - else
+              %span.month== #{event.date_and_time.strftime('%b')}
+              %span.date== #{event.date_and_time.strftime('%d')}
+              %span.day== #{event.date_and_time.strftime('%a')}
+          .event_description
+            %h3
+              = link_to h(event.name), event
+            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+
+- else
+  -if @cms_config['site_settings']['show_past_events']
+    = link_to "Click here to view past events", past_events_path
+  =# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
+  = @page.body if @page.body.length > 14
+  - if !@events_in_progress.blank?
+    %h2.event_month In Progress
+    %ul.events
+      - for event in @events_in_progress
+        %li[event]
+          %div.event_date
+            %span.month== #{event.date_and_time.strftime('%b')}
+            %span.date== #{event.date_and_time.strftime('%d')}
+            %span.day== #{event.date_and_time.strftime('%a')}
+          .event_description
+            %h3
+              = link_to h(event.name), event
+              - if event.today? # before midnight
+                %span.event_tag.event_tag_soon today!
+              - elsif event.tomorrow?
+                %span.event_tag.event_tag_soon tomorrow
+              - elsif event.this_week?
+                %span.event_tag.event_tag_this_week this week
+            - if @cms_config['features']['event_registration']
+              - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+                -# if event.registration_spots?
+                -#%span.event_tag.event_tag_open registration open
+                -#- else
+                -#%span.event_tag.event_tag_full registration full
+            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+    .clear
+  - @events_grouped.each do |year_and_month, events|
+    %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
+    %ul.events
+      - for event in events.sort_by(&:date_and_time)
+        %li[event]
+          %div.event_date
+            %span.month== #{event.date_and_time.strftime('%b')}
+            %span.date== #{event.date_and_time.strftime('%d')}
+            %span.day== #{event.date_and_time.strftime('%a')}
+          .event_description
+            %h3
+              = link_to h(event.name), event
+              - if event.today? # before midnight
+                %span.event_tag.event_tag_soon today!
+              - elsif event.tomorrow?
+                %span.event_tag.event_tag_soon tomorrow
+              - elsif event.this_week?
+                %span.event_tag.event_tag_this_week this week
+            - if @cms_config['features']['event_registration']
+              - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+                -# if event.registration_spots?
+                -#%span.event_tag.event_tag_open registration open
+                -#- else
+                -#%span.event_tag.event_tag_full registration full
+            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+    = clear
