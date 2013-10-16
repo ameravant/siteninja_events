@@ -34,7 +34,7 @@
       <td>
       .calendar-day= date.day
       - wday_count = ((date.day - 1) / 7).round + 1
-      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and 'repeat' = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
 
       %ul
         - for event in events
@@ -50,7 +50,7 @@
   %ul.events
     - (date..@end_date).each do |date|
       - wday_count = ((date.day - 1) / 7).round + 1
-      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and 'repeat' = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
       - for event in events
         %li[event]
           %div.event_date

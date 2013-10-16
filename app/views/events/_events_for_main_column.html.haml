@@ -6,7 +6,7 @@
 - count = ColumnSectionType.find_by_partial_name("events_for_side_column").default_count if count.blank?
 - ops = "person_id = #{@page.author_id}" if @page.author_id
 
-- if @cms_config['features']['recurring_events']
+- if @cms_config['features']['recurring_events'] and section.show_all_categories == true
   - #unless events.blank?
   %div
     - if section.section_format == "full"
@@ -16,7 +16,7 @@
         - date = Date.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day)
         - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
           - wday_count = ((date.day - 1) / 7).round + 1
-          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and 'repeat' = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
           - for event in events
             %li[event]
               %div.event_date
@@ -48,7 +48,7 @@
         - date = Date.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day)
         - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
           - wday_count = ((date.day - 1) / 7).round + 1
-          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+          - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and 'repeat' = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and 'repeat' = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
           - for event in events
             %li
               %h3= link_to event.name, event_path(event)
