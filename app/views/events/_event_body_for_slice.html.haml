@@ -1,1 +1,15 @@
 = ninja_parse(@event.description)
+- if !@event.repeat
+  ==<a href="#{request.url}" title="Add to Calendar" class="addthisevent">
+  Add to Calendar
+  ==<span class="_start">#{@event.date_and_time.strftime("%m-%d-%Y %I:%M %p")}</span>
+  ==<span class="_end">#{@event.end_date_and_time.strftime("%m-%d-%Y %I:%M %p")}</span>
+  <span class="_zonecode">6</span>
+  ==<span class="_summary">#{@event.description}</span>
+  ==<span class="_description">#{@event.description}</span>
+  ==<span class="_location">#{@event.address}</span>
+  ==<span class="_organizer">#{@cms_config["website"]["name"]}</span>
+  ==<span class="_organizer_email">#{Setting.first.inquiry_notification_email}</span>
+  <span class="_all_day_event">false</span>
+  <span class="_date_format">MM/DD/YYYY</span>
+  </a>

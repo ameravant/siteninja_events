@@ -1,4 +1,6 @@
-
+- content_for :head do
+  <!-- AddThisEvent -->
+  <script type="text/javascript" src="http://js.addthisevent.com/atemay.js"></script>
 - if !@event.description.include?('<p>') and !@event.description.include?('<div>') 
   - @event.description = simple_format(@event.description)
 - content_for :meta_title do

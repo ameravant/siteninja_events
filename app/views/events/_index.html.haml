@@ -39,7 +39,10 @@
       %ul
         - for event in events
           %li
-            = link_to(event.title, event_path(event))
+            - if event.restrict_link
+              = event.title
+            - else
+              = link_to(event.title, event_path(event))
       </td>
       - if date.wday == 6 or date.end_of_month.day == date.day
         </tr>
@@ -64,7 +67,10 @@
               %span.day== #{event.date_and_time.strftime('%a')}
           .event_description
             %h3
-              = link_to h(event.name), event
+              - if event.restrict_link
+                = event.title
+              - else
+                = link_to h(event.name), event
             .event_blurb= simple_format(truncate(event.blurb.strip, 200))
 
 - else
@@ -83,7 +89,10 @@
             %span.day== #{event.date_and_time.strftime('%a')}
           .event_description
             %h3
-              = link_to h(event.name), event
+              - if event.restrict_link
+                = event.title
+              - else
+                = link_to h(event.name), event
               - if event.today? # before midnight
                 %span.event_tag.event_tag_soon today!
               - elsif event.tomorrow?
@@ -109,7 +118,10 @@
             %span.day== #{event.date_and_time.strftime('%a')}
           .event_description
             %h3
-              = link_to h(event.name), event
+              - if event.restrict_link
+                = event.title
+              - else
+                = link_to h(event.name), event
               - if event.today? # before midnight
                 %span.event_tag.event_tag_soon today!
               - elsif event.tomorrow?

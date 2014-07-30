@@ -126,6 +126,9 @@
         %dt.form-label
           = f.check_box :active, :disabled => @disabled
           = f.label :active, "Publish Event to Public"
+        %dt.form-label
+          = f.check_box :restrict_link
+          = f.label :restrict_link, "Hide #{@cms_config['site_settings']['event_title']} Detail Page", :id => "event_restrict_link_label"
   
   - if @cms_config['features']['event_registration'] and current_user.has_role("Admin")
     = clear
