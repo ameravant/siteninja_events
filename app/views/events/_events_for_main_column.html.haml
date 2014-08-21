@@ -39,6 +39,7 @@
                     -#%span.event_tag.event_tag_full registration full
                 .event_blurb= simple_format(truncate(event.blurb.strip, 200))
                 - i += 1
+              .event_clear
             - break if i >= count
           - break if i >= count
     - else
@@ -92,6 +93,7 @@
                     -#- else
                     -#%span.event_tag.event_tag_full registration full
                 .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+              .event_clear
 
       - else
         %h2= section.title
