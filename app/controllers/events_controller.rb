@@ -107,6 +107,7 @@ class EventsController < ApplicationController
         @menu = @page.menus.first
         @event_categories = EventCategory.active
         @footer_pages = Page.find(:all, :conditions => {:show_in_footer => true}, :order => :footer_pos )
+        @body_id = "events"
       # else
       #   render_404 unless @page = Page.find_by_permalink('events')
       #   get_page_defaults(@page)
