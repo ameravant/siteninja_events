@@ -84,6 +84,7 @@
                     %span.time= event.date_and_time.strftime("%I:%M %p")
                 - if event.images.size > 0
                   = image_tag(event.images.first.image(:original), :alt => event.name, :title => event.name)
+          = clear
       - elsif section.section_format == "full"
         %h2= section.title
         %ul.events
