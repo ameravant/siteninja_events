@@ -1,7 +1,7 @@
 - if !@event.description.blank? && (!@event.description.include?('<p>') && !@event.description.include?('<div>')) 
   - @event.description = simple_format(@event.description)
 - content_for :head do
-  = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js"
+  = javascript_include_tag "/plugin_assets/siteninja_events/javascripts/admin_events_form.js", :async => true
   %style{:type => "text/css"}
     ==#categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 150px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); display: none; }
     ==.date-options input, .repeat-date-options input { padding: 8px 14px; }
@@ -15,10 +15,11 @@
     == .weekdays, .week-number { width: 50%; float: left; }
     == .week-number { display: #{@event.repeat_frequency == "Select Weeks" ? "block" : "none"}}
     == .radio-option { margin-left: 20px; }
-  :javascript
-    function addtext(text) {
-    tinyMCE.execInstanceCommand("event_description","mceInsertContent",false,text);
-    }
+  - content_for :footer do
+    :javascript
+      function addtext(text) {
+      tinyMCE.execInstanceCommand("event_description","mceInsertContent",false,text);
+      }
 = error_messages_for "event"
 - @calendar_select = true
 -if @controller.action_name == 'edit' && @cms_config['features']['event_registration'] && current_user.has_role("Admin")
