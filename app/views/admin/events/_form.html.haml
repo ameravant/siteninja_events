@@ -18,8 +18,8 @@
   - content_for :footer do
     :javascript
       function addtext(text) {
-      tinyMCE.execInstanceCommand("event_description","mceInsertContent",false,text);
-      }
+        tinymce.get("event_description").insertContent(text);
+        }
 = error_messages_for "event"
 - @calendar_select = true
 -if @controller.action_name == 'edit' && @cms_config['features']['event_registration'] && current_user.has_role("Admin")
