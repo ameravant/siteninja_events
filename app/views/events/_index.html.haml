@@ -1,4 +1,7 @@
-#event-list-link.float-right= link_to("Event List", "?event_list=true")
+- if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar'] && !params[:event_list]
+  #event-list-link.float-right= link_to("Event List", "?event_list=true")
+- elsif @cms_config['features']['recurring_events'] && @cms_config['features']['calendar'] 
+  #event-list-link.float-right= link_to("Event Calendar", "#{events_path}")
 %h1= @page.title.strip
 - if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar'] && !params[:event_list]
   - year = params[:year] ? params[:year].to_i : Time.now.year
@@ -75,7 +78,6 @@
             .event_blurb= simple_format(truncate(event.blurb.strip, 200))
 
 - else
-  #event-list-link.float-right= link_to("Event Calendar", "#{events_path}")
   -if @cms_config['site_settings']['show_past_events']
     = link_to "Click here to view past events", past_events_path
   =# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
