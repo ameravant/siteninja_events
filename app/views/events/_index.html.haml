@@ -1,5 +1,5 @@
 %h1= @page.title.strip
-- if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar']
+- if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar'] && !params[:event_list]
   - year = params[:year] ? params[:year].to_i : Time.now.year
   - month = params[:month] ? params[:month].to_i : Time.now.month
   - date = Date.new(year.to_i, month.to_i, 1)
@@ -46,7 +46,7 @@
       </td>
       - if date.wday == 6 or date.end_of_month.day == date.day
         </tr>
-- elsif @cms_config['features']['recurring_events']
+- elsif @cms_config['features']['recurring_events'] && !params[:event_list]
   - year = Time.now.year
   - month = Time.now.month
   - date = Date.new(year.to_i, month.to_i, Time.now.day)
