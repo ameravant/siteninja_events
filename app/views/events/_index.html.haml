@@ -4,6 +4,7 @@
   #event-list-link.float-right= link_to("Event Calendar", "#{events_path}")
 %h1= @page.title.strip
 - if @cms_config['features']['recurring_events'] && @cms_config['features']['calendar'] && !params[:event_list]
+  = @page.body
   - year = params[:year] ? params[:year].to_i : Time.now.year
   - month = params[:month] ? params[:month].to_i : Time.now.month
   - date = Date.new(year.to_i, month.to_i, 1)
