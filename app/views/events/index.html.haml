@@ -53,6 +53,7 @@
 - content_for :meta_title do
   = "Past" if @past
   = @cms_config['site_settings']['events_title']
+  = " - Page #{params[:page]}" if params[:page]
 - if @cms_config['site_settings']['enable_responsive_layouts']
   = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "index"}, :collection => @main_column_sections
 - else
