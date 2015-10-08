@@ -54,6 +54,10 @@
   = "Past" if @past
   = @cms_config['site_settings']['events_title']
   = " - Page #{params[:page]}" if params[:page]
+- content_for :meta_description do
+  = "A listing of #{@past ? "past" : "upcoming"} events"
+  = " in calendar view" if @cms_config['features']['calendar'] and !params[:event_list]
+  = " - Page #{params[:page]}" if params[:page]
 - if @cms_config['site_settings']['enable_responsive_layouts']
   = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "index"}, :collection => @main_column_sections
 - else
