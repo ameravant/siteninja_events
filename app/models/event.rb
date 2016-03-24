@@ -18,16 +18,16 @@ class Event < ActiveRecord::Base
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
-  named_scope :future, :conditions => ["active = ? and date_and_time >= ?", true, Time.now]
-  named_scope :this_week, :conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 7.days)) }
-  named_scope :this_month, :conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 29.days))  }
-  named_scope :three_months,:conditions => { :active => true, :date_and_time => (Time.now..(Time.now + 3.months))  }
-  named_scope :this_year, :conditions => { :active => true, :date_and_time => (Time.now..Time.now.next_year)  }
-  named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and (end_date_and_time < ? or repeat_end_date < ?)", true, Time.now, Time.now]
+  named_scope :future, :conditions => ["active = ? and date_and_time >= ?", true, Time.now.in_time_zone("Pacific Time (US & Canada)")]
+  named_scope :this_week, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 7.days)) }
+  named_scope :this_month, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 29.days))  }
+  named_scope :three_months,:conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 3.months))  }
+  named_scope :this_year, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..Time.now.in_time_zone("Pacific Time (US & Canada)").next_year)  }
+  named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and (end_date_and_time < ? or repeat_end_date < ?)", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
   named_scope :not_yet_complete, :order => "date_and_time desc", 
-    :conditions => ["active = ? and ((end_date_and_time > ? OR end_date_and_time = ?) or (repeat_start_time < ? and repeat_end_time > ?))", true, Time.now, '', Time.now, Time.now]
+    :conditions => ["active = ? and ((end_date_and_time > ? OR end_date_and_time = ?) or (repeat_start_time < ? and repeat_end_time > ?))", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), '', Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
   named_scope :in_progress, :order => "date_and_time desc", 
-    :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now, Time.now]
+    :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
   named_scope :soonest, :limit => 6, :conditions => { :active => true }
   include Rakismet::Model
   rakismet_attrs   :author => :person_name,
@@ -66,7 +66,7 @@ class Event < ActiveRecord::Base
   def is_past_deadline?
     deadline = self.registration_deadline ? self.registration_deadline : self.date_and_time
     if !deadline.blank?
-      Time.now > deadline
+      Time.now.in_time_zone("Pacific Time (US & Canada)") > deadline
     else
       false
     end
@@ -94,7 +94,7 @@ class Event < ActiveRecord::Base
   end
 
   def future_date?
-    self.date_and_time >= Time.now
+    self.date_and_time >= Time.now.in_time_zone("Pacific Time (US & Canada)")
   end
 
   def today?
@@ -102,11 +102,11 @@ class Event < ActiveRecord::Base
   end
 
   def tomorrow?
-    self.date_and_time < (Time.now + 1.day) and !self.today?
+    self.date_and_time < (Time.now.in_time_zone("Pacific Time (US & Canada)") + 1.day) and !self.today?
   end
 
   def this_week?
-    self.date_and_time <= Time.now + 7.days
+    self.date_and_time <= Time.now.in_time_zone("Pacific Time (US & Canada)") + 7.days
   end
 
   def validates_end_is_after_start
