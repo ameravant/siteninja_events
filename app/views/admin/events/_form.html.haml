@@ -44,9 +44,9 @@
         %h2.title.repeat-options-title Repeat Options
         .repeat-date-options
           Dates:
-          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.in_time_zone(@time_zone).strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
+          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
           to
-          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.in_time_zone(@time_zone).strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
+          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
         .repeat-date-options
           Time: &nbsp;
           = f.text_field(:repeat_start_time, :value => (@event.repeat_start_time.blank? ? Time.zone.now.strftime("%I:%M %p") : @event.repeat_start_time.in_time_zone(@time_zone).strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "Start Time")
