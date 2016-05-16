@@ -1,19 +1,19 @@
 .event-date-time
   - if @event.repeat
     Between 
-    = @event.repeat_start_date.strftime("%A, %B %d, %Y ")
+    = @event.repeat_start_date.in_time_zone("Pacific Time (US & Canada)").strftime("%A, %B %d, %Y ")
     and 
-    = @event.repeat_end_date.strftime("%A, %B %d, %Y ")
+    = @event.repeat_end_date.in_time_zone("Pacific Time (US & Canada)").strftime("%A, %B %d, %Y ")
     from 
-    = @event.repeat_start_time.strftime("%I:%M %p")
+    = @event.repeat_start_time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M %p")
     to 
-    = @event.repeat_end_time.strftime("%I:%M %p")
+    = @event.repeat_end_time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M %p")
   - else
-    = @event.date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+    = @event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%A, %B %d, %Y at %I:%M %p")
     -if @event.end_date_and_time
       -if @event.end_date_and_time.day == @event.date_and_time.day
-        = @event.end_date_and_time.strftime("&mdash; %I:%M %p")
+        = @event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("&mdash; %I:%M %p")
       -else
         &mdash;
         %br
-        = @event.end_date_and_time.strftime("%A, %B %d, %Y at %I:%M %p")
+        = @event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%A, %B %d, %Y at %I:%M %p")

@@ -33,9 +33,9 @@
     .date-wrapper{:style => "display: #{@event.repeat ? "none" : "block"}"}
       %h2.form-label= f.label :date_and_time, "Date/Time"
       .date-options
-        = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "Start")
+        = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.in_time_zone(@time_zone).strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "Start")
         to
-        = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "End")
+        = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.in_time_zone(@time_zone).strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "End")
     - if @cms_config['features']['recurring_events']
       .repeat-checkbox
         = f.check_box :repeat, :onclick => 'jQuery(".repeat").slideToggle(); jQuery(".date-wrapper").slideToggle(); jQuery(".registration-wrapper").slideToggle()'
@@ -44,14 +44,14 @@
         %h2.title.repeat-options-title Repeat Options
         .repeat-date-options
           Dates:
-          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
+          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.in_time_zone(@time_zone).strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
           to
-          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
+          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.in_time_zone(@time_zone).strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
         .repeat-date-options
           Time: &nbsp;
-          = f.text_field(:repeat_start_time, :value => (@event.repeat_start_time.blank? ? Time.now.strftime("%I:%M %p") : @event.repeat_start_time.strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "Start Time")
+          = f.text_field(:repeat_start_time, :value => (@event.repeat_start_time.blank? ? Time.zone.now.strftime("%I:%M %p") : @event.repeat_start_time.in_time_zone(@time_zone).strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "Start Time")
           to
-          = f.text_field(:repeat_end_time, :value => (@event.repeat_end_time.blank? ? (Time.now + 2.hours).strftime("%I:%M %p") : @event.repeat_end_time.strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "End Time")
+          = f.text_field(:repeat_end_time, :value => (@event.repeat_end_time.blank? ? (Time.zone.now + 2.hours).strftime("%I:%M %p") : @event.repeat_end_time.in_time_zone(@time_zone).strftime("%I:%M %p")), :class => "timepicker small-input", :placeholder => "End Time")
         .frequency
           Frequency: 
           = f.radio_button(:repeat_frequency, "Weekly", :onclick => 'jQuery(".week-number").slideUp()')

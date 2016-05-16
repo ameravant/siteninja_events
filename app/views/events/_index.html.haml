@@ -67,9 +67,9 @@
               %span.date== #{date.strftime('%d')}
               %span.day== #{date.strftime('%a')}
             - else
-              %span.month== #{event.date_and_time.strftime('%b')}
-              %span.date== #{event.date_and_time.strftime('%d')}
-              %span.day== #{event.date_and_time.strftime('%a')}
+              %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
+              %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
+              %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
           .event_description
             %h3
               - if event.restrict_link
@@ -89,9 +89,9 @@
       - for event in @events_in_progress
         %li[event]
           %div.event_date
-            %span.month== #{event.date_and_time.strftime('%b')}
-            %span.date== #{event.date_and_time.strftime('%d')}
-            %span.day== #{event.date_and_time.strftime('%a')}
+            %span.month== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%b')}
+            %span.date== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%d')}
+            %span.day== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%a')}
           .event_description
             %h3
               - if event.restrict_link
@@ -118,9 +118,9 @@
       - for event in events.sort_by(&:date_and_time)
         %li[event]
           %div.event_date
-            %span.month== #{event.date_and_time.strftime('%b')}
-            %span.date== #{event.date_and_time.strftime('%d')}
-            %span.day== #{event.date_and_time.strftime('%a')}
+            %span.month== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%b')}
+            %span.date== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%d')}
+            %span.day== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%a')}
           .event_description
             %h3
               - if event.restrict_link

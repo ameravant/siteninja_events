@@ -24,9 +24,9 @@
                   %span.date== #{date.strftime('%d')}
                   %span.day== #{date.strftime('%a')}
                 - else
-                  %span.month== #{event.date_and_time.strftime('%b')}
-                  %span.date== #{event.date_and_time.strftime('%d')}
-                  %span.day== #{event.date_and_time.strftime('%a')}
+                  %span.month== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%b')}
+                  %span.date== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%d')}
+                  %span.day== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%a')}
               .event_description
                 %h3
                   = link_to h(event.name), event
@@ -54,7 +54,7 @@
               %h3= link_to event.name, event_path(event)
               - if @cms_config['site_settings']['show_event_location']
                 %address= event.address
-              %span.date= date.strftime("%a, %B %d, %Y")
+              %span.date= date.in_time_zone("Pacific Time (US & Canada)").strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))
             - i += 1
@@ -77,9 +77,9 @@
                 .text
                   %h2= event.name
                   .datetime
-                    %span.day= event.date_and_time.strftime("%a")
-                    %span.month= event.date_and_time.strftime("%B")
-                    %span.date= event.date_and_time.strftime("%e")
+                    %span.day= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%a")
+                    %span.month= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%B")
+                    %span.date= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%e")
                     at
                     %span.time= event.date_and_time.strftime("%I:%M %p")
                 - if event.images.size > 0
@@ -91,9 +91,9 @@
           - for event in events.sort_by(&:date_and_time)
             %li[event]
               %div.event_date
-                %span.month== #{event.date_and_time.strftime('%b')}
-                %span.date== #{event.date_and_time.strftime('%d')}
-                %span.day== #{event.date_and_time.strftime('%a')}
+                %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
+                %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
+                %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
               .event_description
                 %h3
                   = link_to h(event.name), event
@@ -120,6 +120,6 @@
               %h3= link_to event.name, event_path(event)
               - if @cms_config['site_settings']['show_event_location']
                 %address= event.address
-              %span.date= event.date_and_time.strftime("%a, %B %d, %Y")
+              %span.date= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))

@@ -67,7 +67,11 @@ class Admin::EventsController < AdminController
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
     @event = Event.new(params[:event])
     @event.event_price_options.build(params[:event_price_options])
-    @event.person_id = current_user.person.id
+    @event.person_id = current_user.person.id if current_user.person
+    @event.date_and_time = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
+    @event.end_date_and_time = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
+    @event.repeat_start_time = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
+    @event.repeat_end_time = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     if @event.save
       if @event.registration?
         flash[:notice] = "Event created, would you like to add price options"
