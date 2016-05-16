@@ -89,6 +89,10 @@ class Admin::EventsController < AdminController
     add_breadcrumb '@event.name'          
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
+    @event.date_and_time = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
+    @event.end_date_and_time = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
+    @event.repeat_start_time = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
+    @event.repeat_end_time = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     if @event.update_attributes(params[:event])
       if @event.registration and @event.event_price_options.reject{|o| !o.public}.empty?
         epo = @event.event_price_options.build(params[:event_price_options])
