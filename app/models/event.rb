@@ -98,7 +98,7 @@ class Event < ActiveRecord::Base
   end
 
   def today?
-    self.date_and_time.strftime('%Y-%m-%d') == Time.now.strftime('%Y-%m-%d') 
+    (self.date_and_time.strftime('%Y-%m-%d') >= Time.now.strftime('%Y-%m-%d')) and (self.date_and_time.strftime('%Y-%m-%d') <= (Time.now.strftime('%Y-%m-%d') + 1.day))
   end
 
   def tomorrow?
@@ -132,5 +132,6 @@ class Event < ActiveRecord::Base
     payment_methods << "Other" if self.allow_other
     payment_methods.join(', ')
   end
+
 end
 

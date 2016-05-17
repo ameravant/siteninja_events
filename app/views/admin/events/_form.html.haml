@@ -33,9 +33,7 @@
     .date-wrapper{:style => "display: #{@event.repeat ? "none" : "block"}"}
       %h2.form-label= f.label :date_and_time, "Date/Time"
       .date-options
-        = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p") : @event.date_and_time.in_time_zone(@time_zone).strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "Start")
         to
-        = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p") : @event.end_date_and_time.in_time_zone(@time_zone).strftime("%m/%d/%Y %I:%M %p")), :class => "datetimepicker small-input", :placeholder => "End")
     - if @cms_config['features']['recurring_events']
       .repeat-checkbox
         = f.check_box :repeat, :onclick => 'jQuery(".repeat").slideToggle(); jQuery(".date-wrapper").slideToggle(); jQuery(".registration-wrapper").slideToggle()'

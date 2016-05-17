@@ -2,7 +2,7 @@ class Admin::EventsController < AdminController
   unloadable # http://dev.rubyonrails.org/ticket/6001
   before_filter :authorization
   before_filter :find_event, :only => [ :edit, :update, :destroy, :restore ]
-
+  before_filter :update_timezone, :only => [:create, :update]
   # Configure breadcrumb
   before_filter :add_crumbs, :except => :index
   add_breadcrumb "New", nil, :only => [ :new, :create ]
@@ -63,15 +63,33 @@ class Admin::EventsController < AdminController
   end
 
   def create
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info params[:event][:date_and_time]
+    logger.info "================================================="
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
+    params[:event][:repeat_start_time] = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
+    params[:event][:repeat_end_time] = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     @event = Event.new(params[:event])
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id if current_user.person
-    @event.date_and_time = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
-    @event.end_date_and_time = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
-    @event.repeat_start_time = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
-    @event.repeat_end_time = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     if @event.save
       if @event.registration?
         flash[:notice] = "Event created, would you like to add price options"
@@ -86,13 +104,32 @@ class Admin::EventsController < AdminController
   end
 
   def update
-    add_breadcrumb '@event.name'          
+    add_breadcrumb '@event.name'
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info "================================================="
+    logger.info params[:event][:date_and_time]
+    logger.info "================================================="
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
-    @event.date_and_time = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
-    @event.end_date_and_time = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
-    @event.repeat_start_time = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
-    @event.repeat_end_time = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
+    
+    params[:event][:repeat_start_time] = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
+    params[:event][:repeat_end_time] = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     if @event.update_attributes(params[:event])
       if @event.registration and @event.event_price_options.reject{|o| !o.public}.empty?
         epo = @event.event_price_options.build(params[:event_price_options])
@@ -112,6 +149,11 @@ class Admin::EventsController < AdminController
   end
 
 private
+
+  def update_timezone
+    # params[:event][:date_and_time] = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
+    # params[:event][:end_date_and_time] = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
+  end
 
   def find_event
     begin
