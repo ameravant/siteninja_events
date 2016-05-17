@@ -97,7 +97,6 @@
               .event_description
                 %h3
                   = link_to h(event.name), event
-                    %span.event_tag.event_tag_this_week this week
                 - if @cms_config['features']['event_registration']
                   - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
                     -# if event.registration_spots?
