@@ -151,8 +151,8 @@ class Admin::EventsController < AdminController
 private
 
   def update_timezone
-    # params[:event][:date_and_time] = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
-    # params[:event][:end_date_and_time] = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
+    params[:event][:date_and_time] = Time.zone.parse(params[:event][:date_and_time]) if !params[:event][:date_and_time].blank?
+    params[:event][:end_date_and_time] = Time.zone.parse(params[:event][:end_date_and_time]) if !params[:event][:end_date_and_time].blank?
   end
 
   def find_event

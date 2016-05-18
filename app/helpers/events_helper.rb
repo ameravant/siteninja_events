@@ -1,5 +1,9 @@
 module EventsHelper
   
+def get_timezone(time)
+  
+end
+
   def soon_indicator(event_datetime, prefix="&mdash; ", capitalize_text=false)
     # Only outputs something if the event is less than a week away
     return if event_datetime > 1.week.from_now
