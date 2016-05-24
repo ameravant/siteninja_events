@@ -20,9 +20,9 @@
             %li[event]
               %div.event_date
                 - if event.repeat
-                  %span.month== #{date.strftime('%b')}
-                  %span.date== #{date.strftime('%d')}
-                  %span.day== #{date.strftime('%a')}
+                  %span.month== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
+                  %span.date== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
+                  %span.day== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
                 - else
                   %span.month== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%b')}
                   %span.date== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%d')}
@@ -81,7 +81,7 @@
                     %span.month= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%B")
                     %span.date= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%e")
                     at
-                    %span.time= event.date_and_time.strftime("%I:%M %p")
+                    %span.time= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M %p")
                 - if event.images.size > 0
                   = image_tag(event.images.first.image(:original), :alt => event.name, :title => event.name)
           = clear
