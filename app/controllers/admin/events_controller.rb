@@ -59,7 +59,7 @@ class Admin::EventsController < AdminController
 
   def edit
     @event_categories = EventCategory.active
-    add_breadcrumb @event.name
+    #add_breadcrumb @event.name
   end
 
   def create
