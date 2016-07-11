@@ -20,13 +20,13 @@
             %li[event]
               %div.event_date
                 - if event.repeat
-                  %span.month== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
-                  %span.date== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
-                  %span.day== #{date.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
+                  %span.month== #{date.in_time_zone(@time_zone).strftime('%b')}
+                  %span.date== #{date.in_time_zone(@time_zone).strftime('%d')}
+                  %span.day== #{date.in_time_zone(@time_zone).strftime('%a')}
                 - else
-                  %span.month== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%b')}
-                  %span.date== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%d')}
-                  %span.day== #{event.in_time_zone("Pacific Time (US & Canada)").date_and_time.strftime('%a')}
+                  %span.month== #{event.in_time_zone(@time_zone).date_and_time.strftime('%b')}
+                  %span.date== #{event.in_time_zone(@time_zone).date_and_time.strftime('%d')}
+                  %span.day== #{event.in_time_zone(@time_zone).date_and_time.strftime('%a')}
               .event_description
                 %h3
                   = link_to h(event.name), event
@@ -45,7 +45,7 @@
       %h2= section.title
       %ul.recent_events.list_of_links
         - i = 0
-        - date = Date.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day)
+        - date = DateTime.new(Time.now.year.to_i, Time.now.month.to_i, Time.now.day).in_time_zone(@time_zone)
         - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
           - wday_count = ((date.day - 1) / 7).round + 1
           - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and events.repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
@@ -54,7 +54,7 @@
               %h3= link_to event.name, event_path(event)
               - if @cms_config['site_settings']['show_event_location']
                 %address= event.address
-              %span.date= date.in_time_zone("Pacific Time (US & Canada)").strftime("%a, %B %d, %Y")
+              %span.date= date.strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))
             - i += 1
@@ -77,11 +77,11 @@
                 .text
                   %h2= event.name
                   .datetime
-                    %span.day= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%a")
-                    %span.month= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%B")
-                    %span.date= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%e")
+                    %span.day= event.date_and_time.in_time_zone(@time_zone).strftime("%a")
+                    %span.month= event.date_and_time.in_time_zone(@time_zone).strftime("%B")
+                    %span.date= event.date_and_time.in_time_zone(@time_zone).strftime("%e")
                     at
-                    %span.time= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M %p")
+                    %span.time= event.date_and_time.in_time_zone(@time_zone).strftime("%I:%M %p")
                 - if event.images.size > 0
                   = image_tag(event.images.first.image(:original), :alt => event.name, :title => event.name)
           = clear
@@ -91,9 +91,9 @@
           - for event in events.sort_by(&:date_and_time)
             %li[event]
               %div.event_date
-                %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
-                %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
-                %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
+                %span.month== #{event.date_and_time.in_time_zone(@time_zone).strftime('%b')}
+                %span.date== #{event.date_and_time.in_time_zone(@time_zone).strftime('%d')}
+                %span.day== #{event.date_and_time.in_time_zone(@time_zone).strftime('%a')}
               .event_description
                 %h3
                   = link_to h(event.name), event
@@ -114,6 +114,6 @@
               %h3= link_to event.name, event_path(event)
               - if @cms_config['site_settings']['show_event_location']
                 %address= event.address
-              %span.date= event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime("%a, %B %d, %Y")
+              %span.date= event.date_and_time.in_time_zone(@time_zone).strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))
