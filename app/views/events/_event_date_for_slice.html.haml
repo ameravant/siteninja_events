@@ -1,13 +1,14 @@
 .event-date-time
   - if @event.repeat
-    Between 
-    = @event.repeat_start_date.strftime("%A, %B %d, %Y ")
-    and 
-    = @event.repeat_end_date.strftime("%A, %B %d, %Y ")
-    from 
+    = @event.repeat_start_date.strftime("%As, ")
     = @event.repeat_start_time.in_time_zone(@time_zone).strftime("%I:%M %p")
     to 
     = @event.repeat_end_time.in_time_zone(@time_zone).strftime("%I:%M %p")
+    .repeat-dates
+      Between 
+      = @event.repeat_start_date.strftime("%B %d, %Y ")
+      and 
+      = @event.repeat_end_date.strftime("%B %d, %Y ")
   - else
     = @event.date_and_time.in_time_zone(@time_zone).strftime("%A, %B %d, %Y at %I:%M %p")
     -if @event.end_date_and_time

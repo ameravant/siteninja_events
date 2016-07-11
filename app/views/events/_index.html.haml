@@ -7,7 +7,7 @@
   = @page.body
   - year = params[:year] ? params[:year].to_i : Time.now.year
   - month = params[:month] ? params[:month].to_i : Time.now.month
-  - date = Date.new(year.to_i, month.to_i, 1)
+  - date = DateTime.new(year.to_i, month.to_i, 1)
   .calendar-title
     - if date.beginning_of_day <= Time.now.beginning_of_month + 1.year
       = link_to("Next Month", "?calendar=true&month=#{month.to_i == 12 ? 1 : month.to_i + 1}&year=#{month.to_i == 12 ? year.to_i + 1 : year.to_i}", :class => "next-month float-right")    
@@ -39,7 +39,7 @@
       <td>
       .calendar-day= date.day
       - wday_count = ((date.day - 1) / 7).round + 1
-      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and events.repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date, date, true, true, "Select Weeks", true, true])
+      - events = Event.all(:conditions => ["(date_and_time >= ? and date_and_time <= ? and events.repeat = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and active = ?) or   (repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_#{wday_count} = ? and active = ?)", date.beginning_of_day, date.end_of_day, false, true,     date, date, true, true, "Weekly", true,     date.in_time_zone(@time_zone), date.in_time_zone(@time_zone), true, true, "Select Weeks", true, true])
 
       %ul
         - for event in events
