@@ -54,7 +54,7 @@
               %h3= link_to event.name, event_path(event)
               - if @cms_config['site_settings']['show_event_location']
                 %address= event.address
-              %span.date= date.strftime("%a, %B %d, %Y")
+              %span.date= event.repeat? ? event.repeat_start_date.strftime("%As") : date.strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))
             - i += 1
