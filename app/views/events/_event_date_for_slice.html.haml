@@ -1,9 +1,10 @@
 .event-date-time
   - if @event.repeat
     = @event.repeat_start_date.strftime("%As, ")
-    = Time.parse(@event.repeat_start_time_string).strftime("%I:%M %p")
-    to 
-    = Time.parse(@event.repeat_end_time_string).strftime("%I:%M %p")
+    - if !@event.repeat_start_time_string.blank?
+      = Time.parse(@event.repeat_start_time_string).strftime("%I:%M %p")
+      to 
+      = Time.parse(@event.repeat_end_time_string).strftime("%I:%M %p")
     .repeat-dates
       Between 
       = @event.repeat_start_date.strftime("%B %d, %Y ")
