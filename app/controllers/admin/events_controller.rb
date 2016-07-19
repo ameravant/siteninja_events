@@ -85,6 +85,8 @@ class Admin::EventsController < AdminController
     logger.info "================================================="
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
+    params[:event][:repeat_start_time] = params[:event][:repeat_start_time_string]
+    params[:event][:repeat_end_time] = params[:event][:repeat_end_time_string]
     params[:event][:repeat_start_time] = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
     params[:event][:repeat_end_time] = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
     @event = Event.new(params[:event])
