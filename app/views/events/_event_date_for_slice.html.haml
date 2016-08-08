@@ -14,7 +14,7 @@
   - else
     = @event.date_and_time.in_time_zone(@time_zone).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
     -if @event.end_date_and_time
-      -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.in_time_zone(@time_zone).date_and_time.day
+      -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.date_and_time.in_time_zone(@time_zone).day
         = @event.end_date_and_time.in_time_zone(@time_zone).strftime("<span class='event-time'>&mdash; %I:%M %p</span>")
       -else
         &mdash;
