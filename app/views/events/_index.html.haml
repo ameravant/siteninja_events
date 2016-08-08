@@ -33,8 +33,8 @@
     <tr>
     - (date.wday).times do
       <td></td>
-    - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
-      - if date.wday == 0 and date.beginning_of_month.day != date.day
+    - (date..date + 1.month).each do |date|
+      - if date.wday == 0 and date.in_time_zone(@time_zone).beginning_of_month.day != date.day
         <tr>
       <td>
       .calendar-day= date.day
@@ -49,7 +49,7 @@
             - else
               = link_to(event.title, event_path(event))
       </td>
-      - if date.wday == 6 or date.end_of_month.day == date.day
+      - if date.wday == 6 or date.in_time_zone(@time_zone).end_of_month.day == date.in_time_zone(@time_zone).day
         </tr>
 - elsif @cms_config['features']['recurring_events'] && !params[:event_list]
   - year = Time.now.year
