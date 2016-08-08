@@ -33,7 +33,7 @@
     <tr>
     - (date.wday).times do
       <td></td>
-    - (date..Date.new(date.year, date.month, date.end_of_month.day)).each do |date|
+    - (date..Date.new(date.year, date.month, date.in_time_zone(@time_zone).end_of_month.day)).each do |date|
       - if date.wday == 0 and date.beginning_of_month.day != date.day
         <tr>
       <td>
