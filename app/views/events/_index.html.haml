@@ -63,9 +63,10 @@
         %li[event]
           %div.event_date
             - if event.repeat
-              %span.month== #{date.strftime('%b')}
-              %span.date== #{date.strftime('%d')}
-              %span.day== #{date.strftime('%a')}
+              .repeat
+                %span.month== #{date.strftime('%b')}
+                %span.date== #{date.strftime('%d')}
+                %span.day== #{date.strftime('%a')}
             - else
               %span.month== #{event.date_and_time.in_time_zone(@time_zone).strftime('%b')}
               %span.date== #{event.date_and_time.in_time_zone(@time_zone).strftime('%d')}
