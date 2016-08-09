@@ -90,9 +90,13 @@
       - for event in @events_in_progress
         %li[event]
           %div.event_date
+            - if event.repeat
+              <div class="repeat">
             %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
             %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
             %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
+            - if event.repeat
+              </div>
           .event_description
             %h3
               - if event.restrict_link
@@ -113,9 +117,13 @@
       - for event in events.sort_by(&:date_and_time)
         %li[event]
           %div.event_date
+            - if event.repeat
+              <div class="repeat">
             %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
             %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
             %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
+            - if event.repeat
+              </div>
           .event_description
             %h3
               - if event.restrict_link
