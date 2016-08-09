@@ -5,42 +5,45 @@
 - content_for :meta_description do
   = "A listing of events in the #{@event_category.title} category"
   = " - Page #{params[:page]}" if params[:page]
-%h1= yield(:meta_title).strip
-- if !@event_category.column.blank?
-  - @side_column_sections = @event_category.column.column_sections
-  = render :partial => "shared/side_column"
+- if !@cms_config['site_settings']['enable_responsive_layouts']
+  %h1= yield(:meta_title).strip
+  - if !@event_category.column.blank?
+    - @side_column_sections = @event_category.column.column_sections
+    = render :partial => "shared/side_column"
+  - else
+    = render :partial => "/event_categories/event_categories_for_side_column"
+  / = render :partial => "/events/sidebar"
+
+  /= render :partial => "/events/event_for_list", :collection => @events
+
+  - unless @events.total_pages == 1
+    = will_paginate @events
+
+  - @events.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }.each do |year_and_month, events|
+    %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
+    %ul.events
+      - for event in events
+        %li[event]
+          %div.event_date
+            %span.month== #{event.date_and_time.strftime('%b')}
+            %span.date== #{event.date_and_time.strftime('%d')}
+            %span.day== #{event.date_and_time.strftime('%a')}
+          .event_description
+            %h3
+              = link_to h(event.name), event
+              / - if event.today? # before midnight
+              /   %span.event_tag.event_tag_soon today!
+              / - elsif event.tomorrow?
+              /   %span.event_tag.event_tag_soon tomorrow
+              / - elsif event.this_week?
+              /   %span.event_tag.event_tag_this_week this week
+            - if @cms_config['features']['event_registration']
+              - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
+                -# if event.registration_spots?
+                -#%span.event_tag.event_tag_open registration open
+                -#- else
+                -#%span.event_tag.event_tag_full registration full
+            .event_blurb= simple_format(h(truncate(event.blurb.strip, 200)))
+    = clear
 - else
-  = render :partial => "/event_categories/event_categories_for_side_column"
-/ = render :partial => "/events/sidebar"
-
-/= render :partial => "/events/event_for_list", :collection => @events
-
-- unless @events.total_pages == 1
-  = will_paginate @events
-
-- @events.group_by { |e| [e.date_and_time.year, e.date_and_time.month] }.each do |year_and_month, events|
-  %h2.event_month== #{month_name(year_and_month.last)} #{year_and_month.first}
-  %ul.events
-    - for event in events
-      %li[event]
-        %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
-        .event_description
-          %h3
-            = link_to h(event.name), event
-            / - if event.today? # before midnight
-            /   %span.event_tag.event_tag_soon today!
-            / - elsif event.tomorrow?
-            /   %span.event_tag.event_tag_soon tomorrow
-            / - elsif event.this_week?
-            /   %span.event_tag.event_tag_this_week this week
-          - if @cms_config['features']['event_registration']
-            - if event.registration? and event.date_and_time >= Date.tomorrow.to_time
-              -# if event.registration_spots?
-              -#%span.event_tag.event_tag_open registration open
-              -#- else
-              -#%span.event_tag.event_tag_full registration full
-          .event_blurb= simple_format(h(truncate(event.blurb.strip, 200)))
-  = clear
+  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "index"}, :collection => @main_column_sections
