@@ -46,4 +46,4 @@
             .event_blurb= simple_format(h(truncate(event.blurb.strip, 200)))
     = clear
 - else
-  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "events", :action => "index"}, :collection => @main_column_sections
+  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "event_categories", :action => "show"}, :collection => @main_column_sections
