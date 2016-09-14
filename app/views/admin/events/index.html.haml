@@ -38,7 +38,7 @@
   %tbody
     - for event in @events
       %tr[event]{ :class => cycle("odd#{event.future_date? ? "" : " past_event"}", "even#{event.future_date? ? "" : " past_event"}") }
-        %td.detail= event.date_and_time.strftime("%a, %b %d, %Y")
+        %td.detail= event.date_and_time.in_time_zone(@time_zone).strftime("%a, %b %d, %Y")
         %td= link_to h(event.name), edit_admin_event_path(event), :title => "Edit #{event.name}"
         - if @full_access == true
           - if event.registration? and @cms_config["features"]["event_registration"] && event.registration_count
