@@ -61,7 +61,7 @@
             = feature_icon_select(event, event.title)
           = icon "Search", event
           - if @full_access == true
-            = link_to("Copy", new_admin_event_path(:duplicate_id => event.id))
+            = link_to("", new_admin_event_path(:duplicate_id => event.id), :class => "icon fa fa-files-o", :title => "Copy")
             = icon "Write", edit_admin_event_path(event)
             = trash_icon(event, admin_event_path(event), "#{event.name}")
           - else
