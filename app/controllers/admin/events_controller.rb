@@ -52,6 +52,9 @@ class Admin::EventsController < AdminController
   def new
     @event_categories = EventCategory.active
     @event = Event.new
+    if params[:duplicate]
+      @event = @event.find(params[:duplicate_id]).clone
+    end
     if @full_access == false
       @event.active = false if current_user.has_role("Event Contributor")
     end
