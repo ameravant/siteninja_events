@@ -123,6 +123,11 @@
                 .event_category_checkbox
                   = check_box_tag "event[event_category_ids][]", event_category.id, @event.event_categories.include?(event_category), :id => dom_id(event_category)
                   = label_tag dom_id(event_category), "#{event_category.title}"
+        %dt.form-label
+          = f.label :importance, "Importance"
+        %dd.form-option
+          = f.select :importance, options_for_select(["Small", "Medium", "Large"], :selected => @event.importance)
+          = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "Importance determines how large the event summary is. An event with \"Small\" importance will not display an image on the summary page, while an event with \"Large\" importance will display a large image."}
 
         %dt.form-label
           = f.check_box :active, :disabled => @disabled
