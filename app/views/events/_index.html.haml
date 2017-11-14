@@ -51,7 +51,7 @@
       </td>
       - if date.wday == 6 or date.in_time_zone(@time_zone).end_of_month.day == date.in_time_zone(@time_zone).day
         </tr>
-- elsif @cms_config['features']['recurring_events'] && !params[:event_list]
+- elsif @cms_config['features']['recurring_events'] && !params[:event_list] && @cms_config['features']['calendar']
   - year = Time.now.year
   - month = Time.now.month
   - date = Date.new(year.to_i, month.to_i, Time.now.day)
