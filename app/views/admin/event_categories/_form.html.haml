@@ -11,9 +11,14 @@
     #options
       %dl
         %dt.form-label
-          = f.label :column_id, "Side Column"
+          = f.label :main_column_id, "Category Layout"
         %dd.form-option
-          = f.select :column_id, Column.all(:conditions => {:column_location => "side_column"}).collect {|ac| [ac.title, ac.id]}, {:include_blank => "Select Side Column"}
+          = collection_select(:event_category, :main_column_id, @layouts, :id, :title, {:include_blank => "Default Event Page Layout"}, :class => "select")
+      %dl
+        %dt.form-label
+          = f.label :event_main_column_id, "Event Layout"
+        %dd.form-option
+          = collection_select(:event_category, :event_layout_id, @event_layouts, :id, :title, {:include_blank => "Default (assigned on Template)"}, :class => "select")
 %br
 %br
 &nbsp;

@@ -2,6 +2,7 @@ class EventCategory < ActiveRecord::Base
   has_permalink :title
   belongs_to :column
   belongs_to :layout, :class_name => "Column", :foreign_key => :main_column_id
+  belongs_to :event_layout, :class_name => "Column", :foreign_key => :event_layout_id
   has_many :events
   has_and_belongs_to_many :events
   has_many :features, :as => :featurable, :dependent => :destroy

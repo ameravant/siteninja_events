@@ -41,6 +41,9 @@ class EventsController < ApplicationController
     if @cms_config['site_settings']['enable_responsive_layouts']
       #unless @event.event_category and !@event.event_category.column.blank?
         @tmplate.event_layout_id ? @main_column = Column.find(@tmplate.event_layout_id) : @main_column = Column.first(:conditions => {:column_location => "event"})
+        if @event.event_category and !@event.event_category.event_layout_id.blank?
+          @main_column = @main_column = Column.find(@event.event_category.event_layout_id)
+        end
         @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
       #end
     end
