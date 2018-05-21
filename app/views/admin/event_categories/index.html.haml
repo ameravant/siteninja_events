@@ -16,12 +16,17 @@
     %tr
       %th Title
       %th= @cms_config['site_settings']['event_title'].pluralize
+      %th Images
       %th.center Options
   %tbody
     - for event_category in @event_categories do
       %tr[event_category]{ :class => cycle('odd','even') }
         %td= link_to h(event_category.title), edit_admin_event_category_path(event_category)
         %td= number_with_delimiter(event_category.events.count)
+        %td.lc-images
+          = icon "Picture", [:admin, event_category, :images]
+          = link_to event_category.images_count, [:admin, event_category, :images]
+          = image_tag(event_category.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless event_category.images.empty?
         %td.center
           - if event_category.menus_count > 0
             = navigation_icon(event_category, event_category.title, "inline")

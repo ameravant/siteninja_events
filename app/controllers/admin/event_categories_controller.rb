@@ -13,6 +13,8 @@ class Admin::EventCategoriesController < AdminController
 
   def new
     @event_category = EventCategory.new
+    @layouts = Column.all(:conditions => {:column_location => "main_column"})
+    @event_layouts = Column.all(:conditions => {:column_location => "event"})
   end
 
   def create
@@ -27,6 +29,8 @@ class Admin::EventCategoriesController < AdminController
 
   def edit
     add_breadcrumb @event_category.title
+    @layouts = Column.all(:conditions => {:column_location => "main_column"})
+    @event_layouts = Column.all(:conditions => {:column_location => "event"})
   end
 
   def update
