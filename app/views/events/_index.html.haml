@@ -115,6 +115,7 @@
                 -#%span.event_tag.event_tag_full registration full
             .event_blurb= simple_format(truncate(event.blurb.strip, 200))
             - if @cms_config['site_settings']['add_to_calendar']
+              .clear
               ==<div title="Add to Calendar" class="addeventatc">Add to Calendar <span class="start">#{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="end">#{event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="timezone">America/Los_Angeles </span> <span class="title">#{event.title}</span> <span class="description">#{event.description}</span> <span class="location">#{event.address}</span></div>
     .clear
   - @events_grouped.each do |year_and_month, events|
@@ -156,6 +157,7 @@
                     %span.caption= image.caption
             .event_blurb= simple_format(truncate(event.blurb.strip, 200))
             - if @cms_config['site_settings']['add_to_calendar']
+              .clear
               ==<div title="Add to Calendar" class="addeventatc">Add to Calendar <span class="start">#{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="end">#{event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="timezone">America/Los_Angeles </span> <span class="title">#{event.title}</span> <span class="description">#{event.description}</span> <span class="location">#{event.address}</span></div>
           .event_clear
     -if @cms_config['site_settings']['show_past_events_on_events_index']
