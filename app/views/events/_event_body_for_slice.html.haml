@@ -13,3 +13,8 @@
 -#  <span class="_all_day_event">false</span>
 -#  <span class="_date_format">MM/DD/YYYY</span>
 -#  </a>
+- if @cms_config['site_settings']['add_to_calendar'] and !@event.repeat
+  - content_for :post_footer do
+    <!-- AddEvent script -->
+    <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
+  ==<div title="Add to Calendar" class="addeventatc">Add to Calendar <span class="start">#{@event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="end">#{@event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="timezone">America/Los_Angeles </span> <span class="title">#{@event.title}</span> <span class="description">#{@event.blurb}</span> <span class="location">#{@event.address}</span></div>
