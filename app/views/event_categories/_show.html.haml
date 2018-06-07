@@ -10,9 +10,9 @@
     - for event in events
       %li[event]
         %div.event_date
-          %span.month== #{event.date_and_time.strftime('%b')}
-          %span.date== #{event.date_and_time.strftime('%d')}
-          %span.day== #{event.date_and_time.strftime('%a')}
+          %span.month== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%b')}
+          %span.date== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%d')}
+          %span.day== #{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%a')}
         .event_description
           %h3
             = link_to h(event.name), event
