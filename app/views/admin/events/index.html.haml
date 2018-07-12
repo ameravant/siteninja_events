@@ -33,8 +33,7 @@
   - if @events.total_pages > 1
     %tfoot
       %tr
-        %td{ :colspan => 6
-         }
+        %td{ :colspan => 6}
           = will_paginate @events
   %tbody
     - for event in @events
