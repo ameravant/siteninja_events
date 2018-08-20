@@ -1,18 +1,16 @@
 - content_for(:meta_title) { concat "#{ @cms_config['site_settings']['events_title']}" }
 
-%h1= large_icon('Clock') + ' ' + yield(:meta_title).strip
+%h1= '<i class="far fa-calendar-alt"></i> ' + yield(:meta_title).strip
 
 .box
   .float-right= render :partial => "/shared/search"
   %span.hmenu
-    = icon "Plus", new_admin_event_path
-    = link_to "Add a new #{@cms_config['site_settings']['event_title']}", new_admin_event_path
+    = link_to "<i class=\"fas fa-plus-circle\"></i> Add a new #{@cms_config['site_settings']['event_title']}", new_admin_event_path
   - if @full_access == true
     %span.hmenu
-      = icon "Folder", admin_event_categories_path
-      = link_to "Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
+      = link_to "<i class=\"far fa-folder\"></i> Manage #{@cms_config['site_settings']['event_title']} categories", admin_event_categories_path
     %span.hmenu
-      = link_to "Export Events", "/admin/events.csv"
+      = link_to "<i class=\"fas fa-file-export\"></i> Export Events", "/admin/events.csv"
 
 %br
 
@@ -29,7 +27,7 @@
           %th{:style => "width: 100px;"} Registrations
         %th{:style => "width: 60px;"} Images
         %th{:style => "width: 60px;"} Files
-      %th.event-options.align-right{:style => "width: 100px;"} Options
+      %th.event-options.align-right{:style => "width: 160px;"} Options
   - if @events.total_pages > 1
     %tfoot
       %tr
@@ -51,22 +49,20 @@
               %br
               ="%s are still available" % pluralize(event.spots_available, "spot") if event.registration_limit
           %td{:style => "width: 60px;"}
-            = icon "Picture", [:admin, event, :images]
-            = link_to event.images_count.to_i, [:admin, event, :images]
+            = link_to("<i class='fas fa-images'></i> #{event.images_count.to_i}", [:admin, event, :images])
           %td{:style => "width: 60px;"}
             = #link_to "#{icon('page_white_text', nil, nil, nil, '', 'color')} #{event.assets_count.to_i}", [:new, :admin, event, :asset]
-            = icon "Document", [:new, :admin, event, :asset]
-            = link_to event.assets_count, [:new, :admin, event, :asset]
+            = link_to("<i class=\"far fa-file-alt\"></i> #{event.assets_count}", [:new, :admin, event, :asset])
         %td.event-options.align-right
           - if @full_access == true
             = feature_icon_select(event, event.title)
-          = icon "Search", event
+          = link_to("<i class=\"fas fa-search\"></i>", event)
           - if @full_access == true
-            = link_to("", new_admin_event_path(:duplicate_id => event.id), :class => "icon fa fa-copy", :title => "Copy")
-            = icon "Write", edit_admin_event_path(event)
+            = link_to("<i class='far fa-copy'></i>", new_admin_event_path(:duplicate_id => event.id), :title => "Copy")
+            = link_to("<i class='far fa-edit'></i>", edit_admin_event_path(event))
             = trash_icon(event, admin_event_path(event), "#{event.name}")
           - else
             - if event.active == false
-              = icon "Write", edit_admin_event_path(event)
+              = link_to("<i class='far fa-edit'></i>", edit_admin_event_path(event))
               = trash_icon(event, admin_event_path(event), "#{event.name}")
               
