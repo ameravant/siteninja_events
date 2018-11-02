@@ -15,6 +15,7 @@
     == .weekdays, .week-number { width: 50%; float: left; }
     == .week-number { display: #{@event.repeat_frequency == "Select Weeks" ? "block" : "none"}}
     == .radio-option { margin-left: 20px; }
+    == .repeat_option { display: inline-block; width: 170px; }
   - content_for :footer do
     :javascript
       function addtext(text) {
@@ -51,6 +52,13 @@
           = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
           to
           = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
+        .repeat-date-options
+          %span.repeat_option
+            = f.check_box :display_repeat_start_date
+            = f.label :display_repeat_start_date, "Display Start Date"
+          %span.repeat_option
+            = f.check_box :display_repeat_end_date
+            = f.label :display_repeat_end_date, "Display End Date"
         .repeat-date-options
           Time: &nbsp;
           = f.text_field(:repeat_start_time_string, :value => (@event.repeat_start_time.blank? ? Time.zone.now.strftime("%I:%M %p") : @event.repeat_start_time_string), :class => "timepicker small-input", :placeholder => "Start Time")
