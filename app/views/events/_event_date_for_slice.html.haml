@@ -20,6 +20,7 @@
     = #@event.repeat_start_date.strftime("%As, ")
     - if !@event.repeat_start_time_string.blank?
       %span.event-time
+        from 
         %span.event-start-time= Time.parse(@event.repeat_start_time_string).strftime("%I:%M %p")
         %span.event-between-times== to 
         %span.event-end-time= Time.parse(@event.repeat_end_time_string).strftime("%I:%M %p")
