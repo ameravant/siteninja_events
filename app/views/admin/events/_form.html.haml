@@ -5,6 +5,7 @@
   %style{:type => "text/css"}
     ==#categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 150px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); display: none; }
     ==.date-options input, .repeat-date-options input { padding: 8px 14px; }
+    ==.date-options input.small-input { width: 124px; }
     ==.registration-wrapper { margin: 20px 0; }
     ==.repeat-checkbox { margin: 10px 0; }
     ==div#content-inner .repeat-options-title { margin: 0 0 10px; }
@@ -16,6 +17,7 @@
     == .week-number { display: #{@event.repeat_frequency == "Select Weeks" ? "block" : "none"}}
     == .radio-option { margin-left: 20px; }
     == .repeat_option { display: inline-block; width: 170px; }
+
   - content_for :footer do
     :javascript
       function addtext(text) {

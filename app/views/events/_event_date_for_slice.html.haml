@@ -36,11 +36,36 @@
         Until
       = @event.repeat_end_date.strftime("%B %d, %Y ") if @event.display_repeat_end_date 
   - else
-    = @event.date_and_time.in_time_zone(@time_zone).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+    - if @event.created_at.dst? and !event.date_and_time.dst?
+      = (@event.date_and_time.in_time_zone(@time_zone) - 1.hour).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+    - elsif !@event.created_at.dst? and @event.date_and_time.dst?
+      = (@event.date_and_time.in_time_zone(@time_zone) + 1.hour).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+    - else
+      = (@event.date_and_time.in_time_zone(@time_zone)).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+    
     -if @event.end_date_and_time
-      -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.date_and_time.in_time_zone(@time_zone).day
-        = @event.end_date_and_time.in_time_zone(@time_zone).strftime("<span class='event-time'>&mdash; %I:%M %p</span>")
-      -else
-        &mdash;
-        %br
-        = @event.end_date_and_time.in_time_zone(@time_zone).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+      - if @event.created_at.dst? and !event.date_and_time.dst?
+        -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.date_and_time.in_time_zone(@time_zone).day
+          = (@event.end_date_and_time.in_time_zone(@time_zone) - 1.hour).strftime("<span class='event-time'>&mdash; %I:%M %p</span>")
+        -else
+          &mdash;
+          %br
+          = (@event.end_date_and_time.in_time_zone(@time_zone) - 1.hour).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+      - elsif !@event.created_at.dst? and @event.date_and_time.dst?
+        -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.date_and_time.in_time_zone(@time_zone).day
+          = (@event.end_date_and_time.in_time_zone(@time_zone) + 1.hour).strftime("<span class='event-time'>&mdash; %I:%M %p</span>")
+        -else
+          &mdash;
+          %br
+          = (@event.end_date_and_time.in_time_zone(@time_zone) + 1.hour).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+      - else
+        -if @event.end_date_and_time.in_time_zone(@time_zone).day == @event.date_and_time.in_time_zone(@time_zone).day
+          = (@event.end_date_and_time.in_time_zone(@time_zone)).strftime("<span class='event-time'>&mdash; %I:%M %p</span>")
+        -else
+          &mdash;
+          %br
+          = (@event.end_date_and_time.in_time_zone(@time_zone)).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")
+
+
+
+      
