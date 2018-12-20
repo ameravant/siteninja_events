@@ -51,14 +51,14 @@
         = f.hidden_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")))
       .date-options
         Dates:
-        = f.text_field(:start_date, :class => "datepicker small-input", :placeholder => "Start Date", :value => @event.start_date.blank? ? nil : @event.start_date.strftime("%m/%d/%Y"))
+        = f.text_field(:start_date, :class => "datepicker small-input", :placeholder => "Start Date", :value => @event.start_date.blank? ? nil : @event.start_date.strftime("%m/%d/%Y"), :autocomplete => "off")
         to
-        = f.text_field(:end_date, :class => "datepicker small-input", :placeholder => "End Date", :value => @event.end_date.blank? ? nil : @event.end_date.strftime("%m/%d/%Y"))
+        = f.text_field(:end_date, :class => "datepicker small-input", :placeholder => "End Date", :value => @event.end_date.blank? ? nil : @event.end_date.strftime("%m/%d/%Y"), :autocomplete => "off")
       .date-options
         Time: &nbsp;
-        = f.text_field(:start_time, :class => "timepicker small-input", :placeholder => "Start Time", :value => @event.start_time.blank? ? "" : @event.start_time.strftime("%I:%M %p"))
+        = f.text_field(:start_time, :class => "timepicker small-input", :placeholder => "Start Time", :value => @event.start_time.blank? ? "" : @event.start_time.strftime("%I:%M %p"), :autocomplete => "off")
         to
-        = f.text_field(:end_time, :class => "timepicker small-input", :placeholder => "End Time", :value => @event.end_time.blank? ? "" : @event.end_time.strftime("%I:%M %p"))
+        = f.text_field(:end_time, :class => "timepicker small-input", :placeholder => "End Time", :value => @event.end_time.blank? ? "" : @event.end_time.strftime("%I:%M %p"), :autocomplete => "off")
     - if @cms_config['features']['recurring_events']
       .repeat-checkbox
         = f.check_box :repeat, :onclick => 'jQuery(".repeat").slideToggle(); jQuery(".date-wrapper").slideToggle(); jQuery(".registration-wrapper").slideToggle()'
@@ -67,9 +67,9 @@
         %h2.title.repeat-options-title Repeat Options
         .repeat-date-options
           Dates:
-          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date")
+          = f.text_field(:repeat_start_date, :value => (@event.repeat_start_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_start_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "Start Date", :autocomplete => "off")
           to
-          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date")
+          = f.text_field(:repeat_end_date, :value => (@event.repeat_end_date.blank? ? Time.zone.now.strftime("%m/%d/%Y") : @event.repeat_end_date.strftime("%m/%d/%Y")), :class => "datepicker small-input", :placeholder => "End Date", :autocomplete => "off")
         .repeat-date-options
           %span.repeat_option
             = f.check_box :display_repeat_start_date
@@ -79,9 +79,9 @@
             = f.label :display_repeat_end_date, "Display End Date"
         .repeat-date-options
           Time: &nbsp;
-          = f.text_field(:repeat_start_time_string, :value => (@event.repeat_start_time.blank? ? Time.zone.now.strftime("%I:%M %p") : @event.repeat_start_time_string), :class => "timepicker small-input", :placeholder => "Start Time")
+          = f.text_field(:repeat_start_time_string, :value => (@event.repeat_start_time.blank? ? Time.zone.now.strftime("%I:%M %p") : @event.repeat_start_time_string), :class => "timepicker small-input", :placeholder => "Start Time", :autocomplete => "off")
           to
-          = f.text_field(:repeat_end_time_string, :value => (@event.repeat_end_time.blank? ? (Time.zone.now + 2.hours).strftime("%I:%M %p") : @event.repeat_end_time_string), :class => "timepicker small-input", :placeholder => "End Time")
+          = f.text_field(:repeat_end_time_string, :value => (@event.repeat_end_time.blank? ? (Time.zone.now + 2.hours).strftime("%I:%M %p") : @event.repeat_end_time_string), :class => "timepicker small-input", :placeholder => "End Time", :autocomplete => "off")
         .frequency
           Frequency: 
           = f.radio_button(:repeat_frequency, "Weekly", :onclick => 'jQuery(".week-number").slideUp()')
