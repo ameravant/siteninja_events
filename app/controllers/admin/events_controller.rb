@@ -92,6 +92,12 @@ class Admin::EventsController < AdminController
     params[:event][:repeat_end_time] = params[:event][:repeat_end_time_string]
     params[:event][:repeat_start_time] = Time.zone.parse(params[:event][:repeat_start_time]) if !params[:event][:repeat_start_time].blank?
     params[:event][:repeat_end_time] = Time.zone.parse(params[:event][:repeat_end_time]) if !params[:event][:repeat_end_time].blank?
+    if params[:event][:start_date] and params[:event][:start_time]
+      params[:event][:date_and_time] = "#{params[:event][:start_date]} #{params[:event][:start_time]} #{@time_zone}"
+    end
+    if params[:event][:end_date] and params[:event][:end_time]
+      params[:event][:end_date_and_time] = "#{params[:event][:end_date]} #{params[:event][:end_time]} #{@time_zone}"
+    end
     @event = Event.new(params[:event])
     @event.event_price_options.build(params[:event_price_options])
     @event.person_id = current_user.person.id if current_user.person
@@ -136,6 +142,13 @@ class Admin::EventsController < AdminController
     params[:event][:repeat_end_time] = params[:event][:repeat_end_time_string]
     params[:event][:repeat_start_time] = Time.zone.parse("#{params[:event][:repeat_start_date]} #{params[:event][:repeat_start_time]}") if !params[:event][:repeat_start_time].blank?
     params[:event][:repeat_end_time] = Time.zone.parse("#{params[:event][:repeat_end_date]} #{params[:event][:repeat_end_time]}") if !params[:event][:repeat_end_time].blank?
+    if params[:event][:start_date] and params[:event][:start_time]
+      params[:event][:date_and_time] = "#{params[:event][:start_date]} #{params[:event][:start_time]} #{@time_zone}"
+    end
+    if params[:event][:end_date] and params[:event][:end_time]
+      params[:event][:end_date_and_time] = "#{params[:event][:end_date]} #{params[:event][:end_time]} #{@time_zone}"
+    end
+
     if @event.update_attributes(params[:event])
       if @event.registration and @event.event_price_options.reject{|o| !o.public}.empty?
         epo = @event.event_price_options.build(params[:event_price_options])

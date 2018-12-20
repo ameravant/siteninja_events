@@ -39,10 +39,23 @@
       .note Modifies permalink.
     .date-wrapper{:style => "display: #{@event.repeat ? "none" : "block"}"}
       %h2.form-label= f.label :date_and_time, "Date/Time"
+      - if !@event.date_and_time.blank? and @event.start_date.blank?
+        .date-options
+          = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")), :class => "datetimepicker small-input", :placeholder => "Start")
+          to
+          = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")), :class => "datetimepicker small-input", :placeholder => "End")
+          .note The Date/Time field has been deprecated and replaced with separate Date and Time fields. 
+          %br
       .date-options
-        = f.text_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")), :class => "datetimepicker small-input", :placeholder => "Start")
+        Dates:
+        = f.text_field(:start_date, :class => "datepicker small-input", :placeholder => "Start Date", :value => @event.start_date.blank? ? nil : @event.start_date.strftime("%m/%d/%Y"))
         to
-        = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")), :class => "datetimepicker small-input", :placeholder => "End")
+        = f.text_field(:end_date, :class => "datepicker small-input", :placeholder => "End Date", :value => @event.end_date.blank? ? nil : @event.end_date.strftime("%m/%d/%Y"))
+      .date-options
+        Time: &nbsp;
+        = f.text_field(:start_time, :class => "timepicker small-input", :placeholder => "Start Time", :value => @event.start_time.blank? ? "" : @event.start_time.strftime("%I:%M %p"))
+        to
+        = f.text_field(:end_time, :class => "timepicker small-input", :placeholder => "End Time", :value => @event.end_time.blank? ? "" : @event.end_time.strftime("%I:%M %p"))
     - if @cms_config['features']['recurring_events']
       .repeat-checkbox
         = f.check_box :repeat, :onclick => 'jQuery(".repeat").slideToggle(); jQuery(".date-wrapper").slideToggle(); jQuery(".registration-wrapper").slideToggle()'

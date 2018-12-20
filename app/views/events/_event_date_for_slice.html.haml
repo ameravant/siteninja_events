@@ -35,6 +35,15 @@
       - elsif @event.display_repeat_end_date
         Until
       = @event.repeat_end_date.strftime("%B %d, %Y ") if @event.display_repeat_end_date 
+  - elsif !@event.start_date.blank?
+    = @event.start_date.strftime("%A, %B %d, %Y")
+    - if !@event.start_time.blank?
+      = @event.start_time.strftime(" <span class='event-time'>at %I:%M %p</span>")
+    - if !@event.end_date.blank?
+      - if @event.start_date != @event.end_date
+        == to #{@event.end_date.strftime("%A, %B %d, %Y")}
+      - if !@event.end_time.blank?
+        = @event.end_time.strftime(" <span class='event-time'>at %I:%M %p</span>")
   - else
     - if @event.created_at.in_time_zone(@time_zone).dst? and !@event.date_and_time.in_time_zone(@time_zone).dst?
       = (@event.date_and_time.in_time_zone(@time_zone) + 1.hour).strftime("%A, %B %d, %Y <span class='event-time'>at %I:%M %p</span>")

@@ -24,6 +24,10 @@
                     %span.month== #{date.in_time_zone(@time_zone).strftime('%b')}
                     %span.date== #{date.in_time_zone(@time_zone).strftime('%d')}
                     %span.day== #{date.in_time_zone(@time_zone).strftime('%a')}
+                - elsif !event.start_date.blank?
+                  %span.month== #{event.start_date.strftime('%b')}
+                  %span.date== #{event.start_date.strftime('%d')}
+                  %span.day== #{event.start_date.strftime('%a')}
                 - else
                   %span.month== #{event.in_time_zone(@time_zone).date_and_time.strftime('%b')}
                   %span.date== #{event.in_time_zone(@time_zone).date_and_time.strftime('%d')}
