@@ -110,11 +110,11 @@ class Event < ActiveRecord::Base
   end
 
   def validates_end_is_after_start
-    if repeat_start_date
-      errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time or repeat_end_date < repeat_start_date
-    else
-      errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time
-    end
+    # if repeat_start_date
+    #   errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time or repeat_end_date < repeat_start_date
+    # else
+    #   errors.add(:end_date_and_time, 'must be after the start time.') and return false if end_date_and_time < date_and_time
+    # end
   end
   
   def set_repeat_start_date_and_time
