@@ -148,7 +148,7 @@ class Admin::EventsController < AdminController
     if params[:event][:end_date] and params[:event][:end_time]
       params[:event][:end_date_and_time] = "#{params[:event][:end_date]} #{params[:event][:end_time]} #{@time_zone}"
     end
-    if params[:event][:repeat]
+    if params[:event][:repeat] == "1"
       params[:event][:date_and_time] = "#{params[:event][:repeat_start_date].to_time.strftime('%m/%d/%Y')} #{params[:event][:repeat_start_time].to_time.strftime('%I:%M %p')}"
       params[:event][:end_date_and_time] = "#{params[:event][:repeat_end_date].to_time.strftime('%m/%d/%Y')} #{params[:event][:repeat_end_time].to_time.strftime('%I:%M %p')}"
     end

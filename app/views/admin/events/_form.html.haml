@@ -47,7 +47,6 @@
           .note The Date/Time field has been deprecated and replaced with separate Date and Time fields. 
           %br
       - else
-        test
         = f.hidden_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")))
         = f.hidden_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")))
       .date-options
