@@ -46,6 +46,10 @@
           = f.text_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")), :class => "datetimepicker small-input", :placeholder => "End")
           .note The Date/Time field has been deprecated and replaced with separate Date and Time fields. 
           %br
+      - else
+        test
+        = f.hidden_field(:date_and_time, :value => (@event.date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")))
+        = f.hidden_field(:end_date_and_time, :value => (@event.end_date_and_time.blank? ? Time.zone.now.strftime("%m/%d/%Y %I:%M %p %z") : @event.end_date_and_time.in_time_zone.strftime("%m/%d/%Y %I:%M %p %z")))
       .date-options
         Dates:
         = f.text_field(:start_date, :class => "datepicker small-input", :placeholder => "Start Date", :value => @event.start_date.blank? ? nil : @event.start_date.strftime("%m/%d/%Y"))
