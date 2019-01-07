@@ -29,9 +29,9 @@
                   %span.date== #{event.start_date.strftime('%d')}
                   %span.day== #{event.start_date.strftime('%a')}
                 - else
-                  %span.month== #{event.in_time_zone(@time_zone).date_and_time.strftime('%b')}
-                  %span.date== #{event.in_time_zone(@time_zone).date_and_time.strftime('%d')}
-                  %span.day== #{event.in_time_zone(@time_zone).date_and_time.strftime('%a')}
+                  %span.month== #{event.date_and_time.in_time_zone(@time_zone).strftime('%b')}
+                  %span.date== #{event.date_and_time.in_time_zone(@time_zone).strftime('%d')}
+                  %span.day== #{event.date_and_time.in_time_zone(@time_zone).strftime('%a')}
               .event_description
                 %h3
                   = link_to h(event.name), event
@@ -114,11 +114,18 @@
                 .text
                   %h2= event.name
                   .datetime
-                    %span.day= event.start_date.strftime("%a")
-                    %span.month= event.start_date.strftime("%B")
-                    %span.date= event.start_date.in_time_zone(@time_zone).strftime("%e")
-                    at
-                    %span.time= event.start_time.strftime("%I:%M %p")
+                    - if !event.start_date.blank?
+                      %span.day= event.start_date.strftime("%a")
+                      %span.month= event.start_date.strftime("%B")
+                      %span.date= event.start_date.in_time_zone(@time_zone).strftime("%e")
+                      at
+                      %span.time= event.start_time.strftime("%I:%M %p")
+                    - else
+                      %span.day= event.date_and_time.in_time_zone(@time_zone).strftime("%a")
+                      %span.month= event.date_and_time.in_time_zone(@time_zone).strftime("%B")
+                      %span.date= event.date_and_time.in_time_zone(@time_zone).strftime("%e")
+                      at
+                      %span.time= event.date_and_time.in_time_zone(@time_zone).strftime("%I:%M %p")                     
                 - if event.images.size > 0
                   = image_tag(event.images.first.image(:original), :alt => event.name, :title => event.name)
           = clear
@@ -181,6 +188,9 @@
                   - weekdays << "Saturdays" if event.saturday
                   = weekdays.to_sentence
                 - else
-                  = event.start_date.strftime("%a, %B %d, %Y")
+                  - if !event.start_date.blank?
+                    = event.start_date.strftime("%a, %B %d, %Y")
+                  - else
+                    = event.date_and_time.in_time_zone(@time_zone).strftime("%a, %B %d, %Y")
               - if section.show_blurb
                 = simple_format(truncate(event.blurb, :length => 100))
