@@ -135,9 +135,14 @@
           - for event in events.sort_by(&:date_and_time)
             %li[event]
               %div.event_date
-                %span.month== #{event.start_date.strftime('%b')}
-                %span.date== #{event.start_date.strftime('%d')}
-                %span.day== #{event.start_date.strftime('%a')}
+                - if !event.start_date.blank?
+                  %span.day= event.start_date.strftime("%a")
+                  %span.month= event.start_date.strftime("%B")
+                  %span.date= event.start_date.strftime("%e")
+                - else
+                  %span.day= event.date_and_time.in_time_zone(@time_zone).strftime("%a")
+                  %span.month= event.date_and_time.in_time_zone(@time_zone).strftime("%B")
+                  %span.date= event.date_and_time.in_time_zone(@time_zone).strftime("%e")
               .event_description
                 %h3
                   = link_to h(event.name), event
