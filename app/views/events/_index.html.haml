@@ -31,7 +31,7 @@
     ==.calendar-title { text-align: center; }
     ==.next-month { text-align: right; display: block; }
     ==.last-month { text-align: left; display: block; }
-    ==.weekday { max-width: 100%; white-space: none; overflow: hidden; width: 100%; }
+    = ".weekday { max-width: 100%; white-space: none; overflow: hidden; width: 100%; }"
   %table.calendar
     <tr><th><div class="weekday">Sun</div></th><th><div class="weekday">Mon</div></th><th><div class="weekday">Tue</div></th><th><div class="weekday">Wed</div></th><th><div class="weekday">Thu</div></th><th><div class="weekday">Fri</div></th><th><div class="weekday">Sat</div></th></tr>
     <tr>
@@ -52,6 +52,15 @@
               = event.title
             - else
               = link_to(event.title, event_path(event))
+        - if date.month != (date + 7.days).month
+          - events_last = Event.all(:conditions => ["(repeat_start_date <= ? and repeat_end_date >= ? and events.repeat = ? and #{day_of_the_week(date.wday)} = ? and repeat_frequency = ? and week_5 = ? and active = ?)", date.to_date, date.to_date, true, true, "Select Weeks", true, true])
+          - for event in events_last
+            - unless events.include?(event)
+              %li
+                - if event.restrict_link
+                  = event.title
+                - else
+                  = link_to(event.title, event_path(event))
       </td>
       - if date.wday == 6 or date.in_time_zone(@time_zone).end_of_month.day == date.in_time_zone(@time_zone).day
         </tr>
