@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :name, :date_and_time, :end_date_and_time
   validates_numericality_of :registration_limit, :allow_blank => true
   validates_presence_of :registration, :if => :allow_check_or_cash?, :message => "must be required if you accept cash or check payment"
-  named_scope :future, :conditions => ["active = ? and date_and_time >= ?", true, Time.now.in_time_zone("Pacific Time (US & Canada)")]
+  named_scope :future, :conditions => ["active = ? and date_and_time >= ?", true, Time.now - 8.hours)]
   named_scope :this_week, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 7.days)) }
   named_scope :this_month, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 29.days))  }
   named_scope :three_months,:conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..(Time.now.in_time_zone("Pacific Time (US & Canada)") + 3.months))  }
