@@ -12,7 +12,7 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :event_categories
   #validates_datetime :registration_deadline, :allow_blank => true
   #validates_datetime :date_and_time, :end_date_and_time
-  before_validation :validates_end_is_after_start
+  #before_validation :validates_end_is_after_start
   before_create :set_repeat_start_date_and_time
   before_update :set_repeat_start_date_and_time
   validates_presence_of :name, :date_and_time, :end_date_and_time
@@ -25,9 +25,9 @@ class Event < ActiveRecord::Base
   named_scope :this_year, :conditions => { :active => true, :date_and_time => (Time.now.in_time_zone("Pacific Time (US & Canada)")..Time.now.in_time_zone("Pacific Time (US & Canada)").next_year)  }
   named_scope :past, :order => "date_and_time desc", :conditions => ["active = ? and (end_date_and_time < ? or repeat_end_date < ?)", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
   named_scope :not_yet_complete, :order => "date_and_time desc", 
-    :conditions => ["active = ? and ((end_date_and_time > ? OR end_date_and_time = ?) or (repeat_start_time < ? and repeat_end_time > ?))", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), '', Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
+    :conditions => ["active = ? and ((end_date_and_time > ? OR end_date_and_time = ?) or (repeat_start_time < ? and repeat_end_time > ?))", true, Time.now - 8.hours, '', Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
   named_scope :in_progress, :order => "date_and_time desc", 
-    :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now.in_time_zone("Pacific Time (US & Canada)"), Time.now.in_time_zone("Pacific Time (US & Canada)")]
+    :conditions => ["active = ? and date_and_time < ? AND end_date_and_time > ?", true, Time.now + 8.hours, Time.now - 8.hours]
   named_scope :soonest, :limit => 6, :conditions => { :active => true }
   include Rakismet::Model
   rakismet_attrs   :author => :person_name,
