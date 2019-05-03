@@ -29,6 +29,9 @@ class EventsController < ApplicationController
   def show
     begin
       @event = Event.find(params[:id], :conditions => {:active => true})
+      @edit_path = [:edit, :admin, @event]
+      @edit_type = "Event"
+      session[:redirect_path] = event_path(@event)
       @images = @event.images
       @price_options = @event.event_price_options.public
       @latest_events = Event.future.soonest.reject { |event| event == @event }

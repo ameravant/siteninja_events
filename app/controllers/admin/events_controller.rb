@@ -11,6 +11,7 @@ class Admin::EventsController < AdminController
   require 'csv'
 
   def index
+    session[:redirect_path] = admin_events_path
     if current_user.has_role("Admin") # Show all articles regardless of author
       params[:q].blank? ? @all_events = Event.all : @all_events = Event.all(:conditions => ["name like ?", "%#{params[:q]}%"], :order => "date_and_time desc")
     else
@@ -163,7 +164,7 @@ class Admin::EventsController < AdminController
         epo.save
       end
       flash[:notice] = "#{@event.name} updated."
-      redirect_to admin_events_path
+      redirect_to session[:redirect_path] ? session[:redirect_path] : admin_events_path
     else
       render :action => "edit"
     end
