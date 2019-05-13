@@ -107,7 +107,7 @@
       - if section.section_format == "panels"
         - i = 0
         #event-panels
-          - for event in events.sort_by(&:date_and_time)
+          - for event in events.sort_by(&:date_and_time).uniq
             - i = i + 1
             %a{:id => "panel-#{i}", :class => "panel", :href => event_path(event)}
               .panel-inner
