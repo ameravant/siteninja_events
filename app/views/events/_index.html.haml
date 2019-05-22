@@ -57,6 +57,11 @@
           - for event in events_last
             - unless events.include?(event)
               %li
+                %strong.date
+                  - if event.repeat
+                    = Time.parse(event.repeat_start_time_string).strftime("%I:%M %p ")
+                  - else
+                    = Time.parse(event.start_time).strftime("%I:%M %p ")
                 - if event.restrict_link
                   = event.title
                 - else
