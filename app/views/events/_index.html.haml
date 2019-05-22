@@ -49,9 +49,9 @@
         - for event in events
           %li
             %strong.date
-              - if event.repeat
+              - if event.repeat and !event.repeat_start_time_string.blank?
                 = Time.parse(event.repeat_start_time_string).strftime("%I:%M %p ")
-              - else
+              - elsif !event.start_time.blank?
                 = Time.parse(event.start_time).strftime("%I:%M %p ")
             - if event.restrict_link
               = event.title
@@ -63,9 +63,9 @@
             - unless events.include?(event)
               %li
                 %strong.date
-                  - if event.repeat
+                  - if event.repeat and !event.repeat_start_time_string.blank?
                     = Time.parse(event.repeat_start_time_string).strftime("%I:%M %p ")
-                  - else
+                  - elsif !event.start_time.blank?
                     = Time.parse(event.start_time).strftime("%I:%M %p ")
                 - if event.restrict_link
                   = event.title
