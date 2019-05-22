@@ -52,7 +52,7 @@
               - if event.repeat and !event.repeat_start_time_string.blank?
                 = Time.parse(event.repeat_start_time_string).strftime("%I:%M %p ")
               - elsif !event.start_time.blank?
-                = Time.parse(event.start_time).strftime("%I:%M %p ")
+                = event.start_time.strftime("%I:%M %p ")
             - if event.restrict_link
               = event.title
             - else
