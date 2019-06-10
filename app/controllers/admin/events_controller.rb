@@ -164,7 +164,7 @@ class Admin::EventsController < AdminController
         epo.save
       end
       flash[:notice] = "#{@event.name} updated."
-      redirect_to session[:redirect_path] ? session[:redirect_path] : admin_events_path
+      redirect_to params[:redirect_path] ? params[:redirect_path] : admin_events_path
     else
       render :action => "edit"
     end
