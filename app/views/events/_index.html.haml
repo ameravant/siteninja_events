@@ -108,7 +108,7 @@
   =# Next line is b/c many sites have "Events" as body of events page to satisfy validates_pres_of :body. Perhaps more pro solution is to find all sites with "Events" as body of page and remove it; would have to be via migration to work universally.  Then could remove "if @page.body.length > 14"
   = ninja_parse(@page.body) if @page.body.length > 14
   - if !@events_in_progress.blank?
-    %h2.event_month In Progress
+    %h2.event_month Ongoing
     %ul.events
       - for event in @events_in_progress
         %li[event]
