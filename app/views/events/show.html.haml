@@ -1,6 +1,25 @@
 - content_for :head do
   <!-- AddThisEvent -->
   <script type="text/javascript" src="https://js.addthisevent.com/atemay.js"></script>
+  - if @event.start_date && @event.start_time && @event.end_date && @event.end_time
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    =="name": "#{@event.title}",
+    =="startDate": "#{@event.start_date.strftime("%Y-%m-%d")}T#{@event.start_time.strftime("%H:%M")}",
+    =="endDate": "#{@event.end_date.strftime("%Y-%m-%d")}T#{@event.end_time.strftime("%H:%M")}",
+    "location": {
+    "@type": "Place",
+    =="address": "#{@event.address}"
+    },
+    - if @event.images.size > 0
+      "image": [
+      == "#{@event.images.first.image.url}"
+      ],
+    =="description": "#{@event.blurb}"
+    }
+    </script>
 - if !@event.description.include?('<p>') and !@event.description.include?('<div>') 
   - @event.description = simple_format(@event.description)
 - content_for :meta_title do
