@@ -11,13 +11,16 @@
     =="endDate": "#{@event.end_date.strftime("%Y-%m-%d")}T#{@event.end_time.strftime("%H:%M")}",
     "location": {
     "@type": "Place",
+    "name": "",
     =="address": "#{@event.address}"
     },
+    "image": [
     - if @event.images.size > 0
-      "image": [
       == "#{@event.images.first.image.url}"
-      ],
-    =="description": "#{@event.blurb}"
+    ],
+    =="description": "#{@event.blurb}",
+    "offers": {},
+    "performer": {}
     }
     </script>
 - if !@event.description.include?('<p>') and !@event.description.include?('<div>') 
