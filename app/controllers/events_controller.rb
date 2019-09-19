@@ -27,7 +27,7 @@ class EventsController < ApplicationController
   end
 
   def show
-    begin
+    #begin
       @event = Event.find(params[:id], :conditions => {:active => true})
       @edit_path = [:edit, :admin, @event]
       @edit_type = "Event"
@@ -37,10 +37,10 @@ class EventsController < ApplicationController
       @latest_events = Event.future.soonest.reject { |event| event == @event }
       add_breadcrumb @cms_config['site_settings']['events_title'], events_path
       add_breadcrumb @event.name
-    rescue ActiveRecord::RecordNotFound
-      flash[:error] = "That event could not be found. It may have already happened or been deleted."
+    #rescue ActiveRecord::RecordNotFound
+      #flash[:error] = "That event could not be found. It may have already happened or been deleted."
       #redirect_to events_path
-    end
+    #end
     if @cms_config['site_settings']['enable_responsive_layouts']
       #unless @event.event_category and !@event.event_category.column.blank?
         @tmplate.event_layout_id ? @main_column = Column.find(@tmplate.event_layout_id) : @main_column = Column.first(:conditions => {:column_location => "event"})
