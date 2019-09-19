@@ -39,7 +39,7 @@ class EventsController < ApplicationController
       add_breadcrumb @event.name
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "That event could not be found. It may have already happened or been deleted."
-      redirect_to events_path
+      #redirect_to events_path
     end
     if @cms_config['site_settings']['enable_responsive_layouts']
       #unless @event.event_category and !@event.event_category.column.blank?
