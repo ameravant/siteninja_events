@@ -24,6 +24,9 @@
       function addtext(text) {
         tinymce.get("event_description").insertContent(text);
         }
+      jQuery("#add-links").click(function() {
+      setupLinkFields("event_description");
+      })
 = error_messages_for "event"
 - @calendar_select = true
 -if @controller.action_name == 'edit' && @cms_config['features']['event_registration'] && current_user.has_role("Admin")
