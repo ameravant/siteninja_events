@@ -114,7 +114,14 @@
                 .text
                   %h2= event.name
                   .datetime
-                    - if !event.start_date.blank?
+                    - if event.not_yet_complete
+                      Ongoing until 
+                      %span.day= event.end_date.strftime("%a")
+                      %span.month= event.end_date.strftime("%b")
+                      %span.date= event.end_date.strftime("%e")
+                      at
+                      %span.time= event.end_time.strftime("%I:%M %p")
+                    - elsif !event.start_date.blank?
                       %span.day= event.start_date.strftime("%a")
                       %span.month= event.start_date.strftime("%b")
                       %span.date= event.start_date.strftime("%e")
