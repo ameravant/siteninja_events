@@ -140,7 +140,7 @@
                       - weekdays << "Saturdays" if event.saturday
                       = weekdays.to_sentence
                       at 
-                      = event.repeat_start_time.strftime("%I:%M %p")
+                      = Time.parse(event.repeat_start_time_string).strftime("%I:%M %p")
                     - elsif !event.start_date.blank?
                       %span.day= event.start_date.strftime("%a")
                       %span.month= event.start_date.strftime("%b")
