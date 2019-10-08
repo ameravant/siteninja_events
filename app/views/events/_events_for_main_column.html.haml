@@ -114,7 +114,34 @@
                 .text
                   %h2= event.name
                   .datetime
-                    - if !event.start_date.blank?
+                    - if event.start_date and event.start_date < DateTime.now - 8.hours and !event.repeat?
+                      Ongoing until 
+                      %span.day= event.end_date.strftime("%a")
+                      %span.month= event.end_date.strftime("%b")
+                      %span.date= event.end_date.strftime("%e")
+                      at
+                      %span.time= event.end_time.strftime("%I:%M %p")
+                    - elsif event.repeat?
+                      - weeks = []
+                      - if event.week_1 || event.week_2 || event.week_3 || event.week_4 || event.week_5
+                        - weeks << "First" if event.week_1
+                        - weeks << "Second" if event.week_2
+                        - weeks << "Third" if event.week_3
+                        - weeks << "Fourth" if event.week_4
+                        - weeks << "Last" if event.week_5
+                        = weeks.to_sentence
+                      - weekdays = []
+                      - weekdays << "Sundays" if event.sunday
+                      - weekdays << "Mondays" if event.monday
+                      - weekdays << "Tuesdays" if event.tuesday
+                      - weekdays << "Wednesdays" if event.wednesday
+                      - weekdays << "Thursdays" if event.thursday
+                      - weekdays << "Fridays" if event.friday
+                      - weekdays << "Saturdays" if event.saturday
+                      = weekdays.to_sentence
+                      at 
+                      = event.repeat_start_time.strftime("%I:%M %p")
+                    - elsif !event.start_date.blank?
                       %span.day= event.start_date.strftime("%a")
                       %span.month= event.start_date.strftime("%b")
                       %span.date= event.start_date.strftime("%e")
