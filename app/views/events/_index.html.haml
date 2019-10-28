@@ -100,7 +100,7 @@
                 = event.title
               - else
                 = link_to h(event.name), event
-            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+            .event_blurb= simple_format(event.blurb.strip)
 
 - else
   -if @cms_config['site_settings']['show_past_events']
@@ -132,7 +132,7 @@
                 -#%span.event_tag.event_tag_open registration open
                 -#- else
                 -#%span.event_tag.event_tag_full registration full
-            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+            .event_blurb= simple_format(event.blurb.strip)
             - if @cms_config['site_settings']['add_to_calendar']
               .clear
               ==<div title="Add to Calendar" class="addeventatc">Add to Calendar <span class="start">#{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="end">#{event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="timezone">America/Los_Angeles </span> <span class="title">#{event.title}</span> <span class="description">#{event.blurb}</span> <span class="location">#{event.address}</span></div>
@@ -174,7 +174,7 @@
                   = tag(:img, :src => "#{image.image(:slide)}", :class => "large_image", :alt => image.image_title, :title => image.image_title)
                   - if !image.caption.blank?
                     %span.caption= image.caption
-            .event_blurb= simple_format(truncate(event.blurb.strip, 200))
+            .event_blurb= simple_format(event.blurb.strip)
             - if @cms_config['site_settings']['add_to_calendar']
               .clear
               ==<div title="Add to Calendar" class="addeventatc">Add to Calendar <span class="start">#{event.date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="end">#{event.end_date_and_time.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y %I:%M %p')}</span> <span class="timezone">America/Los_Angeles </span> <span class="title">#{event.title}</span> <span class="description">#{event.blurb}</span> <span class="location">#{event.address}</span></div>
