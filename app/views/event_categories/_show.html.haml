@@ -30,3 +30,5 @@
               -#%span.event_tag.event_tag_full registration full
           .event_blurb= simple_format(event.blurb.strip)
   = clear
+- unless @events.total_pages == 1
+  = will_paginate @events

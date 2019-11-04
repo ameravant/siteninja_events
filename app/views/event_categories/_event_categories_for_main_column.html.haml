@@ -1,16 +1,36 @@
 - @event_categories = EventCategory.active
-- unless @event_categories.empty?
-  %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories
-  %ul.event_categories.list_of_links
-    %li.sidebar_link
-      = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
-      = link_to("All Categories", "/#{path_safe(@master_config['site_settings']['events_title'])}")
-    - for category in @event_categories
-      - if @event_category and @event_category == category
-        %li.sidebar_link_active
-          = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
-          = h(category.title)
-      - else
-        %li
-          = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon", :title => "Subscribe to RSS Feed")
-          = link_to h(category.title), category 
+- if !section.show_all_categories
+  - categories = section.column_section_event_categories
+  - #@event_categories = EventCategory.find(categories).index_by(&:id).values_at(*categories)
+  - unless categories.empty?
+    %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories
+    %ul.event_categories.list_of_links
+      %li.sidebar_link
+        = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
+        = link_to("All Categories", "/#{path_safe(@master_config['site_settings']['events_title'])}")
+      - categories.sort_by{|category| category.sort_order}.each do |eccs|
+        - category = EventCategory.find(eccs.event_category_id)
+        - if @event_category and @event_category == category
+          %li.sidebar_link_active
+            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
+            = h(category.title)
+        - else
+          %li
+            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon", :title => "Subscribe to RSS Feed")
+            = link_to h(category.title), category 
+- else
+  - unless @event_categories.empty?
+    %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories
+    %ul.event_categories.list_of_links
+      %li.sidebar_link
+        = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
+        = link_to("All Categories", "/#{path_safe(@master_config['site_settings']['events_title'])}")
+      - for category in @event_categories
+        - if @event_category and @event_category == category
+          %li.sidebar_link_active
+            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
+            = h(category.title)
+        - else
+          %li
+            = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon", :title => "Subscribe to RSS Feed")
+            = link_to h(category.title), category 
