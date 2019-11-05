@@ -6,7 +6,7 @@
     %h2
       = section.section_format == "custom" ? section.title : "#{@cms_config["site_settings"]["events_title"].titlecase} Categories"
     %ul.event_categories.list_of_links
-      %li.sidebar_link
+      %li.sidebar_link.all-events
         = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
         = link_to("All Upcoming Events", "/#{path_safe(@master_config['site_settings']['events_title'])}", :class => "all-events")
       - categories.sort_by{|category| category.sort_order}.each do |eccs|
@@ -23,7 +23,7 @@
   - unless @event_categories.empty?
     %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories
     %ul.event_categories.list_of_links
-      %li.sidebar_link
+      %li.sidebar_link.all-events
         = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
         = link_to("All Upcoming Events", "/#{path_safe(@master_config['site_settings']['events_title'])}", :class => "all-events")
       - for category in @event_categories
