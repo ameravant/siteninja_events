@@ -3,11 +3,12 @@
   - categories = section.column_section_event_categories
   - #@event_categories = EventCategory.find(categories).index_by(&:id).values_at(*categories)
   - unless categories.empty?
-    %h2== #{@cms_config["site_settings"]["events_title"].titlecase} Categories
+    %h2
+      = section.section_format == "custom" ? section.title : "#{@cms_config["site_settings"]["events_title"].titlecase} Categories"
     %ul.event_categories.list_of_links
       %li.sidebar_link
         = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
-        = link_to("All Categories", "/#{path_safe(@master_config['site_settings']['events_title'])}")
+        = link_to("All Upcoming Events", "/#{path_safe(@master_config['site_settings']['events_title'])}", :class => "all-events")
       - categories.sort_by{|category| category.sort_order}.each do |eccs|
         - category = EventCategory.find(eccs.event_category_id)
         - if @event_category and @event_category == category
@@ -24,7 +25,7 @@
     %ul.event_categories.list_of_links
       %li.sidebar_link
         = link_to(icon("Rss 1"), "/#{path_safe(@master_config['site_settings']['events_title'])}.rss", :class => "rss-icon", :title => "Subscribe to RSS Feed")
-        = link_to("All Categories", "/#{path_safe(@master_config['site_settings']['events_title'])}")
+        = link_to("All Upcoming Events", "/#{path_safe(@master_config['site_settings']['events_title'])}", :class => "all-events")
       - for category in @event_categories
         - if @event_category and @event_category == category
           %li.sidebar_link_active
