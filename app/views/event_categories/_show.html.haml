@@ -28,6 +28,18 @@
               -#%span.event_tag.event_tag_open registration open
               -#- else
               -#%span.event_tag.event_tag_full registration full
+          - if !event.images.empty?
+            - image = event.images.first
+            - if event.importance == "Medium"
+              %div{:class => "images float-right"}
+                = link_to(tag(:img, :src => image.thumbnail, :alt => image.image_title, :title => image.image_title), image.image.url, :title => image.image_title, :class => "fancy")
+                - unless image.caption.blank?
+                  .image-caption= image.caption
+            - elsif event.importance == "Large"
+              .large-image{:id => "image_#{image.id}"}
+                = tag(:img, :src => "#{image.image(:slide)}", :class => "large_image", :alt => image.image_title, :title => image.image_title)
+                - if !image.caption.blank?
+                  %span.caption= image.caption
           .event_blurb= simple_format(event.blurb.strip)
   = clear
 - unless @events.total_pages == 1
