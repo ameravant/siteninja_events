@@ -41,6 +41,7 @@
                 - if !image.caption.blank?
                   %span.caption= image.caption
           .event_blurb= simple_format(event.blurb.strip)
+          .event_clear
   = clear
 - unless @events.total_pages == 1
   = will_paginate @events
