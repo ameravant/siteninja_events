@@ -38,7 +38,7 @@
     %h2.title.form-label= f.label :name, "Title"
     = f.text_field :name, :class => "big-input"
     %h2.form-label= f.label :blurb
-    = f.text_area :blurb, :class => "big-area blurb #{"mceEditor short" if @cms_config['site_settings']['wysiwyg_blurb']}", :disabled => @disabled
+    = f.text_area :blurb, :class => "blurb mceEditor short", :disabled => @disabled
     - if current_user.is_super_user and !@event.permalink.blank?
       %h2.title.form-label= f.label :permalink, "Permalink"
       = f.text_field :permalink, :class => "big-input", :disabled => @no_edit
