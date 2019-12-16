@@ -53,7 +53,7 @@
                       = tag(:img, :src => "#{image.image(:slide)}", :class => "large_image", :alt => image.image_title, :title => image.image_title)
                     - if !image.caption.blank?
                       %span.caption= image.caption
-                .event_blurb= simple_format(event.blurb.strip)
+                .event_blurb= event.blurb
                 - i += 1
               .event_clear
             - break if i >= count
@@ -93,7 +93,7 @@
                 - else
                   = event.start_date.strftime("%a, %B %d, %Y")
               - if section.show_blurb
-                = simple_format(event.blurb)
+                = event.blurb
             - i += 1
             - break if i == count
           - break if i == count
@@ -189,7 +189,7 @@
                   - elsif event.importance == "Large"
                     .large-image{:id => "image_#{image.id}"}
                       = tag(:img, :src => "#{image.image(:slide)}", :class => "large_image", :alt => image.image_title, :title => image.image_title)
-                .event_blurb= simple_format(event.blurb.strip)
+                .event_blurb= event.blurb
               .event_clear
 
       - else
@@ -225,4 +225,4 @@
                   - else
                     = event.date_and_time.in_time_zone(@time_zone).strftime("%a, %B %d, %Y")
               - if section.show_blurb
-                = simple_format(event.blurb)
+                = event.blurb
