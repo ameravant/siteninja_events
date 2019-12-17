@@ -12,11 +12,11 @@
       - categories.sort_by{|category| category.sort_order}.each do |eccs|
         - category = EventCategory.find(eccs.event_category_id)
         - if @event_category and @event_category == category
-          %li.sidebar_link_active
+          %li{:id => "event-category-#{category.permalink}", :class => "event-category-#{category.permalink} sidebar_link_active"}
             = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
-            = h(category.title)
+            = link_to h(category.title), category
         - else
-          %li{:id => "event-category-#{category.permalink}"}
+          %li{:id => "event-category-#{category.permalink}", :class => "event-category-#{category.permalink}"}
             = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon", :title => "Subscribe to RSS Feed")
             = link_to h(category.title), category 
 - else
@@ -28,10 +28,10 @@
         = link_to("All Upcoming Events", "/#{path_safe(@master_config['site_settings']['events_title'])}", :class => "all-events")
       - for category in @event_categories
         - if @event_category and @event_category == category
-          %li.sidebar_link_active{:id => "event-category-#{category.permalink}"}
+          %li{:id => "event-category-#{category.permalink}", :class => "event-category-#{category.permalink} sidebar_link_active"}
             = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon rss-icon-selected", :title => "Subscribe to RSS Feed")
             = link_to h(category.title), category
         - else
-          %li{:id => "event-category-#{category.permalink}"}
+          %li{:id => "event-category-#{category.permalink}", :class => "event-category-#{category.permalink}"}
             = link_to(icon("Rss 1"), event_category_url(category, :format => :rss), :class => "rss-icon", :title => "Subscribe to RSS Feed")
             = link_to h(category.title), category 
