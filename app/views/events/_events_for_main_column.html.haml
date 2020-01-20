@@ -115,12 +115,17 @@
                   %h2= event.name
                   .datetime
                     - if event.start_date and event.start_date < DateTime.now - 8.hours and !event.repeat?
-                      Ongoing until 
-                      %span.day= event.end_date.strftime("%a")
-                      %span.month= event.end_date.strftime("%b")
-                      %span.date= event.end_date.strftime("%e")
+                      %span.day= event.start_date.strftime("%a")
+                      %span.month= event.start_date.strftime("%b")
+                      %span.date= event.start_date.strftime("%e")
                       at
-                      %span.time= event.end_time.strftime("%I:%M %p")
+                      %span.time= event.start_time.strftime("%I:%M %p")
+                      -#Ongoing until 
+                      -#%span.day= event.end_date.strftime("%a")
+                      -#%span.month= event.end_date.strftime("%b")
+                      -#%span.date= event.end_date.strftime("%e")
+                      -#at
+                      -#%span.time= event.end_time.strftime("%I:%M %p")
                     - elsif event.repeat?
                       - weeks = []
                       - if event.week_1 || event.week_2 || event.week_3 || event.week_4 || event.week_5
