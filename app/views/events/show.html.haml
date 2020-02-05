@@ -18,7 +18,7 @@
     - if @event.images.size > 0
       == "#{@event.images.first.image.url}"
     ],
-    =="description": "#{@event.meta_description}",
+    =="description": "#{@event.meta_description.gsub('"', '\"')}",
     "offers": {},
     "performer": {}
     }
