@@ -21,6 +21,7 @@ class Admin::EventCategoriesController < AdminController
     @event_category = EventCategory.new(params[:event_category])
     if @event_category.save
       flash[:notice] = "Category \"#{@event_category.title}\" created."
+      log_activity("Created \"#{@event_category.title}\"")
       redirect_to admin_event_categories_path
     else
       render :action => "new"
@@ -37,6 +38,7 @@ class Admin::EventCategoriesController < AdminController
     add_breadcrumb @event_category.title
     if @event_category.update_attributes(params[:event_category])
       flash[:notice] = "Category \"#{@event_category.title}\" updated."
+      log_activity("Updated \"#{@event_category.title}\"")
       redirect_to admin_event_categories_path
     else
       render :action => "edit"
@@ -44,6 +46,7 @@ class Admin::EventCategoriesController < AdminController
   end
 
   def destroy
+    log_activity("Deleted \"#{@event_category.title}\"")
     @event_category.update_attribute(:active, false)
     respond_to :js
   end
@@ -57,6 +60,10 @@ class Admin::EventCategoriesController < AdminController
       flash[:error] = "Event category was not found. It may have been deleted."
       redirect_to admin_event_categories_path
     end
+  end
+
+  def log_activity(description)
+    add_activity(controller_name.classify, @event_category.id, description)
   end
 
   def authorization

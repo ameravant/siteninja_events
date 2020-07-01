@@ -133,6 +133,7 @@ class Admin::EventsController < AdminController
   end
 
   def destroy
+    log_activity("Deleted \"#{@event.name}\"")
     @event.destroy
     respond_to :js
   end
