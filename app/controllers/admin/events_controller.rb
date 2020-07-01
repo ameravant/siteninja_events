@@ -67,26 +67,6 @@ class Admin::EventsController < AdminController
   end
 
   def create
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info params[:event][:date_and_time]
-    logger.info "================================================="
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
     params[:event][:repeat_start_time] = params[:event][:repeat_start_time_string]
@@ -112,6 +92,7 @@ class Admin::EventsController < AdminController
         redirect_to new_admin_event_event_price_option_path(@event)
       else
         flash[:notice] = "Event created"
+        log_activity("Created \"#{@event.name}\"")
         redirect_to admin_events_path
       end
     else
@@ -121,26 +102,6 @@ class Admin::EventsController < AdminController
 
   def update
     add_breadcrumb '@event.name'
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info "================================================="
-    logger.info params[:event][:date_and_time]
-    logger.info "================================================="
     params[:event][:event_category_ids] ||= []
     params[:event][:event_category_ids] << params[:event][:event_category_id] unless params[:event][:event_category_id].blank? or params[:event][:event_category_ids].include?(params[:event][:event_category_id])
     params[:event][:repeat_start_time] = params[:event][:repeat_start_time_string]
@@ -164,6 +125,7 @@ class Admin::EventsController < AdminController
         epo.save
       end
       flash[:notice] = "#{@event.name} updated."
+      log_activity("Updated \"#{@event.name}\"")
       redirect_to params[:redirect_path] ? params[:redirect_path] : admin_events_path
     else
       render :action => "edit"
@@ -189,6 +151,10 @@ private
       flash[:error] = "Event not found."
       redirect_to admin_events_path
     end
+  end
+
+  def log_activity(description)
+    add_activity(controller_name.classify, @event.id, description)
   end
 
   def authorization
