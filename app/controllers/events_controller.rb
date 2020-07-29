@@ -29,7 +29,7 @@ class EventsController < ApplicationController
   def show
     #begin
       @event = Event.find(params[:id], :conditions => {:active => true})
-      @edit_path = [:edit, :admin, @event]
+      @edit_path = edit_admin_event_path(@event, :params => {:redirect_path => request.request_uri})#[:edit, :admin, @event]
       @edit_type = "Event"
       session[:redirect_path] = event_path(@event)
       @images = @event.images
