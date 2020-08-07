@@ -1,5 +1,14 @@
-.side-column-section
-  %h2 Location
-  %div= h @event.address
-  ==<iframe id="google_map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q= #{URI.encode(@event.address.strip)}&ie=UTF8&z=12&t=m&iwloc=near&output=embed"></iframe>
-  %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"
+- if @event.online_event?
+  .side-column-section
+    %h2 Location
+    %div#online-event 
+      %i{:class => "fas fa-globe"} 
+      Online Event
+    - if !@event.address.blank?
+      %div#online-event-address= link_to(@event.address, @event.address, :target => "_blank")
+- elsif !@event.online_event? and !@event.address.blank?
+  .side-column-section
+    %h2 Location
+    %div= h @event.address
+    ==<iframe id="google_map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q= #{URI.encode(@event.address.strip)}&ie=UTF8&z=12&t=m&iwloc=near&output=embed"></iframe>
+    %div= link_to "View larger map", "http://maps.google.com?q=#{u @event.address}"

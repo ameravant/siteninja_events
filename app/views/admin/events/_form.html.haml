@@ -27,6 +27,16 @@
       jQuery("#add-links").click(function() {
       setupLinkFields("event_description");
       })
+      jQuery(document).ready(function() {
+        jQuery('#event_online_event').on('change', function() {
+          if(jQuery(this).is(":checked")) {
+            jQuery('#event_address').attr('placeholder', "Event URL (example: https://www.event_domain.com/event_page)")
+          }
+          else {
+            jQuery('#event_address').attr('placeholder', "\"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\"")
+          }
+        })
+      })
 = error_messages_for "event"
 - @calendar_select = true
 -if @controller.action_name == 'edit' && @cms_config['features']['event_registration'] && current_user.has_role("Admin")
@@ -138,7 +148,17 @@
               = f.label :week_5, "Last"
         = clear
     %h2.form-label= f.label :address
-    = f.text_field :address, :class => "big-input", :placeholder => "\"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\""
+    = f.text_field :address, :class => "big-input", :placeholder => (@event.online_event? ? "Event URL (example: https://www.event_domain.com/event_page)" : "\"Address 1\" \"Address 2\", \"City\", \"State\" \"Zip\"")
+    %br
+    = f.check_box :online_event
+    = f.label :online_event, "Online Event"
+    .note 
+      %strong Postal Address: 
+      "Address 1" "Address 2", "City", "State" "Zip"
+      %br
+      %strong Web Address: 
+      https://www.event_domain.com/event_page
+      %br
   #main-details.details.options
     #options
       %dl
