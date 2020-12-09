@@ -5,8 +5,8 @@ class EventMailer < ActionMailer::Base
     :enable_starttls_auto => true,
     :authentication => :login,
     :domain => $DOMAIN,
-    :user_name => $CMS_CONFIG['site_settings']['sendgrid_username'],
-    :password => $CMS_CONFIG['site_settings']['sendgrid_password'],
+    :user_name => $MASTER_CONFIG['site_settings']['sendgrid_username'],
+    :password => $MASTER_CONFIG['site_settings']['sendgrid_password'],
   }
   
   def event_notification_to_admin(event)   
@@ -26,7 +26,7 @@ class EventMailer < ActionMailer::Base
   def setup_email(email, name, subject)
     cms_config ||= YAML::load_file("#{RAILS_ROOT}/config/cms.yml")
     recipients   "#{name.strip} <#{email.strip}>"
-    from         "#{$CMS_CONFIG['website']['name']} <#{$CMS_CONFIG['site_settings']['sendgrid_username']}>"
+    from         "#{$CMS_CONFIG['website']['name']} <#{Setting.first.inquiry_notification_email}>"
     headers      'Reply-to' => "#{$CMS_CONFIG['website']['name'].strip} <#{Setting.first.inquiry_notification_email.strip}>"
     subject      subject.strip
     sent_on      Time.now
