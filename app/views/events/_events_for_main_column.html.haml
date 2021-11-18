@@ -118,8 +118,9 @@
                       %span.day= event.start_date.strftime("%a")
                       %span.month= event.start_date.strftime("%b")
                       %span.date= event.start_date.strftime("%e")
-                      at
-                      %span.time= event.start_time.strftime("%I:%M %p")
+                      - if !event.start_time.blank?
+                        at
+                        %span.time= event.start_time.strftime("%I:%M %p")
                       -#Ongoing until 
                       -#%span.day= event.end_date.strftime("%a")
                       -#%span.month= event.end_date.strftime("%b")

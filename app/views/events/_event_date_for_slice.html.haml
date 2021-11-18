@@ -37,7 +37,9 @@
       = @event.repeat_end_date.strftime("%B %d, %Y ") if @event.display_repeat_end_date 
   - elsif !@event.start_date.blank?
     = @event.start_date.strftime("%A, %B %d, %Y")
-    - if !@event.start_time.blank?
+    - if !@event.start_time.blank? and !@event.end_time.blank?
+      = @event.start_time.strftime(" <span class='event-time'>from %I:%M %p</span>")
+    - elsif !@event.start_time.blank?
       = @event.start_time.strftime(" <span class='event-time'>at %I:%M %p</span>")
     - if !@event.end_date.blank?
       - if @event.start_date != @event.end_date
